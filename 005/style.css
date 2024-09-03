@@ -1,0 +1,71 @@
+ body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    font-size: 16px;
+    border: 20px solid darkred;
+    background-color: black;
+    color: skyblue;
+    width: 100vw;
+    box-sizing: border-box;
+    height: 200vb;
+    overflow: hidden;
+    position: relative;
+}
+.sq {
+    width: 100px;
+    height: 100px;
+    border: 2px solid skyblue;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 100px;
+}
+.rel1 {
+    background-color: blue;
+    position: relative;
+    top: 70px;
+    left: 20px;
+    z-index: 10;
+}
+.rel2 {
+    background-color: deeppink;
+    position: relative;
+    bottom: 100px;
+    right: -40px;
+    z-index: 2;
+}
+.rel3 {
+    background-color: green;
+    position: relative;
+    bottom: 200px;
+    z-index: 30;
+    left: calc(100vw - 140px);
+}
+.abs1 {
+    background-color: lightcoral;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+.abs2 {
+    background-color: blueviolet;
+    position: relative;
+    top: 0;
+    left: 300px;
+    z-index: 100;
+
+}
+.container {
+    border: 2px dotted skyblue;
+    position: relative;
+}
+.fix1 {
+  background-color: aqua;
+  position: fixed;
+  top: calc(100vh - 100px);
+  left: calc(100vh-140px);
+  z-index: 100;
+
+
+}

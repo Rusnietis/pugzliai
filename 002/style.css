@@ -1,0 +1,113 @@
+.sar {
+    margin: 3px;
+    padding: 0px;
+    border: 1px solid white;
+    width: 300px;
+    height: 280px;
+    font-family: Red Hat Display;
+    font-size: 20px;
+    color: brown;
+    font-weight: 500;
+    text-align: left;
+}
+h1 {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid white;
+    width: 800px;
+    height: 40px;
+    font-family: Red Hat Display;
+    font-size: 30px;
+    color: brown;
+   font-weight: 900;
+}
+h2 {
+    font-family: Red Hat Display;
+    font-style: normal;
+    font-size: 20px;
+    color: brown;
+    font-weight: 400;
+   
+}
+
+/* .mar {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid black;
+    width: 920px;
+    height: 400px;
+    background-image: url(https://www.plaukiu.lt/data/tourism_objects/large/regykl.1.jpg);
+} */
+
+
+
+.sam, .veg, .lyd, .sta, .karp, .kar {
+    font-family: Red Hat Display;
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    background-color: green;
+    margin: 1px;
+    padding: 10px;
+    border: 1px solid white;
+    width: 470px;
+    height: 170px;
+    display: inline-block;
+}
+.aprs, .aprv, .aprl, .aprst, .aprkp, .aprkr, .parb {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid white;
+    width: 1500px;
+    height: 450px;
+    font-family:'Times New Roman', Times, serif;
+    font-size: 18px;
+    color: black;
+    font-weight: 400; 
+    box-sizing: border-box;
+    display: inline-block;
+}
+img {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid white;
+    width: 350px;
+    height: 170px;
+    box-sizing: border-box;
+}
+.cia {
+    margin: 0;
+    padding: 0;
+    border: 1px solid white;
+    width: 560px;
+    height: 50px;
+    background-color: rgb(152, 234, 152);
+    font-family: Onest;
+    font-size: 18px;
+    color: white
+}
+.grz {:
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+    width: 150px;
+    height: 50px;
+    background-color: brown;
+    font-family: Onest;
+    font-size: 14px;
+    color:white;
+    font-weight: 500; 
+}
+.parb{
+    margin: 0;
+    padding: 0;
+    border: 1px solid white;
+    width: 400px;
+    height: 200px;
+    font-family: Tourney;
+    font-size: 30px;
+    color: grey;
+    font-weight: 500;
+    display: inline-block; 
+
+}

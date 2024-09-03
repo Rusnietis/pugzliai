@@ -1,0 +1,28 @@
+body{
+    margin: 0;
+}
+    
+span{
+    color: crimson;
+    font-size: 50px;
+    font-weight:400;
+    font-family: 'Red Hat Display', sans-serif;
+    text-align: center;
+    text-transform:uppercase;
+    letter-spacing: 10px;
+    text-decoration: underline;
+    text-decoration-color: skyblue;
+    text-decoration-thickness: 15px;
+    text-shadow: 5px 5px 5px black;
+    
+}
+
+div{
+    text-align: center;
+    border: 5px solid royalblue;
+    padding: 15px 30px 45px 60px;
+    padding: 10px 30px;
+    margin: 7px 7px;
+    width: 50%;
+    box-sizing: border-box;
+}

@@ -1,0 +1,50 @@
+div {
+width: 100px;
+height: 100px;
+background-color: black;
+border: 2px solid black;
+margin: 10px;
+border-radius: 50%;
+text-align: center;
+font-size: 14px;
+line-height: 110px;
+box-sizing: border-box;
+font-family: monospace;
+display: inline-block;
+}
+div:hover{
+    border-color: black;
+}
+.wite{
+    border-radius: white;
+}
+.black{
+    color: black;
+}
+.c-1{
+    background-color: #D0E1D450;
+    border: color(white);
+}
+.c-2{
+    background-color: aqua;
+    border-color: white;
+}
+.c-3{
+    background-color: bisque;
+    border-color: white;
+}
+.c-4{
+    background-color: beige;
+    border-color: white;
+}
+.c-5{
+    background-color: antiquewhite;
+    border-color: white;
+}
+
+
+
+
+
+
+}
