@@ -1,1 +1,1 @@
-Labas vakaras
+Laba diena
