@@ -12,7 +12,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <h1>React lists uždaviniai</h1>
+                <h1>React  base lists uždaviniai</h1>
                 <h4>Pirmas uzdavinys</h4>
                 {/* <div className="squares">
                     {
