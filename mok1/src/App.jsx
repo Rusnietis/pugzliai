@@ -1,6 +1,7 @@
 //Lists uzdaviniai
 
 import './App.scss';
+import Tvenkinys from './Components/Lists/Antruz/Tvenkinys';
 import Bala from './Components/Lists/Pirmuz/Bala';
 // import randomColor from './Functions/randomColor';
 // import Dogs from './Components/Lists/Dogs';
@@ -35,9 +36,17 @@ function App() {
 
                 <h4>Antras uzdavinys</h4>
 
-
-
-
+                <div>
+                    {
+                        seaPlaners.filter(item => item.id % 2 === 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
+                    }
+                </div>
+                <div>
+                    {
+                        seaPlaners.filter(item => item.id % 2 !== 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
+                    }
+                </div>
+                <h4>Trecias uzdavinys</h4>
 
 
             </header>
