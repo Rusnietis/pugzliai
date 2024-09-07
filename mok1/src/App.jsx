@@ -3,6 +3,8 @@
 import './App.scss';
 import Tvenkinys from './Components/Lists/Antruz/Tvenkinys';
 import Bala from './Components/Lists/Pirmuz/Bala';
+import Jura from './Components/Lists/Trecuz/Jura';
+
 // import randomColor from './Functions/randomColor';
 // import Dogs from './Components/Lists/Dogs';
 
@@ -47,7 +49,18 @@ function App() {
                     }
                 </div>
                 <h4>Trecias uzdavinys</h4>
-
+                <div>
+                    {
+                        seaPlaners.filter(item => item.type === 'fish').map((item) => <Jura key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
+                    }
+                </div>
+                <div>
+                    {
+                        seaPlaners.sort((a,b) =>  a.item - b.item).map((item) => <Jura key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
+                    }
+                    
+                </div>
+                
 
             </header>
         </div>
