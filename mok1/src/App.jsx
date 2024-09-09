@@ -5,6 +5,7 @@ import Tvenkinys from './Components/Lists/Antruz/Tvenkinys';
 import Bala from './Components/Lists/Pirmuz/Bala';
 import Jura from './Components/Lists/Trecuz/Jura';
 import Vandenynas from './Components/Lists/Ketuz/Vandenynas';
+import Pasaulis from './Components/Lists/Penkuz/Pasaulis';
 
 // import randomColor from './Functions/randomColor';
 // import Dogs from './Components/Lists/Dogs';
@@ -52,10 +53,16 @@ function App() {
                     }
                 </div> */}
                 <h4>Trecias uzdavinys</h4>
+
                 <Jura data={seaPlaners} />
+
                 <h4>Ketvirtas uzdavinys</h4>
 
                 <Vandenynas data={seaPlaners} />
+
+                <h4>Penktas uzdavinys</h4>
+
+                <Pasaulis data={seaPlaners}/>
 
             </header>
         </div>
