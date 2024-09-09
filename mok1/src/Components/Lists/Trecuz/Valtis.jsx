@@ -1,16 +1,17 @@
-export default function Valtis({ tipas, vardas, color }) {
-    if (tipas === 'man') {
+export default function Valtis({ type, color }) {
+    if(type === 'man') {
         return (
             <>
                 <h3>
-                    <div style={{ color: color }}>
-                        Valtis
-                        {tipas}
-                        {vardas}
-                    </div>
+                    <span style={{ color: color }}>
+                        
+                        Valtis:{type}
+                        
+                    </span>
                 </h3>
             </>
 
         )
     }
+    
 }

@@ -4,6 +4,7 @@ import './App.scss';
 import Tvenkinys from './Components/Lists/Antruz/Tvenkinys';
 import Bala from './Components/Lists/Pirmuz/Bala';
 import Jura from './Components/Lists/Trecuz/Jura';
+import Vandenynas from './Components/Lists/Ketuz/Vandenynas';
 
 // import randomColor from './Functions/randomColor';
 // import Dogs from './Components/Lists/Dogs';
@@ -38,6 +39,8 @@ function App() {
 
                 <h4>Antras uzdavinys</h4>
 
+                <Tvenkinys data={seaPlaners}/>
+                {/* 
                 <div>
                     {
                         seaPlaners.filter(item => item.id % 2 === 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
@@ -47,20 +50,12 @@ function App() {
                     {
                         seaPlaners.filter(item => item.id % 2 !== 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
                     }
-                </div>
+                </div> */}
                 <h4>Trecias uzdavinys</h4>
-                <div>
-                    {
-                        seaPlaners.filter(item => item.type === 'fish').map((item) => <Jura key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
-                    }
-                </div>
-                <div>
-                    {
-                        seaPlaners.sort((a,b) =>  a.item - b.item).map((item) => <Jura key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
-                    }
-                    
-                </div>
-                
+                <Jura data={seaPlaners} />
+                <h4>Ketvirtas uzdavinys</h4>
+
+                <Vandenynas data={seaPlaners} />
 
             </header>
         </div>

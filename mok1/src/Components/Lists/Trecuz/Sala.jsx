@@ -1,12 +1,12 @@
-export default function Sala({ vardas, tipas, color }) {
-    if (tipas === 'animal') {
+export default function Sala({ type, color }) {
+    if (type === 'animal') {
         return (
             <>
                 <h3>
                     <span style={{ color: color }}>
-                        Sala
-                        {tipas}
-                        {vardas}
+                        Sala:
+                        {type}
+                        
                     </span>
                 </h3>
             </>

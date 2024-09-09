@@ -1,12 +1,12 @@
-export default function Laivas({ tipas, vardas, color }){
-    if (tipas === 'car') {
+export default function Laivas({ type, color }){
+    if (type === 'car') {
         return (
             <>
                 <h3>
                     <div style={{ color: color }}>
-                        Laivas
-                        {tipas}
-                        {vardas}
+                        Laivas:
+                        {type}
+                        
                     </div>
                 </h3>
             </>

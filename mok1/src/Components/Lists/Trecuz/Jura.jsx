@@ -3,24 +3,21 @@ import Laivas from './Laivas'
 import Valtis from './Valtis'
 
 
-export default function Jura({ vardas, tipas, color }) {
+export default function Jura({ data }) {
 
     return (
         <>
-            {/* <div>
-                {
-                    tipas === 'fish' ? { tipas } : 0
-                }
-            </div> */}
-            <div>
-                <Valtis vardas={vardas} tipas={tipas} color={color} />
-            </div>
-            <div>
-                <Laivas vardas={vardas} tipas={tipas} color={color} />
-            </div>
-            <div>
-                <Sala vardas={vardas} tipas={tipas} color={color} />
-            </div>
+
+            {
+                data.map((item) => < Valtis key={item.id} type={item.type} color={item.color} />)
+            }
+            {
+                data.map((item) => < Laivas key={item.id} type={item.type} color={item.color}/>)
+            }
+            {
+                data.map((item) => < Sala key={item.id} type={item.type} color={item.color}/>)
+            }
+
         </>
     )
 
