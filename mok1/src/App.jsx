@@ -1,72 +1,84 @@
-//Lists uzdaviniai
-
+// React State uždaviniai
 import './App.scss';
-import Tvenkinys from './Components/Lists/Antruz/Tvenkinys';
-import Bala from './Components/Lists/Pirmuz/Bala';
-import Jura from './Components/Lists/Trecuz/Jura';
-import Vandenynas from './Components/Lists/Ketuz/Vandenynas';
-import Pasaulis from './Components/Lists/Penkuz/Pasaulis';
+import './buttons.scss'
+import { useState } from 'react';
 
-// import randomColor from './Functions/randomColor';
-// import Dogs from './Components/Lists/Dogs';
 
-function App() {
+export default function App() {
 
-    const seaPlaners = [
-        { id: 1, type: 'man', name: 'Lina', color: 'blue' },
-        { id: 2, type: 'car', name: 'Opel', color: 'red' },
-        { id: 3, type: 'animal', name: 'Vilkas', color: 'green' },
-        { id: 4, type: 'fish', name: 'Ungurys', color: 'yellow' },
-        { id: 5, type: 'man', name: 'Tomas', color: 'green' },
-        { id: 6, type: 'animal', name: 'Bebras', color: 'red' },
-        { id: 7, type: 'animal', name: 'Barsukas', color: 'green' },
-        { id: 8, type: 'car', name: 'MB', color: 'blue' },
-        { id: 9, type: 'car', name: 'ZIL', color: 'red' },
-        { id: 10, type: 'man', name: 'Teta Toma', color: 'yellow' },
-    ];
+    const randomColor = _ => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
-    console.log(seaPlaners);
+
+    const [circles, setCircles] = useState([])
+    const [squares, setSquares] = useState([])
+
+
+    const addCircle = _ => {
+        if (circles < 1) {
+
+            setCircles(c => [...c, randomColor()]);
+        }
+    }
+
+    // const addSquare = _ => {
+
+    //     setSquares(s => [...s, randomColor()]);
+    // }
+
+    const change = _ => {
+
+        if (circles) {
+            setCircles([])
+            
+
+        } else {
+            setSquares([randomColor()])
+
+        }
+
+
+        // if (squares) {
+        //     setSquares([])
+        // }
+        // if (circles) {
+
+        //     setCircles([randomColor()])
+        // }
+
+    }
+
+
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>React lists uždaviniai</h1>
-                <h4>Pirmas uzdavinys</h4>
-                <div>
+                <h1>React State uždaviniai</h1>
+                <div className="squares">
                     {
-                        seaPlaners.map((item) => <Bala key={item.id} vardas={item.name} color={item.color} />)
+                        squares.map((square, i) => <div className="square" style={{
+                            backgroundColor: square + '66',
+                            border: '1px solid ' + square
+                        }} key={i}>{square}</div>)
+                    }
+                </div>
+                <div className="circles">
+                    {
+                        circles.map((circle, i) => <div className="circle" style={{
+                            backgroundColor: circle + '66',
+                            border: '1px solid ' + circle
+                        }} key={i}>{circle}</div>)
                     }
                 </div>
 
-                <h4>Antras uzdavinys</h4>
+                <div className="buttons">
 
-                <Tvenkinys data={seaPlaners}/>
-                {/* 
-                <div>
-                    {
-                        seaPlaners.filter(item => item.id % 2 === 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
-                    }
+                    <button className='yellow' onClick={addCircle} >ADD CIRCLE</button>
+
+                    <button className='yellow' onClick={change} >CHANGE</button>
                 </div>
-                <div>
-                    {
-                        seaPlaners.filter(item => item.id % 2 !== 0).map((item) => <Tvenkinys key={item.id} vardas={item.name} color={item.color} tipas={item.type} />)
-                    }
-                </div> */}
-                <h4>Trecias uzdavinys</h4>
-
-                <Jura data={seaPlaners} />
-
-                <h4>Ketvirtas uzdavinys</h4>
-
-                <Vandenynas data={seaPlaners} />
-
-                <h4>Penktas uzdavinys</h4>
-
-                <Pasaulis data={seaPlaners}/>
 
             </header>
         </div>
     );
 }
 
-export default App;
