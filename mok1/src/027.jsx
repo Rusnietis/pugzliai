@@ -54,6 +54,7 @@ export default function App() {
                 <button className="white" onClick={reset}>white</button> */}
 
                 <div className="squares">
+                    
                     {
                         squares.map((square, i) => <div className="square spin" style={{
                             backgroundColor: square + '66',
