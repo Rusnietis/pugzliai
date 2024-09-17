@@ -1,169 +1,53 @@
-// React State uždaviniai
 import './App.scss';
-import './buttons.scss'
+import './buttons.scss';
+import './form.scss';
 import { useState } from 'react';
-import rand from './Functions/rand';
-
+//29 paskaita
 export default function App() {
 
-    const randomColor = _ => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-
-    const [circles, setCircles] = useState([]);
-    const [squares, setSquares] = useState([]);
-    const [counter, setCounter] = useState(0);
+    const [showText, setShowText] = useState('---');
+    const [singleText, setSingleText] = useState('');
+    const [multiText, setMultiText] = useState(['', '', '']);
 
 
-    const random = rand(5, 25)
-
-    //Antras uzdavinys
-    const addCircle = _ => {
-        if (circles < 1) {
-
-            setCircles(c => [...c,
-            {
-                color: randomColor(),
-                id: random
-
-            }
-            ]);
-        }
+    const handleSingleText = e => {
+        setSingleText(e.target.value);
     }
 
-    const change = _ => {
-
-        if (circles) {
-
-            setCircles([]);
-
-        }
-
-        if (squares < 1) {
-
-            setSquares([{
-                color: randomColor(),
-                id: rand(5, 25)
-            }]);
-
-        }
-
-    }
-    // const addSquare = _ => {
-    //     setSquares(s => [...s,
-    //     {
-    //         color: randomColor(),
-    //         id: random
-    //     }
-    //     ]);
-    // }
-
-    const changeNumber = _ => {
-        if (squares) {
-            setSquares(s => [{ id: random }]);
-        }
-
-    };
-    // Trecias uzdavinys
-    const prideti = _ => {
-
-        setCounter(c => c + 1);
-
-    };
-
-    const atimti = _ => {
-
-        setCounter(c => c - 3);
-
-    };
-
-    //Ketvirtas uždavinys
-    const addSquare = _ => {
-        setSquares(s => [...s,
-        {
-            color: 'blue',
-
-        }
-        ]);
-    }
-    //Penktas uzdavinys
-    const addSquareBlue = _ => {
-        setSquares(s => [...s,
-        {
-            color: 'blue',
-
-        }
-        ]);
-    }
-    const addSquareRed = _ => {
-        setSquares(s => [...s,
-        {
-            color: 'red',
-
-        }
-        ]);
-    }
-
-
-    const reset = _ => {
-        setSquares([]);
-
+    const handleMultiText = (e, index) => {
+        // no call back
+        // const newMultiText = [...multiText];
+        // newMultiText[index] = e.target.value;
+        // setMultiText(newMultiText);
+        // with call back
+        // setMultiText(prev => {
+        //     const newMultiText = [...prev];
+        //     newMultiText[index] = e.target.value;
+        //     return newMultiText;
+        // });
+        // with call back and map
+        setMultiText(prev => prev.map((item, i) => i === index ? e.target.value : item));
     }
 
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>React State uždaviniai</h1>
+                <h1>Form Control</h1>
+                <div className="form">
+                    <input type="text" placeholder="Name" value={singleText} onChange={handleSingleText} />
+                    <h3>{showText}</h3>
+                    <div className="buttons">
+                        <button className="green" onClick={_ => setShowText(singleText)}>Show</button>
+                        <button className="red" onClick={_ => setSingleText('')}>Clear</button>
+                    </div>
+                    <input type="text" placeholder="Animal 1" value={multiText[0]} onChange={e => handleMultiText(e, 0)}/>
+                    <input type="text" placeholder="Animal 2" value={multiText[1]} onChange={e => handleMultiText(e, 1)} />
+                    <input type="text" placeholder="Animal 3" value={multiText[2]} onChange={e => handleMultiText(e, 2)} />
 
-                <div className="squares">
-
-                    {
-                        squares.map((square, i) => <div className="square" style={{
-                            backgroundColor: square.color + '66',
-                            border: '1px solid ' + square.color
-                        }} key={i}>{square.id}</div>)
-                    }
                 </div>
-                <div className="circles">
-                    {
-                        circles.map((circle, i) => <div className="circle" style={{
-                            backgroundColor: circle.color + '66',
-                            border: '1px solid ' + circle.color
-                        }} key={i}>{circle.id}</div>)
-                    }
-                </div>
-
-
-                <h4>Pirmas uždavinys</h4>
-                {/* <div className="buttons">
-                    <button className='yellow' onClick={addCircle} >ADD CIRCLE</button>
-                    <button className='yellow' onClick={keisti} >CHANGE</button>
-                </div> */}
-                <h4>Antras uzdavinys</h4>
-                <div className="buttons">
-                    <button className='yellow' onClick={addCircle} >ADD CIRCLE</button>
-                    <button className='yellow' onClick={change} >CHANGE</button>
-                    <button className='yellow' onClick={changeNumber} >RANDOM</button>
-                </div>
-                {/* <h4>Trecias uzdavinys</h4>
-                <h1>{counter}</h1>
-                <div className="buttons">
-                    <button className='yellow' onClick={prideti} >Prideti</button>
-                    <button className='yellow' onClick={atimti} >Atimti</button>
-                </div>
-                <h4>Ketvirtas uzdavinys</h4>
-                <div className="buttons">
-                    <button className='yellow' onClick={addSquare} >Prideti</button>
-                </div> */}
-                <h4>Penktas uzdavinys</h4>
-                <div className="buttons">
-                    <button className='red' onClick={addSquareRed} >ADD RED</button>
-                    <button className='red' onClick={addSquareBlue} >ADD BLUE</button>
-                    <button className='red' onClick={reset} >RESET</button>
-                </div>
-
 
             </header>
         </div>
     );
 }
-
