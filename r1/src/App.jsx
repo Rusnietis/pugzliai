@@ -1,51 +1,92 @@
 import './App.scss';
 import './buttons.scss';
 import './form.scss';
-import { useState } from 'react';
-//29 paskaita
+import { useEffect, useState } from 'react';
+//31 paskaita
 export default function App() {
 
-    const [showText, setShowText] = useState('---');
-    const [singleText, setSingleText] = useState('');
-    const [multiText, setMultiText] = useState(['', '', '']);
+    const [cat, setCat] = useState('');
+    const [dog, setDog] = useState('');
+    const [bird, setBird] = useState('');
 
+    useEffect(_ => {
+        let animals = JSON.parse(localStorage.getItem('animals'));
+        if (null === animals)  {
+            return;
+        }
+        setCat(animals.cat);
+        setDog(animals.dog);
+        setBird(animals.bird);
+    }, []);
 
-    const handleSingleText = e => {
-        setSingleText(e.target.value);
+    const saveCat = _ => {
+        localStorage.setItem('cat', cat);
     }
 
-    const handleMultiText = (e, index) => {
-        // no call back
-        // const newMultiText = [...multiText];
-        // newMultiText[index] = e.target.value;
-        // setMultiText(newMultiText);
-        // with call back
-        // setMultiText(prev => {
-        //     const newMultiText = [...prev];
-        //     newMultiText[index] = e.target.value;
-        //     return newMultiText;
-        // });
-        // with call back and map
-        setMultiText(prev => prev.map((item, i) => i === index ? e.target.value : item));
+    const removeCat = _ => {
+        localStorage.removeItem('cat');
     }
 
+    const getCat = _ => {
+        setCat(localStorage.getItem('cat'));
+    }
+
+    const addDog = _ => {
+        localStorage.setItem('dog', dog);
+    }
+
+    const removeDog = _ => {
+        localStorage.removeItem('dog');
+    }
+
+    const addBird = _ => {
+        localStorage.setItem('bird', bird);
+    }
+
+    const removeBird = _ => {
+        localStorage.removeItem('bird');
+    }
+
+    const clear = _ => {
+        localStorage.clear();
+    }
+
+    const addAll = _ => {
+        localStorage.setItem('animals', JSON.stringify({cat, dog, bird}));
+    }
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>Form Control</h1>
-                <div className="form">
-                    <input type="text" placeholder="Name" value={singleText} onChange={handleSingleText} />
-                    <h3>{showText}</h3>
-                    <div className="buttons">
-                        <button className="green" onClick={_ => setShowText(singleText)}>Show</button>
-                        <button className="red" onClick={_ => setSingleText('')}>Clear</button>
-                    </div>
-                    <input type="text" placeholder="Animal 1" value={multiText[0]} onChange={e => handleMultiText(e, 0)}/>
-                    <input type="text" placeholder="Animal 2" value={multiText[1]} onChange={e => handleMultiText(e, 1)} />
-                    <input type="text" placeholder="Animal 3" value={multiText[2]} onChange={e => handleMultiText(e, 2)} />
+                <h1>This is Local Storage</h1>
 
+                <div className="form">
+                    <label>Cat</label>
+                    <input type="text" name="cat" value={cat} onChange={e => setCat(e.target.value)} />
+                    <label>Dog</label>
+                    <input type="text" name="dog" value={dog} onChange={e => setDog(e.target.value)} />
+                    <label>Bird</label>
+                    <input type="text" name="bird" value={bird} onChange={e => setBird(e.target.value)} />
+                    <input type="text" name="name" autoComplete="off" />
+                    <div className="buttons">
+                        <button className="black" onClick={saveCat}>Add Cat</button>
+                        <button className="red" onClick={removeCat}>Remove Cat</button>
+                        <button className="black" onClick={getCat}>Get Cat</button>
+                        <button className="yellow" onClick={addDog}>Add Dog</button>
+                        <button className="red" onClick={removeDog}>Remove Dog</button>
+                        <button className="green" onClick={addBird}>Add Bird</button>
+                        <button className="red" onClick={removeBird}>Remove Bird</button>
+
+                        <button className="white" onClick={addAll}>Add All</button>
+
+                        <button className="red" onClick={clear}>Clear</button>
+                    </div>
                 </div>
+
+
+
+
+
 
             </header>
         </div>
