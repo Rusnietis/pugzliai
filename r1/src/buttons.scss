@@ -3,6 +3,8 @@ $red: #FF0022;
 $green: #41EAD4;
 $white: #FDFFFC;
 $yellow: #FF9F1C;
+$blue: #122cd8;
+
 
 .buttons {
     display: flex;
@@ -101,6 +103,14 @@ button:not(.btn-close) {
         &:hover {
             background-color: darken($yellow, 20);
             box-shadow: transparentize(darken($yellow, 20), 0.8) 0 6px 12px;
+        }
+    }
+    &.blue{
+        background-color: $blue;
+        box-shadow: transparentize($blue, 0.85) 0 4px 9px;
+        &:hover {
+            background-color: darken($blue, 20);
+            box-shadow: transparentize(darken($blue, 20), 0.8) 0 6px 12px;
         }
     }
 

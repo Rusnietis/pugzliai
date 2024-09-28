@@ -26,7 +26,7 @@ export default function App() {
         //     return newMultiText;
         // });
         // with call back and map
-        setMultiText(prev => prev.map((item, i) => i === index ? e.target.value : item));
+        setMultiText(prev => prev.map(item, i => i === index? e.target.value:item));
     }
 
 

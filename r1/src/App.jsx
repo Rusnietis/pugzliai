@@ -1,94 +1,109 @@
+
 import './App.scss';
 import './buttons.scss';
 import './form.scss';
-import { useEffect, useState } from 'react';
-//31 paskaita
+import { useState } from 'react';
+//import rand from './Functions/rand';
+
+
 export default function App() {
 
-    const [cat, setCat] = useState('');
-    const [dog, setDog] = useState('');
-    const [bird, setBird] = useState('');
+    // random hex color generator
+    // const randomColor = _ => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
-    useEffect(_ => {
-        let animals = JSON.parse(localStorage.getItem('animals'));
-        if (null === animals)  {
-            return;
-        }
-        setCat(animals.cat);
-        setDog(animals.dog);
-        setBird(animals.bird);
-    }, []);
+    const [items, setItems] = useState([]);
+    // const [counter, setCounter] = useState(1);
+    // const [showText, setShowText] = useState('');
 
-    const saveCat = _ => {
-        localStorage.setItem('cat', cat);
+
+    const [newItem, setNewItem] = useState({
+
+        vardas: '',
+        saskaita: '',
+        amount: 0
+    });
+
+    const handleNewItem = e => {
+
+        //  setMultiText(e.target.value);
+        setNewItem(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        // setMultiText(prev => prev.map(items, i => i === index? e.target.value:items));
+
     }
 
-    const removeCat = _ => {
-        localStorage.removeItem('cat');
-    }
+    const addItem = _ => {
+        localStorage.setItem('newItem', JSON.stringify(newItem));
 
-    const getCat = _ => {
-        setCat(localStorage.getItem('cat'));
-    }
+        setItems(item => [...item, newItem]);
+        setNewItem({
 
-    const addDog = _ => {
-        localStorage.setItem('dog', dog);
-    }
+            vardas: '',
+            saskaita: '',
+            amount: 0
+        });
+        //setCounter(' ')
 
-    const removeDog = _ => {
-        localStorage.removeItem('dog');
     }
-
-    const addBird = _ => {
-        localStorage.setItem('bird', bird);
-    }
-
-    const removeBird = _ => {
-        localStorage.removeItem('bird');
-    }
-
-    const clear = _ => {
-        localStorage.clear();
-    }
-
-    const addAll = _ => {
-        localStorage.setItem('animals', JSON.stringify({cat, dog, bird}));
-    }
-
+    console.log(items)
+    const deleteItem = (index) => {
+        setItems((prevItems) => prevItems.filter((_, item) => item.index !== index));
+    };
+    console.log(items)
     return (
         <div className="App">
             <header className="App-header">
-                <h1>This is Local Storage</h1>
+                <h1>Bankas</h1>
+                <table border="1" cellPadding="10">
+                    <thead>
+                        <tr>
+                            <th>Eil. Nr.</th>
+                            <th>Vardas, Pavarde</th>
+                            <th>Saskaitos numeris</th>
+                            <th>Suma Eur</th>
+                            <th>Prideti </th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                <div className="form">
-                    <label>Cat</label>
-                    <input type="text" name="cat" value={cat} onChange={e => setCat(e.target.value)} />
-                    <label>Dog</label>
-                    <input type="text" name="dog" value={dog} onChange={e => setDog(e.target.value)} />
-                    <label>Bird</label>
-                    <input type="text" name="bird" value={bird} onChange={e => setBird(e.target.value)} />
-                    <input type="text" name="name" autoComplete="off" />
+                        {items.map((item, index) => (
+                            <tr key={index} >
+                                <td>{index}</td>
+                                <td>{item.vardas}</td>
+                                <td>{item.saskaita}</td>
+                                <td>{item.amount}</td>
+                                <td><div className="buttons">
+
+                                    <div className="form">
+                                        <input type="number" />
+                                    </div>
+                                    <button className="red" onClick={_ => deleteItem(index)} >Ištrinti</button>
+                                    <button className="yellow" onClick={addItem} >Pridėti lėšų</button>
+                                    <button className="red" onClick={addItem} >Ištrinti lėšas</button>
+
+
+                                </div></td>
+                            </tr>
+
+                        ))}
+
+
+                    </tbody>
+                </table>
+
+
+                <div className='form'>
+                    <input type="text" name="vardas" placeholder="Vardas, pavarde" value={newItem.name} onChange={handleNewItem} />
+                    <input type="text" name="saskaita" placeholder="Saskaitos numeris" value={newItem.saskaita} onChange={handleNewItem} />
+                    {/* <input type="number" placeholder="Suma" value={multiText[2]} onChange={e => handleMultiText(e, 2)} /> */}
+
+
                     <div className="buttons">
-                        <button className="black" onClick={saveCat}>Add Cat</button>
-                        <button className="red" onClick={removeCat}>Remove Cat</button>
-                        <button className="black" onClick={getCat}>Get Cat</button>
-                        <button className="yellow" onClick={addDog}>Add Dog</button>
-                        <button className="red" onClick={removeDog}>Remove Dog</button>
-                        <button className="green" onClick={addBird}>Add Bird</button>
-                        <button className="red" onClick={removeBird}>Remove Bird</button>
-
-                        <button className="white" onClick={addAll}>Add All</button>
-
-                        <button className="red" onClick={clear}>Clear</button>
+                        <button className="blue" onClick={addItem} >Prideti klienta</button>
+                        {/* <button className="red" >RESET</button> */}
                     </div>
                 </div>
 
-
-
-
-
-
-            </header>
-        </div>
+            </header >
+        </div >
     );
 }
