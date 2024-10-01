@@ -16,9 +16,9 @@ export default function App() {
 
     const KEY = 'colors';
     const [colors, setColors] = useState([]); // readData
-    const [createData, setCreateData] = useState(null);
-    const [deleteData, setDeleteData] = useState(null);
-    const [destroyData, setDestroyData] = useState(null);
+    const [createData, setCreateData] = useState(null); //saugoma paruošta informacija
+    const [deleteData, setDeleteData] = useState(null); // paruošta informacija trinimui
+    const [destroyData, setDestroyData] = useState(null); // informacija ištrinama
     const [editData, setEditData] = useState(null);
     const [updateData, setUpdateData] = useState(null);
     const [messages, setMessages] = useState([]);
