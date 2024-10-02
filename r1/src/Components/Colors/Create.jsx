@@ -7,8 +7,8 @@ export default function Create({ setCreateData }) {
 
     const handleSubmit = _ => {
         setCreateData(
-            { 
-                color, 
+            {
+                color,
                 size: +size,  //size convert string to number
             });
         setColor('#000000');

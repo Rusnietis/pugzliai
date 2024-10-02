@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 //import rand from './Functions/rand';
 import Create from './Components/Bankas/Create';
+import Read from './Components/Bankas/Read';
 import { lsRead, lsStore } from './Components/Bankas/lsManager'
 
 
@@ -15,9 +16,9 @@ export default function App() {
 
     const KEY = 'costumers';
 
-    const [costumers, setCostumers] = useState({})
+    // const [costumers, setCostumers] = useState({})
     const [createData, setCreateData] = useState(null);
-    console.log(costumers)
+    // console.log(costumers)
     // useEffect(_=> {
     //     setCostumers(lsRead(KEY))
     // })
@@ -25,18 +26,18 @@ export default function App() {
         if (null === createData) {
             return;
         }
-        const id = lsStore(KEY, createData);
+        lsStore(KEY, createData)
+        console.log(createData);
         // setCostumers(prevCostumers => [...prevCostumers, { ...createData, id }]);
-        
-
     }, [createData]);
 
     return (
         <>
+            <h1>Bankas</h1>
             <div className="container mt-5">
                 <div className="row">
                     <div className="row-1">
-                        {/* <Read /> */}
+                        <Read />
                     </div>
                     <div className="row-2">
                         <Create setCreateData={setCreateData} />
