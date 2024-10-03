@@ -106,7 +106,7 @@ export default function App() {
 
                     <div className="form">
                         <input type="text" name="vardas" placeholder="Vardas, pavarde" value={newItem.vardas} onChange={handleNewItem} />
-                        <input type="text" name="saskaita" placeholder="Saskaitos numeris" value={newItem.saskaita} onChange={handleNewItem} />
+                        <input type="text" name="saskaita" placeholder="Saskaitos numeris" value={newItem.saskaita} onChange={e =>handleNewItem(e, index)} />
                         {/* <input type="number" placeholder="Suma" value={multiText[2]} onChange={e => handleMultiText(e, 2)} /> */}
 
                         <div className="buttons">

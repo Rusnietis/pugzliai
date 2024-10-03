@@ -14,14 +14,14 @@ import { lsRead, lsStore } from './Components/Bankas/lsManager'
 //Bankas CRUD ver.1
 export default function App() {
 
-    const KEY = 'costumers';
+    const KEY = 'custumers';
 
-    // const [costumers, setCostumers] = useState({})
+    const [customers, setCustomers] = useState([])
     const [createData, setCreateData] = useState(null);
-    // console.log(costumers)
-    // useEffect(_=> {
-    //     setCostumers(lsRead(KEY))
-    // })
+    console.log(customers)
+    useEffect(_ => {
+        setCustomers(lsRead(KEY))
+    }, [])
     useEffect(_ => {
         if (null === createData) {
             return;
@@ -37,7 +37,7 @@ export default function App() {
             <div className="container mt-5">
                 <div className="row">
                     <div className="row-1">
-                        <Read />
+                        <Read custumers={customers} />
                     </div>
                     <div className="row-2">
                         <Create setCreateData={setCreateData} />
