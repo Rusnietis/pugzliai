@@ -2,40 +2,53 @@ import { useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Create({ setCreateData }) {
-    const [customer, setCustomer] = useState([{
+    const [customer, setCustomer] = useState({
         id: uuidv4(),
         vardas: '',
         saskaita: '',
-        amount: 0
-    }]);
+        amount: 0,
+    });
     console.log(customer)
 
-    const handleSubmit = e => {
-
+    const handleChange = e => {
         const { name, value } = e.target;
-        // setCustomer(prev => prev.map(customer, i => i === index ? e.target.value : customer));
-        setCustomer({ ...customer, [name]: value })
-        setCreateData({ ...customer, customer })
+        setCustomer(prev => ({ ...prev, [name]: value }));
+    };
 
-    }
+    const handleSubmit = () => {
+        if (customer.vardas && customer.saskaita) {
+            setCreateData(customer); 
+            console.log("Klientas pridėtas:", customer);
+
+            setCustomer({
+                id: uuidv4(),
+                vardas: '',
+                saskaita: '',
+                amount: 0,
+            });
+        } else {
+            console.log("Prašome užpildyti visus laukus!");
+        }
+    };
 
     return (
         <>
             <h3>Naujo kliento pridėjimas</h3>
-            <div className="mb-3">
-                <label className="form-label">Vardas, pavardė</label>
-                <input type="tex" name="vardas" className="form-control" placeholder="Vardas, pavardė"
-                    value={customer.vardas} onChange={handleSubmit}
-                />
-                <label className="form-label">Sąskaitos numeris</label>
-                <input type="tex" name="saskaita" className="form-control" placeholder="Sąskaitos Nr"
-                    value={customer.saskaita} onChange={handleSubmit}
-                />
+            <div className="mb-3" >
+                <div className="form">
+                    <label className="form-label">Vardas, pavardė</label>
 
+                    <input type="text" name="vardas" className="form-control" placeholder="Vardas, pavarde"
+                        value={customer.vardas} onChange={handleChange}
+                    />
+                    <label className="form-label">Sąskaitos numeris</label>
+                    <input type="text" name="saskaita" className="form-control" placeholder="Saskaitos Nr."
+                        value={customer.saskaita} onChange={handleChange}
+                    />
 
-                <label className="form-label">Example textarea</label>
-                <div className="buttons">
-                    <button className="blue" onClick={handleSubmit}>Pridėti klienta</button>
+                    <div className="buttons">
+                        <button className="blue" onClick={handleSubmit}>Pridėti klienta</button>
+                    </div>
                 </div>
             </div>
         </>

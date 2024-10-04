@@ -21,21 +21,37 @@ h6 {
   color: white;
 }
 
-.mb-3 {
+.row-2 {
+
   border: 1px solid black;
   margin: 15px;
-  padding: 15px 100px;
-  background-color: lightgrey;
+  padding: 15px 15px;
+  background-color: lightgreen;
   border-radius: 5px;
+  
+  
 }
 
-.table {
+.row-1 {
+  
   border: 1px solid black;
   margin: 15px;
   padding: 15px;
-  background: lightgreen;
+  background: lightgrey;
   border-radius: 5px;
+  .form{
+    display: flex;
+    display: inline-block;
+    flex-direction: row;
+    
+   .form-control{
+    width: 230px;
+    background-color:white ;
+    color: black;
+   }
+  }
 }
+
 
 
 .sq-bin {

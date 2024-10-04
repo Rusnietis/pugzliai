@@ -18,27 +18,28 @@ export default function Read({ customers }) {
                         <th scope="col">Pridėti</th>
                     </tr>
                 </thead>
-                {/* <tbody>
-                    {customers.map(customer => (
+                <tbody>
+            {(customers || []).map(customer => (
                         <tr key={customer.id}>
+                            <td>{customer.index}</td>
                             <td>{customer.vardas}</td>
                             <td>{customer.saskaita}</td>
                             <td>{customer.amount}</td>
                             <td>
-                                <div className="form">
+                                {/* <div className="form">
                                     <input type="number" value={inputValue} onChange={(e) => setInputValue(Number(e.target.value))} />
-                                </div>
-                                <div className="buttons">
+                                </div> */}
+                                {/* <div className="buttons">
                                     <button className="red" onClick={_ => deleteItem(item.id)} >Ištrinti</button>
                                     <button className="yellow" onClick={_ => handleAmountChange(item.id)} >Pridėti lėšų</button>
                                     <button className="blue" onClick={_ => handleAmountMinus(item.id)} >Ištrinti lėšas</button>
-                                </div>
+                                </div> */}
                             </td>
-                            <Show customer={customer} />
+                            {/* <Show customer={customer} /> */}
                         </tr>
                     ))}
 
-                </tbody > */}
+                </tbody >
 
             </table >
         </>
