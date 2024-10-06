@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 //import rand from './Functions/rand';
 import Create from './Components/Bankas/Create';
 import Read from './Components/Bankas/Read';
-import { lsRead, lsStore } from './Components/Bankas/lsManager'
+import Delete from './Components/Bankas/Delete';
+import { lsDestroy, lsRead, lsStore } from './Components/Bankas/lsManager'
 
 
 //Bankas CRUD ver.1
@@ -18,7 +19,10 @@ export default function App() {
 
     const [customers, setCustomers] = useState([])
     const [createData, setCreateData] = useState(null);
-    console.log(customers)
+    const [deleteData, setDeleteData] = useState(null); // valdo modala ir duomenis, kurios galima istrinti
+    const [destroyData, setDestroyData] = useState(null);
+    
+    console.log(deleteData)
     useEffect(_ => {
         setCustomers(lsRead(KEY))
     }, [])
@@ -26,10 +30,21 @@ export default function App() {
         if (null === createData) {
             return;
         }
-        lsStore(KEY, createData)
+       const id = lsStore(KEY, createData)
         console.log(createData);
-        // setCostumers(prevCostumers => [...prevCostumers, { ...createData, id }]);
+        setCustomers(prevCustomers => [...prevCustomers, { ...createData, id }]);
     }, [createData]);
+
+    useEffect(_=>{
+        if (null === destroyData) {
+            return;
+        }
+        lsDestroy(KEY, destroyData.id);
+                        
+        setCustomers(prevCustomers => prevCustomers.filter(customer => customer.id !== destroyData.id));
+        setDeleteData(null)
+
+    }, [destroyData]);
 
     return (
         <>
@@ -41,15 +56,15 @@ export default function App() {
                         <Create setCreateData={setCreateData} />
                     </div>
                     <div className="row-2">
-                        <Read customers={customers} />
+                        <Read customers={customers} setDeleteData={setDeleteData}/>
                     </div>
 
                 </div>
 
 
             </div>
-            {/* <Delete  />
-        <Edit /> */}
+            <Delete  deleteData = {deleteData} setDeleteData={setDeleteData} setDestroyData={setDestroyData} />
+        {/* <Edit /> */} 
 
         </>
     );
