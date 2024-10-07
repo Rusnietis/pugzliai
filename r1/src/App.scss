@@ -256,21 +256,21 @@ h6 {
 //   }
 // }
 
-// .messages {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   width: 350px;
-//   position: fixed;
-//   top: 30px;
-//   right: 50px;
+.messages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 350px;
+  position: fixed;
+  top: 30px;
+  right: 50px;
 
-//   .alert {
-//     width: 100%;
-//   }
+  .alert {
+    width: 100%;
+  }
 
-// }
+}
 
 // .big-bin {
 //   display: flex;

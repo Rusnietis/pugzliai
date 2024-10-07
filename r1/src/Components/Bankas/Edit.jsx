@@ -79,8 +79,8 @@ export default function Edit({ editData, setEditData, setUpdateData }) {
                                 />
                               
                                 <div className="buttons">
-                                    <button className="blue" onClick={handleAddAmount} >Pridėti sumas</button>
-                                    <button className="red" onClick={handleSubtractAmount} >Atimti sumas</button>
+                                    <button className="blue" onClick={handleAddAmount} >Pridėti suma</button>
+                                    <button className="red" onClick={handleSubtractAmount} >Atimti suma</button>
                                 </div>
                             </div>
                         </div>
