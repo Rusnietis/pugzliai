@@ -1,6 +1,6 @@
 import Show from "./Show";
 
-export default function Read({ customers, setDeleteData }) {
+export default function Read({ customers, setDeleteData, setEditData }) {
 
     console.log(customers)
 
@@ -12,7 +12,7 @@ export default function Read({ customers, setDeleteData }) {
                     <li key={customer.id} className="list-group-item"><Show customer={customer}/></li>
                 ))}
             </ul> */}
-            <Show customers={customers} setDeleteData={setDeleteData}/>
+            <Show customers={customers} setDeleteData={setDeleteData} setEditData={setEditData}/>
         </>
     )
 

@@ -1,11 +1,7 @@
-export default function Show({ customers, setDeleteData }) {
+export default function Show({ customers, setDeleteData, setEditData }) {
     return (
-
-
         <>
-
             <table className="table table-bordered">
-
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -25,11 +21,11 @@ export default function Show({ customers, setDeleteData }) {
                             <td>
 
                                 <div className="form">
-                                  
+
                                     <div className="buttons">
-                                        <button className="red" onClick={_=> setDeleteData(customer)} >Ištrinti klienta</button>
-                                        <button className="yellow" >Keisti</button>
-                                        
+                                        <button className="red" onClick={_ => setDeleteData(customer)} >Ištrinti klienta</button>
+                                        <button className="yellow" onClick={_ => setEditData(customer)}>Keisti</button>
+
                                     </div>
                                 </div>
                             </td>

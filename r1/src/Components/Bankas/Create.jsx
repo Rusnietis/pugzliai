@@ -37,7 +37,6 @@ export default function Create({ setCreateData }) {
             <div className="mb-3" >
                 <div className="form">
                     <label className="form-label">Vardas, pavardė</label>
-
                     <input type="text" name="vardas" className="form-control" placeholder="Vardas, pavarde"
                         value={customer.vardas} onChange={handleChange}
                     />
@@ -45,7 +44,6 @@ export default function Create({ setCreateData }) {
                     <input type="text" name="saskaita" className="form-control" placeholder="Saskaitos Nr."
                         value={customer.saskaita} onChange={handleChange}
                     />
-
                     <div className="buttons">
                         <button className="blue" onClick={handleSubmit}>Pridėti klienta</button>
                     </div>
@@ -53,6 +51,5 @@ export default function Create({ setCreateData }) {
             </div>
         </>
     )
-
 
 }
