@@ -4,7 +4,7 @@ import A from './Components/035/A';
 import { useState } from 'react';
 import { Context } from './Components/035/Context';
 import { ColorContext } from './Components/035/ColorContext';
-// 32 paskaita
+// 35 paskaita
 function App() {
 
     const [counter1, setCounter1] = useState(0);
