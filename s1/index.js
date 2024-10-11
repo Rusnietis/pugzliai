@@ -4,10 +4,12 @@ const fs = require('node:fs');
 const app = express();
 const port = 3001;
 
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(express.static('public'));
 
 // parse application/json
-//app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // router
 
@@ -39,6 +41,29 @@ app.post('/form', (req, res) => {
   fs.writeFileSync('./data/data.json', data);
 
   res.redirect('/form');
+})
+
+app.get('/form-js', (req, res) => {
+  let html = fs.readFileSync('./htmls/jsform.html', 'utf8');
+
+  let data = fs.readFileSync('./data/data.json', 'utf8');// nuskaitymas
+  data = JSON.parse(data); //pavertimas i masyva
+  let htmlData = '';
+  data.forEach(item => {
+    htmlData += `<tr><td>${item.name}</td><td>${item.surname}</td><td>${item.age}</td></tr>`;
+  });
+  html = html.replace('{{data}}', htmlData);
+  res.send(html);
+})
+
+app.post('/form-js', (req, res) => {
+  let data = fs.readFileSync('./data/data.json', 'utf8');// nuskaitymas
+  data = JSON.parse(data); //pavertimas i masyva
+  data.push(req.body);
+  data = JSON.stringify(data);
+  fs.writeFileSync('./data/data.json', data);
+  res.json({ success: true });
+
 })
 
 app.listen(port, () => {
