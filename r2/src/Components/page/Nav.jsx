@@ -1,4 +1,4 @@
-
+import Link from "./Link"
 export default function Nav() {
 
     return (
@@ -6,9 +6,9 @@ export default function Nav() {
                 <a className="navbar-brand" href="#home">Home Base</a>
 
                 <div className="navbar-nav">
-                    <a className="nav-link active" href="#animals">Animals</a>
-                    <a className="nav-link" href="#about">About zoo</a>
-                    <a className="nav-link" href="#contact">Contacts</a>
+                    <Link href="#animals">Animals</Link>
+                    <Link href="#about">About zoo</Link>
+                    <Link href="#contact">Contacts</Link>
                     
                 </div>
             

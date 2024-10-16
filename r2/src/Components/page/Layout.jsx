@@ -1,28 +1,29 @@
-import { useState } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import About from './About';
 import Animals from './Animals';
 import Contact from './Contact';
 import Home from './Home';
 import Page404 from './Page404';
-import { useEffect } from 'react';
 import Loading from './Loading';
 
+export const ParameterContext = createContext();
 
+//Layout komponenta reiktu pakeisti i  ParameterContext.Provider komponenta
 export default function Layout() {
 
-    const [patch, setPatch] = useState(null);
+    const [path, setPath] = useState(null);
     const [params, setParams] = useState([]);
 
     useEffect(_ => {
 
         const hash = window.location.hash.split('/')
-        setPatch(hash.shift() || '#home');
+        setPath(hash.shift() || '#home');
         setParams(hash);
 
 
         const onHashChange = _ => {
             const hash = window.location.hash.split('/')
-            setPatch(hash.shift() || '#home');
+            setPath(hash.shift() || '#home');
             setParams(hash);
         }
 
@@ -31,7 +32,7 @@ export default function Layout() {
         return _ => {
             window.removeEventListener('hashchange', onHashChange);
         }
-    }, [setParams,setPatch]);
+    }, [setParams, setPath]);
 
 
     const routes = [
@@ -43,11 +44,16 @@ export default function Layout() {
 
     ]
 
-    return (
-        <>
+    return ( <ParameterContext.Provider value={
             {
-                routes.find(route => route.path === patch)?.component || <Page404 />
+                params,
+                path
             }
-        </>
+        }>
+            {
+                routes.find(route => route.path === path)?.component || <Page404 />
+            }
+        
+        </ParameterContext.Provider>
     )
 }
