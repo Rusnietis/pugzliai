@@ -14,41 +14,43 @@ app.use(bodyParser.json());
 
 // // router
 
-app.get('/animals', (req, res) => {
+app.get('/customers', (req, res) => {
   const data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
   // res.status(400).end();
   res.json(data); //issiuntimas i serveri
 });
 
-app.post('/animals', (req, res) => {
+app.post('/customers', (req, res) => {
   const data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
-  const newAnimal = req.body;
-  newAnimal.id = uuidv4();
-  data.push(newAnimal);
+  const newCustomer = req.body;// I nauja klienta idedame nauja varda(klienta pvz. - Jonas)
+  newCustomer.id = uuidv4();// prie kliento pridedame ID
+  data.push(newCustomer);// su papildytais duomenimis irasome i faila
   fs.writeFileSync('./data/data.json', JSON.stringify(data));
-  res.json({ id: newAnimal.id,  message: 'Animal at home now', type: 'success' });
+  res.json({id: newCustomer.id}); // graziname nauja objekta i reacta/narsykle
+  //res.json({ id: newAnimal.id,  message: 'Animal at home now', type: 'success' });
 });
 
-app.delete('/animals/:id', (req, res) => {
+app.delete('/customers/:id', (req, res) => {
 
   let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
   const id = req.params.id;
-  data = data.filter(animal => animal.id !== id);
+  data = data.filter(customer => customer.id !== id);
   fs.writeFileSync('./data/data.json', JSON.stringify(data));
+  res.json({status: 'ok'});
   //res.status(204).end();
-  res.json({ message: 'Animal is free now', type: 'info' });
+  //res.json({ message: 'Animal is free now', type: 'info' });
 
 });
 
-app.put('/animals/:id', (req, res) => {
-  let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
-  const id = req.params.id;
-  const updateAnimal = req.body;
-  data = data.map(animal => animal.id !== id ? { ...updateAnimal, id } : animal);
-  fs.writeFileSync('./data/data.json', JSON.stringify(data));
-  res.json({ message: 'Animal is diferent now', type: 'info'  });
+// app.put('/animals/:id', (req, res) => {
+//   let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
+//   const id = req.params.id;
+//   const updateAnimal = req.body;
+//   data = data.map(animal => animal.id !== id ? { ...updateAnimal, id } : animal);
+//   fs.writeFileSync('./data/data.json', JSON.stringify(data));
+//   res.json({ message: 'Animal is diferent now', type: 'info'  });
 
-});
+// });
 
 
 app.listen(port, () => {

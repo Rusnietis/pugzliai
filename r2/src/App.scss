@@ -1,27 +1,58 @@
-.App {
-  text-align: center;
-}
+// .App {
+//   text-align: center;
+// }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+// .App-logo {
+//   height: 40vmin;
+//   pointer-events: none;
+// }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+// @media (prefers-reduced-motion: no-preference) {
+//   .App-logo {
+//     animation: App-logo-spin infinite 20s linear;
+//   }
+// }
 
 .App-header {
-  background-color: #282c34;
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+
+  //align-items: start;
+  // justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
+
+  h1 {
+    width: 450px;
+    height: 100px;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    font-size: 50px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: orangered;
+    background-color: lightblue;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  h3 {
+    width: 280px;
+    height: 50px;
+    display: flex;
+    justify-content: end;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px 10px;
+    background-color: lightgreen;
+    font-size: 20px;
+    font-family: monospace;
+
+  }
 }
 
 .App-link {
@@ -38,6 +69,8 @@
   }
 }
 
+
+
 .animal-line {
   display: flex;
   flex-direction: row;
@@ -45,6 +78,134 @@
   align-items: center;
   margin: 5px;
   width: 500px;
+}
+
+.row {
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(80, 123, 203);
+  border-radius: 10px;
+  width: 1050px;
+  height: 180px;
+
+  .table {
+    display: inline-block;
+    border: black;
+    width: 1000px;
+    height: 140px;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+
+    th {
+      text-align: center;
+      height: 70px;
+    }
+
+    td {
+
+      justify-items: center;
+      align-items: baseline;
+      width: 300px;
+      height: 70px;
+      padding: 0;
+
+      .form {
+        align-content: center;
+        display: flex;
+        // display: inline-block;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 200px;
+        background-color: white;
+        color: black;
+        margin: 0;
+
+        input {
+          width: 200px;
+          height: 40px;
+          color: black;
+        }
+      }
+
+      .buttons {
+        margin: 0;
+
+        button {
+          margin: 8px;
+        }
+      }
+    }
+
+
+  }
+}
+
+.row-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(180, 59, 11);
+  border-radius: 10px;
+  width: 1300px;
+  height: 400px;
+
+  .table {
+    display: inline-block;
+
+    border: black;
+    width: 1200px;
+    height: 140px;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+
+    th {
+      text-align: center;
+      height: 70px;
+    }
+
+    td {
+      
+      justify-items: center;
+      text-align: center;
+      width: 220px;
+      height: 70px;
+      padding: 0;
+
+      .form {
+        align-content: center;
+        display: flex;
+        // display: inline-block;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 200px;
+        background-color: white;
+        color: black;
+        margin: 0;
+
+        input {
+          width: 110px;
+          height: 40px;
+          color: black;
+        }
+      }
+
+      .buttons {
+        margin: 0;
+
+        button {
+          text-align: start;
+          margin: 8px;
+          padding: 10px;
+        }
+      }
+    }
+
+
+  }
 }
 
 .messages {
@@ -115,12 +276,15 @@ main {
     text-align: center;
     font-size: 100px;
   }
+
   h2 {
     font-size: 50px;
   }
+
   h3 {
     font-size: 30px;
-    a{
+
+    a {
       color: #61dafb;
     }
   }
