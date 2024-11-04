@@ -5,11 +5,9 @@ import './form.scss';
 import './buttons.scss';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-//import Messages from './Components/039/Messages';
+import Messages from './Components/039/Messages';
 
 const URL = 'http://localhost:3001/customers';
-
-
 
 function App() {
 
@@ -20,98 +18,87 @@ function App() {
   });
   const [customers, setCustomers] = useState([])
   const [storeCustomers, setStoreCustomers] = useState(null);
-  // //   const [animalEditInput, setAnimalEditInput] = useState('');
-  // //   const [animals, setAnimals] = useState(null);
-
-  // //   const [updateAnimals, setUpdateAnimals] = useState(null);
+  const [adjustAmounts, setAdjustAmounts] = useState({});
+  const [updateCustomers, setUpdateCustomers] = useState(null);
   const [destroyCustomers, setDestroyCustomers] = useState(null);
-  // //   const [editStatus, setEditStatus] = useState(null);
-  // //   const [error, setError] = useState(null);
-  // //   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
+  const [messages, setMessages] = useState([]);
 
-  //   const addMessage = useCallback((type, text) => {
-  //       const id = uuidv4();
-  //       setMessages(prevMessages => [{ id, type, text }, ...prevMessages]);
-  //       setTimeout(_ => {
-  //           setMessages(prevMessages => prevMessages.filter(m => m.id !== id));
-  //       }, 3000);
-  //   }, []);
+
+
+  const addMessage = useCallback((type, text) => {
+    const id = uuidv4();
+    setMessages(prevMessages => [{ id, type, text }, ...prevMessages]);
+    setTimeout(_ => {
+      setMessages(prevMessages => prevMessages.filter(m => m.id !== id));
+    }, 3000);
+  }, []);
 
   useEffect(_ => {
     axios.get(URL)
-      .then(res => setCustomers(res.data))
-      .catch(err => console.log(err))
+      .then(res => {
+        console.log(res)
+        setCustomers(res.data);
+        setError(null);
+      })
+      .catch(err => {
+        console.log(err)
+        if (err.response) {
+          setError(err.response.status + ' ' + err.response.statusText);
+        } else {
+          setError(err.message);
+        }
+      });
   }, []);
 
-  //   //1
-  //   useEffect(_ => {
-  //     axios.get(URL)
-  //       .then(res => {
-  //         console.log(res)
-  //         setAnimals(res.data);
-  //         setError(null);
-  //       })
-  //       .catch(err => {
-  //         console.log(err)
-  //         if (err.response) {
-  //           setError(err.response.status + ' ' + err.response.statusText);
-  //         }else {
-  //           setError(err.message);
-  //         }
-  //       });
-  //   }, []);
-
-  //   useEffect(_ => {
-  //     setAnimalEditInput(animals?.find(animal => animal.id === editStatus)?.name || '');
-  //   }, [editStatus])
-  //   //2
-
-  useEffect(_ => {
-    if (null !== storeCustomers) {
+  useEffect(() => {
+    if (storeCustomers) {
       axios.post(URL, storeCustomers)
         .then(res => {
-          setCustomers(prevCustomers => [{ name: storeCustomers.name, id: res.data.id, ...storeCustomers }, ...prevCustomers]);
-          setCustomerInput({
-            vardas: '',
-            saskaita: '',
-            amount: 0
-          });
-          //setError(null);
-          //addMessage(res.data.type, res.data.message);
+          setCustomers(prevCustomers => sortCustomersByLastName([
+            { id: res.data.id, ...storeCustomers },
+            ...prevCustomers
+          ]));
+          // setCustomers(prevCustomers => [
+          //   { id: res.data.id, ...storeCustomers },
+          //   ...prevCustomers
+          // ]);
+          setCustomerInput({ vardas: '', saskaita: '', amount: 0 });
+          setError(null);
+          addMessage('success', 'Klientas sėkmingai pridėtas');
         })
         .catch(err => console.log(err));
     }
-  }, [storeCustomers]);
+}, [storeCustomers, addMessage]);
 
-    useEffect(_ => {
-      if (null !== destroyCustomers) {
-        axios.delete(`${URL}/{destroyCustomers.id}`)//perdavimas per parametra
-          .then(_ => {
-            setCustomers(customers.filter(customer => customer.id !== destroyCustomers.id));
-            //setError(null);
-            //addMessage(res.data.type, res.data.message);
-          })
-          .catch(err => { 
-            console.log(err);
-            //addMessage('danger', err.response ? err.response.status + ' ' + err.response.statusText : err.message) ;
-          });
-      }
-    }, [destroyCustomers]);
+  useEffect(res => {
+    if (destroyCustomers) {
+      axios.delete(`${URL}/${destroyCustomers.id}`)
+        .then(res => {
+          setCustomers(prevCustomers => prevCustomers.filter(customer => customer.id !== destroyCustomers.id));
+          setError(null);
+          addMessage(res.data.type, res.data.message);
+        })
+        .catch(err => {
+          console.log(err)
+          addMessage('danger', err.response ? err.response.status + ' ' + err.response.statusText : err.message);
+        });
+    }
+  }, [destroyCustomers, addMessage]);
 
-  //   useEffect(_ => {
-  //     if (updateAnimals) {
-  //       axios.put(`${URL}/${updateAnimals.id}`, updateAnimals)
-  //         .then(res => {
-  //           setAnimals(animals.map(animal => animal.id === updateAnimals.id ? { ...animal, name: updateAnimals.name } : animal));
-  //           setEditStatus(null);
-  //           setError(null);
-  //           addMessage(res.data.type, res.data.message);
-  //         })
-  //         .catch(err => {
-  //           console.log(err)
-  //         });
-  //     }
-  //   }, [updateAnimals]);
+  useEffect(res => {
+    if (updateCustomers) {
+      axios.put(`${URL}/${updateCustomers.id}`, updateCustomers)
+        .then(() => {
+          setCustomers(prevCustomers => prevCustomers.map(customer => customer.id === updateCustomers.id ? { ...customer, ...updateCustomers } : customer));// Atnaujiname visus laukus: customer));
+          setError(null);
+          addMessage(res.data.type, res.data.message);
+        })
+        .catch(err =>
+          console.log(err)
+        );
+    }
+  }, [updateCustomers, addMessage]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -121,21 +108,70 @@ function App() {
     });
   };
 
-  const submit = _ => {
+  const handleAdjustAmountChange = (id, value) => {
+    setAdjustAmounts(prevAdjustAmounts => ({
+      ...prevAdjustAmounts,
+      [id]: value // Priskiriame tik tam tikram `id` kliento sumą
+    }));
+  };
 
-    setStoreCustomers(customerInput);
-  }
+  const handleAddAmount = (id) => {
+    const updatedCustomer = customers.find(customer => customer.id === id);
+    if (!updatedCustomer) return;
 
-  //   const change = animal => {
-  //     if (null === editStatus || editStatus !== animal.id) {
-  //       setEditStatus(animal.id)
-  //     }
-  //     else {
-  //       setUpdateAnimals({ name: animalEditInput, id: animal.id });
-  //     }
-  //   }
+    const newAmount = updatedCustomer.amount + (adjustAmounts[id] || 0); // Nauja suma
 
+    // Atnaujiname kliento sąrašą
+    setCustomers(prevCustomers =>
+      prevCustomers.map(customer =>
+        customer.id === id ? { ...customer, amount: newAmount } : customer
+      )
+    );
 
+    // Siunčiame atnaujintą klientą į serverį
+    setUpdateCustomers({ ...updatedCustomer, amount: newAmount });
+  };
+
+  const handleSubtractAmount = (id) => {
+    const updatedCustomer = customers.find(customer => customer.id === id);
+    if (!updatedCustomer) return;
+
+    const newAmount = Math.max(updatedCustomer.amount - (adjustAmounts[id] || 0), 0); // Nauja suma
+
+    // Atnaujiname kliento sąrašą
+    setCustomers(prevCustomers =>
+      prevCustomers.map(customer =>
+        customer.id === id ? { ...customer, amount: newAmount } : customer
+      )
+    );
+
+    // Siunčiame atnaujintą klientą į serverį
+    setUpdateCustomers({ ...updatedCustomer, amount: newAmount });
+  };
+
+  const submit = () => {
+    if (customerInput.vardas && customerInput.saskaita) {
+      setStoreCustomers({ ...customerInput, name: customerInput.vardas });
+    } else {
+      addMessage('info', 'Užpildykite visus laukus');
+    }
+  };
+
+  const sortCustomersByLastName = (customers) => {
+    return [...customers].sort((a, b) => {
+      const lastNameA = a.vardas.trim().split(' ').slice(-1)[0];
+      const lastNameB = b.vardas.trim().split(' ').slice(-1)[0];
+      return lastNameA.localeCompare(lastNameB);
+    });
+  };
+
+  const handleDeleteCustomer = (customer) => {
+    if (customer.amount > 0) {
+      addMessage('info', 'Sąskaitoje yra pinigų, todėl kliento ištrinti negalima');
+      return;
+    }
+    setDestroyCustomers(customer); // Jei balansas 0, pradeda trynimo procesą
+  };
 
   return (
     <div className="App">
@@ -164,19 +200,17 @@ function App() {
                     <input type="text" name="vardas" placeholder="Vardas, pavardė"
                       value={customerInput.vardas} onChange={handleInputChange}
                     />
-                    {/* <input type="text" placeholder="Enter Animal" value={animalInput} onChange={e => setAnimalInput(e.target.value)} /> */}
                   </div>
                 </td>
                 <td>
                   <div className="form">
                     <input type="text" name="saskaita" value={customerInput.saskaita} onChange={handleInputChange} />
-                    {/* <input type="text" name="saskaita" value={customerInput.saskaita || ''} onChange={e => setCustomerInput(e.target.value)} /> */}
                   </div>
                 </td>
                 <td></td>
                 <td>
                   <div className="buttons">
-                    <button className="green" onClick={submit} >Submit</button>
+                    <button className="yellow" onClick={submit} >Pridėti</button>
                   </div>
                 </td>
               </tr>
@@ -197,40 +231,35 @@ function App() {
                   <th scope="col"></th>
                   <th scope="col">Įvesti suma</th>
                   <th scope="col">Op. su pinigais</th>
-
                 </tr>
               </thead>
               <tbody>
-                {customers.map(customer =>
+                {Array.isArray(customers) && customers.map(customer =>
                   <tr key={customer.id} >
-
                     <th scope="row">#</th>
                     <td>{customer.vardas}</td>
                     <td>{customer.saskaita}</td>
                     <td>{customer.amount}</td>
-                    <td><button className="red" onClick={_=>setDestroyCustomers(customer)}>Ištrinti</button></td>
+                    <td><button className="red" onClick={() => handleDeleteCustomer(customer)}>Ištrinti</button></td>
                     <td>
                       <div className="form">
-                        <input type="number" />
+                        <input
+                          type="number"
+                          value={adjustAmounts[customer.id] || ''} // Parenkame individualią reikšmę pagal id
+                          onChange={(e) => handleAdjustAmountChange(customer.id, Number(e.target.value))}
+                        />
                       </div>
                     </td>
                     <td>
                       <div className="buttons">
-                        <button className="green" >Pridėti pinigus</button>
-                        <button className="blue" >Nuimti pinigus</button>
+                        <button className="green" onClick={() => handleAddAmount(customer.id)}>Pridėti pinigus</button>
+                        <button className="blue" onClick={() => handleSubtractAmount(customer.id)}>Nuimti pinigus</button>
                       </div>
 
                     </td>
                   </tr>
 
                 )}
-                {/* <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td><input type="number"/></td>
-
-                </tr> */}
               </tbody>
             </table>
           }
@@ -238,12 +267,13 @@ function App() {
             customers && !customers.length && <p>No Customers Found</p>
           }
           {
-            !customers && <p>Customers is loading...</p>
+            !customers && (error ? <p style={{ color: 'crimson' }}>{error}</p> : <p>Customers is loading...</p>)
+            //!customers &&  <p>Customers is loading...</p>
           }
         </div>
 
       </header >
-
+      <Messages messages={messages} />
     </div >
   );
 }
