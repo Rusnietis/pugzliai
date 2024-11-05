@@ -6,7 +6,7 @@ import './buttons.scss';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Messages from './Components/039/Messages';
-
+// Banko versija 2, versija su Express serveriu
 const URL = 'http://localhost:3001/customers';
 
 function App() {
@@ -86,17 +86,22 @@ function App() {
     }
   }, [destroyCustomers, addMessage]);
 
-  useEffect(res => {
+  useEffect(() => {
     if (updateCustomers) {
       axios.put(`${URL}/${updateCustomers.id}`, updateCustomers)
-        .then(() => {
-          setCustomers(prevCustomers => prevCustomers.map(customer => customer.id === updateCustomers.id ? { ...customer, ...updateCustomers } : customer));// Atnaujiname visus laukus: customer));
+        .then((res) => {
+          setCustomers(prevCustomers => 
+            prevCustomers.map(customer => 
+              customer.id === updateCustomers.id ? { ...customer, ...updateCustomers } : customer
+            )
+          );
           setError(null);
           addMessage(res.data.type, res.data.message);
         })
-        .catch(err =>
-          console.log(err)
-        );
+        .catch(err => {
+          console.log(err);
+          setError("Nepavyko atnaujinti kliento.");
+        });
     }
   }, [updateCustomers, addMessage]);
 

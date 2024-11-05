@@ -1,1 +1,37 @@
-[{"vardas":"Antanas Antanaitis","saskaita":"LT 065555","amount":30,"name":"Antanas Antanaitis","id":"4c261db1-edf6-41f9-87b1-4a1dd34bd874"},{"vardas":"Bebras Bebraitis","saskaita":"LT 022333","amount":27,"name":"Bebras Bebraitis","id":"0598bce9-a0ba-434f-bdde-005e365c84b3"},{"vardas":"Pranas Kranas","saskaita":"LT 066666","amount":0,"name":"Pranas Kranas","id":"b5c85072-1f38-4a48-853c-5865d99b78c5"}]
+[
+  {
+    "vardas": "Antanas Antanaitis",
+    "saskaita": "LT 065555",
+    "amount": 30,
+    "name": "Antanas Antanaitis",
+    "id": "4c261db1-edf6-41f9-87b1-4a1dd34bd874"
+  },
+  {
+    "vardas": "Bebras Bebraitis",
+    "saskaita": "LT 022333",
+    "amount": 28,
+    "name": "Bebras Bebraitis",
+    "id": "0598bce9-a0ba-434f-bdde-005e365c84b3"
+  },
+  {
+    "vardas": "Pranas Kranas",
+    "saskaita": "LT 066666",
+    "amount": 0,
+    "name": "Pranas Kranas",
+    "id": "b5c85072-1f38-4a48-853c-5865d99b78c5"
+  },
+  {
+    "vardas": "Zigmas Zigmaitis",
+    "saskaita": "LT 055555",
+    "amount": 44,
+    "name": "Zigmas Zigmaitis",
+    "id": "7eb57b54-817f-4ad2-8398-43a0259a023d"
+  },
+  {
+    "vardas": "Lukas Lukaitis",
+    "saskaita": "LT 065111",
+    "amount": 33,
+    "name": "Lukas Lukaitis",
+    "id": "91de03b2-e5a5-48f5-99a1-b2b1fbbaf4b1"
+  }
+]

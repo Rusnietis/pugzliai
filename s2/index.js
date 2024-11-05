@@ -42,48 +42,32 @@ app.delete('/customers/:id', (req, res) => {
 
 });
 
-// app.put('/customers/:id', (req, res) => {
-//   try {
-//     // Patikrinkite, ar failas egzistuoja ir gali būti sėkmingai perskaitytas
-//     if (!fs.existsSync('./data/data.json')) {
-//       return res.status(404).json({ error: "Duomenų failas nerastas" });
-//     }
-
-//     let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
-
-//     // Patikrinkite, ar data buvo sėkmingai nuskaityta
-//     if (!Array.isArray(data)) {
-//       return res.status(500).json({ error: "Duomenų failas netinkamas" });
-//     }
-
-//     const id = req.params.id;
-//     const updateCustomer = req.body;
-
-//     // Atnaujinkite klientą
-//     data = data.map(customer =>
-//       customer.id === id ? { ...customer, ...updateCustomer } : customer
-//     );
-
-//     // Išsaugokite atnaujintus duomenis
-//     fs.writeFileSync('./data/data.json', JSON.stringify(data, null, 2));
-//     res.json({ id: id, message: 'Klientas atnaujintas', type: 'info' });
-    
-//   } catch (error) {
-//     console.error("Klaida atnaujinant klientą:", error);
-//     res.status(500).json({ error: "Vidinė serverio klaida atnaujinant klientą" });
-//   }
-// });
-
-
 app.put('/customers/:id', (req, res) => {
-  let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
-  const id = req.params.id;
-  const updateCustomer = req.body;
-  data = data.map(customer => customer.id === id ? { ...customer,...updateCustomer, id } : customer);
-  fs.writeFileSync('./data/data.json', JSON.stringify(data));
-  res.json({id: newCustomer.id, message: 'Klientas atnaujintas', type: 'info'  });
+  let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8')); // Perskaitome esamus klientų duomenis
+  const id = req.params.id; // Gauname kliento ID iš URL
+  const updateCustomer = req.body; // Gauname naujus duomenis iš užklausos kūno
 
+  // Atnaujiname konkretų klientą pagal jo ID
+  data = data.map(customer => 
+    customer.id === id ? { ...customer, ...updateCustomer } : customer
+  );
+
+  // Įrašome atnaujintus duomenis į failą
+  fs.writeFileSync('./data/data.json', JSON.stringify(data, null, 2)); // `null, 2` suteikia formatavimą, kad JSON failas būtų lengviau skaitomas
+
+  // Grąžiname atsakymą su patvirtinimu
+  res.json({ id, message: 'Klientas atnaujintas', type: 'info' });
 });
+
+// app.put('/customers/:id', (req, res) => {
+//   let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
+//   const id = req.params.id;
+//   const updateCustomer = req.body;
+//   data = data.map(customer => customer.id === id ? { ...customer,...updateCustomer, id } : customer);
+//   fs.writeFileSync('./data/data.json', JSON.stringify(data));
+//   res.json({id: newCustomer.id, message: 'Klientas atnaujintas', type: 'info'  });
+
+// });
 
 
 app.listen(port, () => {
