@@ -21,10 +21,9 @@ function App() {
   const [adjustAmounts, setAdjustAmounts] = useState({});
   const [updateCustomers, setUpdateCustomers] = useState(null);
   const [destroyCustomers, setDestroyCustomers] = useState(null);
+  const [filter, setFilter] = useState('visi'); // Nustatome filtrą: 'visi', 'suPinigais', 'tuscios'
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
-
-
 
   const addMessage = useCallback((type, text) => {
     const id = uuidv4();
@@ -69,7 +68,7 @@ function App() {
         })
         .catch(err => console.log(err));
     }
-}, [storeCustomers, addMessage]);
+  }, [storeCustomers, addMessage]);
 
   useEffect(res => {
     if (destroyCustomers) {
@@ -90,8 +89,8 @@ function App() {
     if (updateCustomers) {
       axios.put(`${URL}/${updateCustomers.id}`, updateCustomers)
         .then((res) => {
-          setCustomers(prevCustomers => 
-            prevCustomers.map(customer => 
+          setCustomers(prevCustomers =>
+            prevCustomers.map(customer =>
               customer.id === updateCustomers.id ? { ...customer, ...updateCustomers } : customer
             )
           );
@@ -104,6 +103,8 @@ function App() {
         });
     }
   }, [updateCustomers, addMessage]);
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -178,6 +179,12 @@ function App() {
     setDestroyCustomers(customer); // Jei balansas 0, pradeda trynimo procesą
   };
 
+  const filteredCustomers = customers.filter(customer => {
+    if (filter === 'suPinigais') return customer.amount > 0; // Tik su pinigais
+    if (filter === 'tuscios') return customer.amount === 0;   // Tik tuščios sąskaitos
+    return true; // Visi klientai
+  });
+
   return (
     <div className="App">
       <header className="App-header">
@@ -227,8 +234,14 @@ function App() {
           {
             customers && customers.length !== 0 &&
             <table className="table ">
+              <div>
+                <button onClick={() => setFilter('visi')}>Visi klientai</button>
+                <button onClick={() => setFilter('suPinigais')}>Tik su pinigais</button>
+                <button onClick={() => setFilter('tuscios')}>Tik tuščios sąskaitos</button>
+              </div>
               <thead>
                 <tr>
+
                   <th scope="col">#</th>
                   <th scope="col">Vardas, pavardė</th>
                   <th scope="col">Sąskaitos Nr.</th>
@@ -239,7 +252,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(customers) && customers.map(customer =>
+                {Array.isArray(customers) && filteredCustomers.map(customer =>
                   <tr key={customer.id} >
                     <th scope="row">#</th>
                     <td>{customer.vardas}</td>
@@ -265,7 +278,9 @@ function App() {
                   </tr>
 
                 )}
+
               </tbody>
+              
             </table>
           }
           {
