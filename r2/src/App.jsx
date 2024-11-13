@@ -15,10 +15,21 @@ export default function App() {
 
     // ];
 
+    const sorts = [
+        { name: 'default', value: 'default' },
+        { name: 'height_asc', value: 'height 1-9' },
+        { name: 'height_desc', value: 'height 9-1' },
+        { name: 'name_asc', value: 'name A-Z' },
+        { name: 'name_desc', value: 'name Z-A' },
+    ]
+
     const types = ['lapuotis', 'spigliuotis', 'palmė'];
     const [inputs, setInputs] = useState({ name: '', height: '', type: '' });
     const [cutId, setCutId] = useState('');
-    const [growInputs, setGrowInputs] = useState({id: '', height:''})
+    const [growInputs, setGrowInputs] = useState({ id: '', height: '' });
+    const [sort, setSort] = useState('default');
+    const [trees, setTrees] = useState([]);
+    const [stats, setStats] = useState({total:0, average:0});
 
     const handleInputChange = e => {
         setInputs({ ...inputs, [e.target.id]: e.target.value });
@@ -27,12 +38,19 @@ export default function App() {
     const handleGrowInputChange = e => {
         setGrowInputs({ ...growInputs, [e.target.id]: e.target.value });
     }
-    const [trees, setTrees] = useState([]);
 
     useEffect(_ => {
-        axios.get(API_URL)
+        axios.get(API_URL + '/stats') 
+        .then(res => {
+            console.log(res.data);
+            setStats(res.data);
+        });
+    }, [trees]);
+
+    useEffect(_ => {
+        axios.get(`${API_URL}/?sort=${sort}`)
             .then(res => setTrees(res.data))
-    }, []);
+    }, [sort]);
 
     const plant = _ => {
         axios.post(API_URL, { ...inputs, height: +inputs.height })
@@ -61,6 +79,20 @@ export default function App() {
     return (
         <div className="inside">
             <h1>Trees</h1>
+            <h2>Trees in garden: {stats.total}, average height: {stats.average.toFixed(2)} m</h2>
+            <div className="sort-box">
+                {
+                    sorts.map(s => <label
+                        key={s.name}
+                        style={{
+                            color: sort === s.name ? 'white' : 'skyblue',
+                            backgroundColor: sort === s.name ? 'skyblue' : 'white',
+                            cursor: sort === s.name ? 'default' : 'pointer'
+                        }}
+                        onClick={_ => setSort(s.name)}
+                    >{s.value}</label>)
+                }
+            </div>
             <table>
                 <thead>
                     <tr>

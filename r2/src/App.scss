@@ -300,3 +300,25 @@ main {
     width: 33%;
   }
 }
+
+.sort-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px;
+  gap: 20px;
+  label {
+    font-size: 17px;
+    color: slateblue;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.2s;
+    user-select: none;
+    &:hover {
+      border: 1px solid skyblue;
+    }
+  }
+}
