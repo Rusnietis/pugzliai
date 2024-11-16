@@ -146,10 +146,54 @@ app.get('/trees/stats', (req, res) => {
           FROM trees
       `;
     connection.query(sql, (err, rows) => {
-      if (err) throw err;
-      res.json(rows[0]);
+        if (err) throw err;
+        res.json(rows[0]);
     });
-  });
+});
+
+
+// SELECT column_name(s)
+// FROM table1
+// INNER JOIN table2
+// ON table1.column_name = table2.column_name;
+
+app.get('/clients', (req, res) => {
+    const type = req.query.type || '';
+    let sql;
+    if (type === 'inner') {
+        sql = `
+         SELECT c.id, p.id AS pid, name, number, client_id
+         FROM clients AS c
+         INNER JOIN phones AS p
+         ON c.id = p.client_id
+         ORDER BY c.name
+        `;
+    } else if (type === 'left') {
+        sql = `
+            SELECT c.id, p.id AS pid, name, number, client_id
+            FROM clients AS c
+            LEFT JOIN phones AS p
+            ON c.id = p.client_id
+        `;
+    } else if (type === 'right') {
+        sql = `
+            SELECT c.id, p.id AS pid, name, number, client_id
+            FROM clients AS c
+            RIGHT JOIN phones AS p
+            ON c.id = p.client_id
+        `;
+    } else {
+        // error
+
+    }
+
+
+    connection.query(sql, (err, rows) => {
+        if (err) throw err;
+        res.json(rows);
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Maria klauso ${port} porto.`);
