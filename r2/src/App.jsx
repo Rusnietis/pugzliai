@@ -10,16 +10,48 @@ const API_URL = 'http://localhost:3001/clients';
 export default function App() {
 
     const [clients, setClients] = useState([]);
+    const [structured, setStructured] = useState([]);
     const [type, setType] = useState('');
+
+
+    const restrcture = clients => {
+        const structured = [];
+        clients.forEach(client => {
+            const index = structured.findIndex(c => c.id === client.id);
+            if (index === -1) {
+                structured.push({
+                    id: client.id,
+                    name: client.name,
+                    phones: [{
+                        pid: client.pid,
+                        number: client.number,
+                        client_id: client.client_id
+                    }]
+                });
+            } else {
+                structured[index].phones.push({
+                    pid: client.pid,
+                    number: client.number,
+                    client_id: client.client_id
+                });
+            }
+        });
+        console.log(structured);
+        return structured;
+    }
 
 
     useEffect(_ => {
         if (type === '') {
             setClients([]);
+            setStructured([]);
             return;
         }
         axios.get(API_URL + '/?type=' + type)
-            .then(res => setClients(res.data));
+            .then(res => {
+                setClients(res.data);
+                setStructured(restrcture(res.data));
+            });
     }, [type, setClients]);
 
     return (
@@ -45,7 +77,7 @@ export default function App() {
                 </thead>
                 <tbody>
                     {clients.map(client => (
-                        <tr key={client.id + '_'+ client.pid}>
+                        <tr key={client.id + '_' + client.pid}>
                             <td>{client.id}</td>
                             <td>{client.name}</td>
                             <td>{client.pid}</td>
@@ -55,6 +87,26 @@ export default function App() {
                     ))}
                 </tbody>
             </table>
+
+            <h2>Structured Data</h2>
+            <div className="structured">
+                {
+                    structured.map(client => (
+                        <div key={client.id} className="client">
+                            <h3>{client.name}</h3>
+                            <div className="phones">
+                                {
+                                    client.phones.map(phone => (
+                                        <div key={phone.pid} className="phone">
+                                            <p>{phone.number}</p>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
 
         </div>
     )
