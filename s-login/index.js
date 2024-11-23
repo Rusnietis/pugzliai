@@ -27,5 +27,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Forest2 SERVERIS klauso ${port} porto.`);
+  console.log(`FRUITŲ SERVERIS klauso ${port} porto.`);
 });
