@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SERVER_URL } from '../Constants/main';
+import { SERVER_URL, AFTER_LOGIN_URL, SITE_URL } from '../Constants/main';
 
 export default function useLogin() {
 
@@ -11,7 +11,9 @@ export default function useLogin() {
         if (null !== inputs) {
             axios.post(`${SERVER_URL}/login`, inputs)
                 .then(res => {
-                    console.log(res);
+                    window.localStorage.setItem('token', res.data.token);
+                    window.localStorage.setItem('user', res.data.name);
+                    window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`;
                 })
                 .catch(error => {
                     console.log(error);
@@ -25,12 +27,12 @@ export default function useLogin() {
                         setResponse({
                             ok: false,
                             status: error.response.status,
-                            message: error.message
+                            message: error.response.data?.message || error.message
                         });
                     }
                 })
         }
-    },[inputs]);
+    }, [inputs]);
 
 
     return [setInputs, response];

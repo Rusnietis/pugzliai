@@ -10,11 +10,13 @@ export default function Login() {
 
     const go = _ => {
         setInputs({ username, password });
+        setPassword('');
     }
 
 
     return (
         <div className="login-page">
+            {console.log(response)}
             <div className="box">
                 <h1>Login</h1>
                 <div className="response">
