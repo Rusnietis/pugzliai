@@ -26,6 +26,14 @@ app.get('/', (req, res) => {
   res.send('Labas Meškėnai!');
 });
 
+const doAuth = (req, res, next) => {
+  const token = req.query.token || req.body.token || '';
+  console.log('token', token);
+  return next();
+};
+
+app.use(doAuth);
+
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const sql = 'SELECT * FROM users WHERE name = ? AND password = ?';
@@ -40,7 +48,7 @@ app.post('/login', (req, res) => {
           if (err) {
             res.status(500);
           } else {
-            res.json({ success: true, token, name: results[0].name, role: results[0].role, id: results[0].id});
+            res.json({ success: true, token, name: results[0].name, role: results[0].role, id: results[0].id });
           }
         });
       } else {
