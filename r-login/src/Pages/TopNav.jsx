@@ -17,13 +17,13 @@ export default function TopNav() {
             </div>
             <div className="login">
                 {
-                    user && <span>{user.user}</span>
+                    user && <span className="user">{user.user}</span>
                 }
                 {
                     user && <span> | </span>
                 }
                 {
-                    user && <button onClick={logout}>Logout</button>
+                    user && <a onClick={logout}>Logout</a>
                 }
                 {
                     !user && <a href="#register">Register</a>
