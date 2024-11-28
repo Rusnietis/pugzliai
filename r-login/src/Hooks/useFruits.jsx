@@ -1,34 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
-// import { Auth } from '../Contexts/Auth';
+import { Auth } from '../Contexts/Auth';
 // import { Router } from '../Contexts/Router';
 
 export default function useFruits() {
-    const [fruits, setFruits] = useState([]);
+    const [fruits, setFruits] = useState(null);
     const [createFruit, setCreateFruit] = useState(null);
     const [editFruit, setEditFruit] = useState(null);
     const [deleteFruit, setDeleteFruit] = useState(null);
 
+    const { user, logout } = useContext(Auth);
+
+    //console.log(user)
+
     useEffect(_ => {
-        axios.get(`${SERVER_URL}/fruits`)
-        .then(res =>{
-            setFruits(res.data);
-            console.log(res.data)
-        })
-        .catch(err =>{
-            console.log(err);
-        })
-    },[]);
+        const withTokenUrl =
+            user ? `${SERVER_URL}/fruits?token=${user.token}` : `${SERVER_URL}/fruits`;
+        axios.get(withTokenUrl)
+            .then(res => {
+                setFruits(res.data);
+                console.log(res.data)
+            })
+            .catch(err => {
+                if (err.response) {
+                    if (err.response.status === 401) {
+                        logout();
+                    }
+                }
+                console.log(err);
+            })
+    }, []);
 
 
     useEffect(_ => {
         if (null !== createFruit) {
 
             axios.post(`${SERVER_URL}/fruits`, createFruit)
-                .then(_ => {
+                .then(res => {
                     setCreateFruit(null);
-
+                    console.log(res.data);
+                    setFruits(f => f.map(fruit => fruit.id === res.data.uuid ? {...f, id: res.data.id, temp: false} : fruit));
                 })
                 .catch(err => {
                     console.log(err);

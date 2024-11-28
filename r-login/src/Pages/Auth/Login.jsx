@@ -17,25 +17,26 @@ export default function Login() {
         setPassword('');
     }
 
-    useEffect(_=> {
+    useEffect(_ => {
         if (user) {
             window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`;
         }
 
-    },[user])
+    }, [user])
 
     if (!user) {
         return (
             <div className="login-page">
                 {console.log(response)}
                 <div className="box">
-                    <h1>Login</h1>
+
                     <div className="response">
                         {
                             response && !response.ok && <span>{response.message}</span>
                         }
                     </div>
                     <form className="form">
+                        <h1>Login</h1>
                         <label>Username</label>
                         <input type="text" name="name" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} />
                         <label>Password</label>
@@ -46,7 +47,7 @@ export default function Login() {
 
             </div>
         );
-    } else{
+    } else {
         return null;
     }
 }

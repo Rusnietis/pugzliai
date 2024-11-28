@@ -7,6 +7,13 @@ export default function List() {
 
     const { fruits } = useContext(Fruits);
 
+    if (!fruits) return (
+        <div>
+            <TopNav />
+            <h1>Loading...</h1>
+        </div>
+    );
+
     return (
         <div>
             <TopNav />
