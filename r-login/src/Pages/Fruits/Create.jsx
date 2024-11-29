@@ -17,7 +17,7 @@ export default function Create() {
             name,
             color,
             form,
-            id: uuidv4,
+            id: uuidv4(),
             authorized: false
         }
         console.log(fruit);

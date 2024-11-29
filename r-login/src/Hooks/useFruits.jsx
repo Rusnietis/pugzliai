@@ -40,7 +40,7 @@ export default function useFruits() {
                 .then(res => {
                     setCreateFruit(null);
                     console.log(res.data);
-                    setFruits(f => f.map(fruit => fruit.id === res.data.uuid ? {...f, id: res.data.id, temp: false} : fruit));
+                    setFruits(f => f.map(fruit => fruit.id === res.data.uuid ? {...fruit, id: res.data.id, temp: false} : fruit));
                 })
                 .catch(err => {
                     console.log(err);

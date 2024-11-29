@@ -90,7 +90,7 @@ app.post('/fruits', (req, res) => {
     if (err) {
       res.status(500);
     } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+      res.json({ success: true, id: result.insertId, uuid: req.body.id});
     }
   })
 
