@@ -1,15 +1,33 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TopNav from "../TopNav";
 import { Fruits } from "../../Contexts/Fruits";
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from "../../Contexts/Router";
 
-export default function Create() {
+export default function Edit() {
 
+   
+
+    
     const [name, setName] = useState('');
-    const [color, setColor] = useState('#8F8431');
-    const [form, setForm] = useState('square');
+    const [color, setColor] = useState('');
+    const [form, setForm] = useState('');
 
-    const { setCreateFruit, setFruits } = useContext(Fruits)
+    const {fruits, setCreateFruit, setFruits } = useContext(Fruits)
+    const params = useContext(Router);
+
+    useEffect(_=>{
+        if (null == fruits) {
+            return
+        }
+        const fruit = fruits.find(fruit => fruit.id === +params[1]);
+        if (null == fruit) {
+            return
+        }
+        setName(fruit.name);
+        setColor(fruit.color);
+        setForm(fruit.form.toLowerCase());
+    },[fruits, params[1]], setName, setColor, setForm)
 
 
     const add = _ => {
@@ -26,10 +44,17 @@ export default function Create() {
         window.location.href = '#fruits';
     }
 
+    if (!fruits) return (
+        <div>
+            <TopNav />
+            <h1>Loading...</h1>
+        </div>
+    );
+
     return (
         <div>
             <TopNav />
-            <h1>Add new fruit</h1>
+            <h1>Edit fruit</h1>
             <div className="fruit-bin">
                 <div className="form">
                     <div className="form-group">

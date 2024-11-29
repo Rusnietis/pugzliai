@@ -4,6 +4,7 @@ import Page404 from '../Page404';
 import List from './List';
 import Create from './Create';
 import { FruitsProvider } from '../../Contexts/Fruits';
+import Edit from './Edit';
 
 export default function Index() {
 
@@ -16,6 +17,8 @@ export default function Index() {
         returnComponent = <List/>
     } else if (params.length === 1 && params[0] === 'create') {
         returnComponent = <Create/>
+    } else if (params.length === 2 && params[0] === 'edit') {
+        returnComponent = <Edit/>
     }
     return (
         <FruitsProvider>

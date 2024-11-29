@@ -3,7 +3,11 @@ export default function Fruit({fruit}){
         <div className={`fruit ${fruit.form.toLowerCase()}`} style={{
             backgroundColor: fruit?.temp ? '#777777' : fruit.color
             }}>
-            {fruit.name}
+            <div>{fruit.name}</div>
+            <span>
+                <b><a href={'#fruits/edit/' + fruit.id}>Edit</a></b>
+                <b><a href="">Delete</a></b>
+                </span>
         </div>
     )
 }
