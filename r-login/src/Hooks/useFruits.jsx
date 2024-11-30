@@ -48,6 +48,20 @@ export default function useFruits() {
         }
     }, [createFruit]);
 
+    useEffect(_ => {
+        if (null !== editFruit) {
+            axios.put(`${SERVER_URL}/fruits/${editFruit.id}`, editFruit)
+                .then(res => {
+                    setEditFruit(null);
+                    console.log(res.data)
+                    setFruits(f => f.map(fruit => fruit.id === res.data.id ? {...fruit, temp: false} : fruit));
+                })
+                .catch(err => {
+                   console.log(err);
+                });
+        }
+    }, [editFruit]);
+
 
     // useEffect(_ => {
     //     if (null !== createFruit) {

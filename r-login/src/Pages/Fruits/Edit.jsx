@@ -6,41 +6,49 @@ import { Router } from "../../Contexts/Router";
 
 export default function Edit() {
 
-   
-
-    
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
     const [form, setForm] = useState('');
+    const [fruit, setFruit] = useState(null);
 
-    const {fruits, setCreateFruit, setFruits } = useContext(Fruits)
+    const { fruits, setEditFruit, setFruits } = useContext(Fruits)
     const params = useContext(Router);
-
-    useEffect(_=>{
-        if (null == fruits) {
+    //atsakingas uz fruit nustatyma
+    useEffect(_ => {
+        if (null === fruits) {
             return
         }
+        //Pasitikrinam ar toks vaisius yra
         const fruit = fruits.find(fruit => fruit.id === +params[1]);
-        if (null == fruit) {
+        if (!fruit) {
+            setFruit(null);
+        } else {
+            setFruit(fruit);
+        }
+    }, [fruits, params[1]])
+
+    useEffect(_ => {
+
+        if (null === fruit) {
             return
         }
+        console.log(fruit);
         setName(fruit.name);
         setColor(fruit.color);
         setForm(fruit.form.toLowerCase());
-    },[fruits, params[1]], setName, setColor, setForm)
+    }, [fruit, setName, setColor, setForm])
 
-
-    const add = _ => {
-        const fruit = {
+    const save = _ => {
+        const editedFruit = {
             name,
             color,
             form,
-            id: uuidv4(),
-            authorized: false
+            id: fruit.id
+            
         }
         console.log(fruit);
-        setFruits(f => [...f, {...fruit, temp: true }]);
-        setCreateFruit(fruit);
+        setFruits(f => f.map(fruit => fruit.id === editedFruit.id ? {...editedFruit, temp: true} : fruit));
+        setEditFruit(fruit);
         window.location.href = '#fruits';
     }
 
@@ -48,6 +56,13 @@ export default function Edit() {
         <div>
             <TopNav />
             <h1>Loading...</h1>
+        </div>
+    );
+
+    if (!fruit) return (
+        <div>
+            <TopNav />
+            <h1>Fruit not found</h1>
         </div>
     );
 
@@ -83,7 +98,7 @@ export default function Edit() {
                         </div>
                     </div>
                     <div className="form-group">
-                        <button className="green" onClick={add}>Add</button>
+                        <button className="green" onClick={save}>Save</button>
                     </div>
                 </div>
             </div>

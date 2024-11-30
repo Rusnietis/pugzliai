@@ -20,10 +20,10 @@ app.use(bodyParser.json());
 connection.connect();
 
 const checkUserIsLogged = (user, res) => {
-  if(user) {
+  if (user) {
     return true;
   } else {
-    res.status(401).json({ message: 'Not logged in'});
+    res.status(401).json({ message: 'Not logged in' });
   }
 
 }
@@ -90,11 +90,28 @@ app.post('/fruits', (req, res) => {
     if (err) {
       res.status(500);
     } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id});
+      res.json({ success: true, id: result.insertId, uuid: req.body.id });
     }
   })
 
 })
+
+app.put('/fruits/:id', (req, res) => {
+
+  // if (!checkUserIsAuthorized(req.user, res, ['admin', 'user'])) {
+  //   return;
+  // }
+
+  const { name, color, form } = req.body;
+  const sql = 'UPDATE fruits SET name = ?, color = ?, form = ? WHERE id = ?';
+  connection.query(sql, [name, color, form, req.params.id], (err) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+});
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
