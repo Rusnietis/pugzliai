@@ -13,8 +13,14 @@ export default function Login() {
 
     return (
         <div className="login-page">
+            {console.log(response)}
             <div className="box">
                 <h1>Login</h1>
+                <div className="response">
+                    {
+                        response && !response.ok && <span>{response.message}</span>
+                    }
+                </div>
                 <div className="form">
                     <label>Username</label>
                     <input type="text" name="name" value={username} onChange={e => setUsername(e.target.value)} />
