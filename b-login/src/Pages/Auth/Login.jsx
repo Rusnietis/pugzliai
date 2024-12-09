@@ -9,6 +9,7 @@ export default function Login() {
 
     const go = _ => {
         setInputs({ username, password });
+        setPassword('');
     }
 
     return (

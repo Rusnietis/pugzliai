@@ -4,9 +4,11 @@ import './Style/app.scss';
 
 export default function App() {
   return (
-    <RouterProvider>
+    <div className="app">
+      <RouterProvider>
 
-    </RouterProvider>
+      </RouterProvider>
+    </div>
   );
 }
 

@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const fs = require('node:fs');
 const { type } = require('node:os');
 const app = express();
+const md5 = require('md5');
+const jwt = require('jsonwebtoken');
 const port = 3001;
 
 app.use(cors());
@@ -12,74 +14,61 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
+const SECRET_KEY = 'aP*8!d19f_@#cKw!37D$&(*Ng02q31!abY';
+
 // // router
 
 app.get('/', (req, res) => {
-  const data = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
-  // res.status(400).end();
-  res.json(data); //issiuntimas i serveri
+  const data = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
+  res.json(data);
 });
 
-// app.post('/animals', (req, res) => {
-//   const data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
-//   const newAnimal = req.body;
-//   newAnimal.id = uuidv4();
-//   data.push(newAnimal);
-//   fs.writeFileSync('./data/data.json', JSON.stringify(data));
-//   res.json({ id: newAnimal.id,  message: 'Animal at home now', type: 'success' });
-// });
+const doAuth = (req, res, next) => {
 
-// app.delete('/animals/:id', (req, res) => {
+  const token = req.query.token || req.body.token || '';
+  console.log('token', token)
+  return next();
+}
 
-//   let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
-//   const id = req.params.id;
-//   data = data.filter(animal => animal.id !== id);
-//   fs.writeFileSync('./data/data.json', JSON.stringify(data));
-//   //res.status(204).end();
-//   res.json({ message: 'Animal is free now', type: 'info' });
+app.use(doAuth)
 
-// });
 
-// app.put('/animals/:id', (req, res) => {
-//   let data = JSON.parse(fs.readFileSync('./data/data.json', 'utf8'));
-//   const id = req.params.id;
-//   const updateAnimal = req.body;
-//   data = data.map(animal => animal.id !== id ? { ...updateAnimal, id } : animal);
-//   fs.writeFileSync('./data/data.json', JSON.stringify(data));
-//   res.json({ message: 'Animal is diferent now', type: 'info'  });
-
-// });
-
-// Login endpoint'as
+// Prisijungimas
 app.post('/login', (req, res) => {
-
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ message: 'Trūksta vartotojo vardo arba slaptažodžio' });
+    return res.status(400).json({ error: 'Nurodykite vartotojo vardą ir slaptažodį.' });
   }
 
-  try {
-    // Perskaitome vartotojus iš JSON failo
-    const users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
-
-    // Tikriname vartotojo vardą ir slaptažodį
-    const user = users.find(u => u.username === username && u.password === password);
-
-    if (!user) {
-      return res.status(401).json({ message: 'Netinkamas vartotojo vardas arba slaptažodis' });
+  fs.readFile('./data/users.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Serverio klaida skaitant vartotojų duomenis.' });
     }
 
-    res.status(200).json({ message: 'Prisijungimas sėkmingas', userId: user.id });
-  } catch (error) {
-    console.error('Klaida tvarkant vartotojus:', error);
-    res.status(500).json({ message: 'Serverio klaida' });
-  }
+    const users = JSON.parse(data);
 
-})
+    const user = users.find(u => u.username === username && u.password === md5(password));
 
+    if (user) {
+      const token = jwt.sign(
+        { username: user.username },
+        SECRET_KEY,
+        { expiresIn: '1h' }
+      );
 
+      res.status(200).json({
+        message: 'Prisijungimas sėkmingas!',
+        token,
+        username
+      });
+    } else {
+      res.status(401).json({ error: 'Netinkamas vartotojo vardas arba slaptažodis.' });
+    }
+  });
+});
 
+// Serverio paleidimas
 app.listen(port, () => {
   console.log(`Banko klientai klauso ${port} porto.`);
 });

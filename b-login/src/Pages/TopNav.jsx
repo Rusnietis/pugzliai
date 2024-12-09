@@ -11,10 +11,13 @@ export default function TopNav() {
 
     return (
         <nav>
-            <a href="#home">Pagrindinis</a>
-            <a href="#customers">Banko klientu sarasas</a>
-            <a href="#login">Login</a>
-
+            <div className="menu">
+                <a href="#home">Pagrindinis</a>
+                <a href="#customers">Banko klientu sarasas</a>
+            </div>
+            <div className="login">
+                <a href="#login">Login</a>
+            </div>
 
             {/* <div className="menu">
                 <a href="#home">Home</a>
