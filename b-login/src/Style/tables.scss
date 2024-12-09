@@ -1,0 +1,66 @@
+.row {
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(156, 221, 172);
+  border: 4px solid rgb(232, 141, 108);
+  border-radius: 10px;
+  width: 950px;
+  height: 180px;
+  margin: 10px 100px 10px 100px;
+
+  .table {
+    display: inline-block;
+    border: black;
+    width: 1000px;
+    height: 140px;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+
+    th {
+      text-align: center;
+      height: 70px;
+    }
+
+    td {
+
+      justify-items: center;
+      align-items: baseline;
+      width: 300px;
+      height: 70px;
+      padding: 0;
+
+      .form {
+        align-content: center;
+        display: flex;
+        // display: inline-block;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 200px;
+        background-color: white;
+        color: black;
+        margin: 0;
+        padding: 0;
+
+        input {
+          width: 200px;
+          height: 40px;
+          color: black;
+          padding: 0;
+          margin: 0;
+        }
+      }
+
+      .buttons {
+        margin: 0;
+
+        button {
+          margin: 8px;
+        }
+      }
+    }
+
+
+  }
+}

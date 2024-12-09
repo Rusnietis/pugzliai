@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import { SERVER_URL, AFTER_LOGIN_URL, SITE_URL } from '../Constants/main';
 import { useEffect } from 'react';
+import {Auth} from '../Contexts/Auth';
 
 export default function useLogin() {
 
     const [inputs, setInputs] = useState(null);
     const [response, setResponse] = useState(null);
+
+    const {login} = useContext(Auth);
     
     useEffect(() => {
         if (null !== inputs) {
@@ -16,9 +19,10 @@ export default function useLogin() {
                 .then(res => {
                     //console.log(res.data);
                     // Panaudojame `res` tiesiogiai, be tarpinių kintamųjų
-                    localStorage.setItem('token', res.data.token);
-                    localStorage.setItem('user', res.data.username);
-                    console.log(res.data.username);
+                    // localStorage.setItem('token', res.data.token);
+                    // localStorage.setItem('user', res.data.username);
+                    // console.log(res.data.username);
+                    login(res.data.token, res.data.username);
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`
                 })
                 .catch(error => {
@@ -43,7 +47,7 @@ export default function useLogin() {
                     }
                 });
         }
-    }, [inputs])
+    }, [inputs,login])
 
 
     return [setInputs, response];

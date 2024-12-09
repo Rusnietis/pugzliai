@@ -1,9 +1,9 @@
-// import { useContext } from "react";
-// import { Auth } from "../Contexts/Auth";
+import { useContext } from "react";
+import { Auth } from "../Contexts/Auth";
 
 export default function TopNav() {
 
-    //const { user, logout } = useContext(Auth);
+    const { user, logout } = useContext(Auth);
 
 
 
@@ -14,9 +14,27 @@ export default function TopNav() {
             <div className="menu">
                 <a href="#home">Pagrindinis</a>
                 <a href="#customers">Banko klientu sarasas</a>
+                <a href="#customers/create">Prideti klienta</a>
             </div>
             <div className="login">
-                <a href="#login">Login</a>
+            {
+                    user && <span className="user">{user.user}</span>
+                }
+                {
+                    user && <span> | </span>
+                }
+                {
+                    user && <i onClick={logout}>Logout</i>
+                }
+                {
+                    !user && <a href="#register">Register</a>
+                }
+                {
+                    user && <span> | </span>
+                }
+                {
+                    !user && <a href="#login">Login</a>
+                }
             </div>
 
             {/* <div className="menu">
