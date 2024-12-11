@@ -20,13 +20,8 @@ const SECRET_KEY = 'aP*8!d19f_@#cKw!37D$&(*Ng02q31!abY';
 
 // // router
 
-app.get('/', (req, res) => {
+app.get('/users', (req, res) => {
   const data = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
-  res.json(data);
-});
-
-app.get('/', (req, res) => {
-  const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
   res.json(data);
 });
 
@@ -38,6 +33,11 @@ const doAuth = (req, res, next) => {
 }
 
 app.use(doAuth)
+
+app.get('/customers', (req, res) => {
+  const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+  res.json(data);
+});
 
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
@@ -62,7 +62,7 @@ app.post('/customers', (req, res) => {
 
       customers.push(newCustomer);
 
-      fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 3), (err) => {
+      fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
           if (err) {
               return res.status(500).json({ error: 'Nepavyko įrašyti kliento duomenų.' });
           }

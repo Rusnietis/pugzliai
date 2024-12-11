@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 1,
+        "name": "Jonas Jonaitis",
+        "account": "LT 789 456",
+        "amount": "0"
+    },
+    {
+        "id": 2,
+        "name": "Panas Pranaitis",
+        "account": "LT 789 333",
+        "amount": "0"
+    }
+]

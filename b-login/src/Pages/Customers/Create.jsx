@@ -17,7 +17,7 @@ export default function Create() {
 
             name,
             account,
-            amount: 0
+            amount: '0'
 
         }
         console.log(customer);
