@@ -21,38 +21,27 @@ export default function useCustomers() {
             console.log('Naudotojas arba prieigos raktas(token) dar nepasiekiamas');
             return;
         }
-    
-        const withTokenUrl = `${SERVER_URL}/customers?token=${user.token}`;
+
+        const withTokenUrl =
+            user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
         console.log('Request URL:', withTokenUrl);
-    
+
         axios.get(withTokenUrl)
             .then(res => {
                 setCustomers(res.data);
                 console.log('Response data:', res.data);
             })
             .catch(err => {
-                console.log('Error in request:', err);
+                if (err.respose) {
+                    if (err.respose.status === 401) {
+                        window.location.href = '#login';
+                    }
+                }
+                console.log(err);
             });
     }, [user]);
 
-    // useEffect(_ => {
-    //     if (!user || !user.token) {
-    //         console.log('User or token is not available');
-    //         return;
-    //     }
-    //     const withTokenUrl =
-    //         user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`
-    //         console.log('Request URL:', `${SERVER_URL}/customers?token=${user?.token}`);
-    //         console.log(`${SERVER_URL}/customers?token=${user.token}`)
-    //     axios.get(withTokenUrl)
-    //         .then(res => {
-    //             setCustomers(res.data);
-    //             console.log(res.data)
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    // }, [user]);
+
 
     useEffect(_ => {
         if (null !== createCustomer) {
