@@ -12,7 +12,10 @@ export default function useLogin() {
     const {login} = useContext(Auth);
     
     useEffect(() => {
-        if (null !== inputs) {
+
+        if (inputs !== null) {
+            console.log('Sending login data:', inputs);  // Patikrinkite, kas siunčiama
+        
             axios.post(`${SERVER_URL}/login`, inputs, {
                 headers: { 'Content-Type': 'application/json' }
             })

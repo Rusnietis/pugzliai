@@ -10,5 +10,11 @@
         "name": "Panas Pranaitis",
         "account": "LT 789 333",
         "amount": "0"
+    },
+    {
+        "id": 3,
+        "name": "Stasys Stasenas",
+        "account": "LT 555 777",
+        "amount": "0"
     }
 ]
