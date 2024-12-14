@@ -7,21 +7,39 @@ const { type } = require('node:os');
 const app = express();
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
+const { URLSearchParams } = require('node:url');
 
 
 const port = 3001;
 
 app.use(cors());
 app.use(express.static('public'));
-
+app.use(express.json());
 app.use(bodyParser.json());
 
 const SECRET_KEY = 'aP*8!d19f_@#cKw!37D$&(*Ng02q31!abY';
-//const secretKey = process.env.SECRET_KEY || 'defaultSecretKey'; // Naudokite tinkamą numatytą reikšmę tik testavimui
 
-//  const secretKey = uuidv4();
-// console.log('Generated secret key:', secretKey);
-//let user;
+
+let user;
+
+// const checkUserIsLogged = (user, res) => {
+//   if (user) {
+//     return true;
+//   } else {
+//     res.status(401).json({ message: 'Not logged in'});
+//   }
+// }
+// Funkcija, skirta nuskaityti vartotojus iš JSON failo
+const readUsersFromFile = () => {
+  try {
+    const data = fs.readFileSync('./data/users.json', 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Klaida skaitant vartotojų duomenis:', err);
+    return [];
+  }
+};
+
 
 // // router
 
@@ -32,32 +50,7 @@ app.get('/', (req, res) => {
   res.send('Labas Bebrai')
 });
 
-// const doAuth = (req, res, next) => {
-//   console.log('Patikrinam, kas ateina:', req.token);  // Patikrinam, kas ateina
-//   const token = req.query.token || req.body.token || '';
-//   console.debug('Received token:', token); // Spausdina token, jeigu `DEBUG` lygis įjungtas
 
-//   if (!token) {
-//     console.warn('Token is missing');
-//     return res.status(401).json({ error: 'Token is required' });
-//   }
-
-//   if (!SECRET_KEY) {
-//     console.error('Secret key is missing or undefined');
-//     return res.status(500).json({ error: 'Server configuration error' });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(token, SECRET_KEY);
-    
-//     req.user = decoded; // Prideda informaciją apie vartotoją prie `req` objekto
-//     console.info('Decoded JWT:', decoded);
-//     next(); // Kviečia sekančią middleware funkciją
-//   } catch (error) {
-//     console.error('JWT validation error:', error.message);
-//     return res.status(403).json({ error: 'Invalid token', details: error.message });
-//   }
-// };
 
 
 const doAuth = (req, res, next) => {
@@ -73,9 +66,33 @@ const doAuth = (req, res, next) => {
   return next();
 }
 
+// const doAuth = (req, res, next) => {
+//   // Gauti tokeną iš HTTP antraščių, query parametrų arba body
+//   const token = req.headers['authorization']?.split(' ')[1] || req.body.token || req.query.token;
+//   console.log(req.body.token)
+//   if (!token) {
+//     return res.status(401).json({ message: 'Trūksta tokeno.' });
+//   }
+
+//   // Patikriname tokeną
+//   jwt.verify(token, SECRET_KEY, (err, decoded) => {
+//     if (err) {
+//       return res.status(401).json({ message: 'Netinkamas arba pasibaigusio galiojimo tokenas.' });
+//     }
+
+//     // Tokenas yra teisingas - pridedame vartotojo informaciją prie užklausos objekto
+//     req.user = decoded;
+//     next(); // Pereiname prie kito maršruto
+//   });
+// };
+
 app.use(doAuth)
 
 app.get('/users', (req, res) => {
+  // if(!checkUserIsLogged(req.user, res)) {
+  //   return;
+  // }
+
   try {
     const data = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
     res.json(data);
@@ -84,11 +101,23 @@ app.get('/users', (req, res) => {
   }
 });
 
-
 app.get('/customers', (req, res) => {
-  const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
-  res.json(data);
+  // Tikriname, kad vartotojas yra autentifikuotas
+  console.log('jo ateinam', req.user);  // Tai rodo autentifikuoto vartotojo informaciją (pvz., username)
+  
+  try {
+    // Nuskaitykite klientų duomenis iš JSON failo
+    const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+    
+    // Grąžiname duomenis kaip JSON atsakymą
+    res.json(data);
+  } catch (error) {
+    // Klaida nuskaitant failą
+    console.error('Klaida nuskaitant klientų duomenis:', error);
+    res.status(500).json({ message: 'Klaida nuskaitant klientų duomenis' });
+  }
 });
+
 
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
@@ -126,48 +155,79 @@ app.post('/customers', (req, res) => {
 
 // Prisijungimas
 app.post('/login', (req, res) => {
-  console.log('Patikrinam, kas ateina login:', req.body);  // Patikrinam, kas ateina
   const { username, password } = req.body;
 
   if (!username || !password) {
-      return res.status(400).json({ error: 'Nurodykite vartotojo vardą ir slaptažodį.' });
+    return res.status(400).json({ message: 'Vartotojo vardas ir slaptažodis yra privalomi.' });
   }
 
-  fs.readFile('./data/users.json', 'utf8', (err, data) => {
-      if (err) {
-          console.error('Klaida skaitant vartotojų duomenis:', err);
-          return res.status(500).json({ error: 'Serverio klaida skaitant vartotojų duomenis.' });
-      }
+  // Nuskaitykite vartotojus iš JSON failo
+  const users = readUsersFromFile();
 
-      try {
-          const users = JSON.parse(data);
+  // Ieškome vartotojo pagal vardą ir slaptažodį
+  const user = users.find(u => u.username === username && u.password === md5(password));
 
-          const user = users.find(u => u.username === username && u.password === md5(password));
+  if (user) {
+    // Generuojame tokeną
+    const token = md5(uuidv4());
 
-          if (user) {
-              const token = jwt.sign(
-                  { username: user.username },
-                  SECRET_KEY,
-                  { expiresIn: '1h' }
-              );
+    // Grąžiname sėkmingą atsakymą su tokenu ir vartotojo duomenimis
+    res.json({
+      message: 'Prisijungimas sėkmingas',
+      token,
+      username: user.username
 
-              console.log('Generuojamas token:', token);
-
-              res.status(200).json({
-                  message: 'Prisijungimas sėkmingas!',
-                  token,
-                  username: user.username,
-              });
-          } else {
-              console.warn('Netinkamas vartotojo vardas arba slaptažodis.');
-              res.status(401).json({ error: 'Netinkamas vartotojo vardas arba slaptažodis.' });
-          }
-      } catch (parseError) {
-          console.error('Klaida parsinguojant vartotojų duomenis:', parseError);
-          res.status(500).json({ error: 'Klaida apdorojant vartotojų duomenis.' });
-      }
-  });
+    });
+  } else {
+    res.status(401).json({ message: 'Netinkamas vartotojo vardas arba slaptažodis.' });
+  }
 });
+
+// app.post('/login', (req, res) => {
+//   console.log('Patikrinam, kas ateina login:', req.body);  // Patikrinam, kas ateina
+//   const { username, password } = req.body;
+
+//   if (!username || !password) {
+//       return res.status(400).json({ error: 'Nurodykite vartotojo vardą ir slaptažodį.' });
+//   }
+
+//   fs.readFile('./data/users.json', 'utf8', (err, data) => {
+//       if (err) {
+//           console.error('Klaida skaitant vartotojų duomenis:', err);
+//           return res.status(500).json({ error: 'Serverio klaida skaitant vartotojų duomenis.' });
+//       }
+
+//       try {
+//           const users = JSON.parse(data);
+
+//           const user = users.find(u => u.username === username && u.password === md5(password));
+
+//           if (user) {
+//               const token = jwt.sign(
+//                   { username: user.username },
+//                   SECRET_KEY,
+//                   { expiresIn: '1h' }
+//               );
+
+//               console.log('Generuojamas token:', token);
+
+//               res.status(200).json({
+//                   message: 'Prisijungimas sėkmingas!',
+//                   token,
+//                   username: user.username,
+//               });
+//           } else {
+//               console.warn('Netinkamas vartotojo vardas arba slaptažodis.');
+//               res.status(401).json({ error: 'Netinkamas vartotojo vardas arba slaptažodis.' });
+//           }
+//       } catch (parseError) {
+//           console.error('Klaida parsinguojant vartotojų duomenis:', parseError);
+//           res.status(500).json({ error: 'Klaida apdorojant vartotojų duomenis.' });
+//       }
+//   });
+// });
+
+
 
 // Serverio paleidimas
 app.listen(port, () => {

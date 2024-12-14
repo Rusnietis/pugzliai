@@ -32,14 +32,14 @@ export default function useCustomers() {
                 console.log('Response data:', res.data);
             })
             .catch(err => {
-                if (err.respose) {
-                    if (err.respose.status === 401) {
+                if (err.response) {
+                    if (err.response.status === 401) {
                         window.location.href = '#login';
                     }
                 }
                 console.log(err);
             });
-    }, [user]);
+    }, []);
 
 
 
