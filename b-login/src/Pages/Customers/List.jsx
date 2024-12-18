@@ -9,16 +9,19 @@ export default function List() {
     if (!customers)
         return (
             <div>
-                <TopNav/>
+                <TopNav />
                 <h1>Loading...</h1>
             </div>
         )
+        
 
     return (
+      
         <div>
             <TopNav />
             <h1>Klientų sąrašas</h1>
             <div className="row-1">
+            {console.log(customers)}
                 <table className="table">
                     <thead>
                         <tr>

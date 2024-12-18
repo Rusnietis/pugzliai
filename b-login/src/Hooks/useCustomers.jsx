@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
-import { useEffect } from 'react';
-import { useContext } from 'react';
 import { Auth } from '../Contexts/Auth';
 
 
@@ -13,7 +11,7 @@ export default function useCustomers() {
     const [editCustomer, setEditCustomer] = useState(null);
     const [deleteCustomer, setDeleteCustomer] = useState(null);
 
-    const { user } = useContext(Auth);
+    const { user, logout } = useContext(Auth);
     console.log(user)
 
     useEffect(() => {
@@ -26,21 +24,21 @@ export default function useCustomers() {
             user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
         console.log('Request URL:', withTokenUrl);
 
-        axios.get(withTokenUrl)
+
+        axios.get(withTokenUrl, {
+            headers: { 'Content-Type': 'application/json' }
+        })
             .then(res => {
                 setCustomers(res.data);
                 console.log('Response data:', res.data);
             })
             .catch(err => {
-                if (err.response) {
-                    if (err.response.status === 401) {
-                        window.location.href = '#login';
-                    }
+                if (err.response && err.response.status === 401) {
+                    logout();
                 }
                 console.log(err);
             });
-    }, []);
-
+    }, [user]);
 
 
     useEffect(_ => {
@@ -48,8 +46,21 @@ export default function useCustomers() {
             axios.post(`${SERVER_URL}/customers`, createCustomer, {
                 headers: { 'Content-Type': 'application/json' }
             })
-                .then(_ => {
+                .then(res => {
                     setCreateCustomer(null)
+                    console.log(res.data)
+                    // setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
+                    setCustomers(c => {
+                        console.log('res.data.uuid:', res.data.uuid);
+                        console.log('customers ids:', c.map(customer => customer.id));
+                        return c.map(customer => {
+                            if (String(customer.id) === String(res.data.uuid)) {
+                                console.log('Updating customer:', customer);
+                                return { ...customer, id: res.data.id, temp: res.data.temp ?? false };
+                            }
+                            return customer;
+                        });
+                    });
                 })
                 .catch(err => {
                     console.log(err)

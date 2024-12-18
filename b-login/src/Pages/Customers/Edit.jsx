@@ -1,17 +1,37 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import TopNav from '../TopNav';
 import { Customers } from '../../Contexts/Customers';
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from '../../Contexts/Router';
 
 
-export default function Create() {
+export default function Edit() {
+
+    const { customers, setCreateCustomer, setCustomers } = useContext(Customers);
+    const params = useContext(Router);
 
     const [name, setName] = useState('');
-    const [account, setAccount] = useState('')
+    const [account, setAccount] = useState('');
+    const [amount, setAmount] = useState('0');
 
-    const {setCreateCustomer, setCustomers} = useContext(Customers);
 
 
+
+
+    useEffect(_ => {
+        if (null == customers) {
+            return;
+        }
+        const customer = customers.find(customer => customer.id === +params[1])
+        if (null == customer) {
+            return;
+        }
+
+        setName(customer.name);
+        setAccount(customer.account);
+        setAmount(customer.amount);
+
+    }, [customers, params[1]], setName, setAccount, setAmount)
 
     const add = _ => {
         const customer = {
@@ -23,15 +43,23 @@ export default function Create() {
 
         }
         console.log(customer);
-        setCustomers(c => [...c, {...customer, temp: true}]);
+        setCustomers(c => [...c, { ...customer, temp: true }]);
         setCreateCustomer(customer);
         window.location.href = '#customers';
     }
 
+    if (!customers)
+        return (
+            <div>
+                <TopNav />
+                <h1>Loading...</h1>
+            </div>
+        )
+
     return (
         <div>
             <TopNav />
-            <h1>Sukurti klienta</h1>
+            <h1>Pinigu pridejimas</h1>
             <div className='row'>
                 <table className="table ">
                     <thead>
@@ -48,15 +76,19 @@ export default function Create() {
                             <th scope="row">#</th>
                             <td>
                                 <div className="form">
-                                    <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                                    <input type="text" value={name} />
                                 </div>
                             </td>
                             <td>
                                 <div className="form">
-                                    <input type="text" value={account} onChange={e => setAccount(e.target.value)} />
+                                    <input type="text" value={account} />
                                 </div>
                             </td>
-                            <td></td>
+                            <td>
+                            <div className="form">
+                                    <input type="text" value={amount} onChange={e => setAmount(e.target.value)} />
+                                </div>
+                            </td>
                             <td>
                                 <div className="buttons">
                                     <button className="yellow" onClick={add} >Pridėti</button>

@@ -13,11 +13,13 @@ export default function TopNav() {
         <nav>
             <div className="menu">
                 <a href="#home">Pagrindinis</a>
-                <a href="#customers">Banko klientu sarasas</a>
+                {
+                    user && <a href="#customers">Banko klientu sarasas</a>
+                }
                 <a href="#customers/create">Prideti klienta</a>
             </div>
             <div className="login">
-            {
+                {
                     user && <span className="user">{user.user}</span>
                 }
                 {

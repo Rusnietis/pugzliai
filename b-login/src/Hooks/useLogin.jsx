@@ -22,8 +22,8 @@ export default function useLogin() {
                 .then(res => {
                     //console.log(res.data);
                     // Panaudojame `res` tiesiogiai, be tarpinių kintamųjų
-                    // localStorage.setItem('token', res.data.token);
-                    // localStorage.setItem('user', res.data.username);
+                    //localStorage.setItem('token', res.data.token);
+                    //localStorage.setItem('user', res.data.username);
                     // console.log(res.data.username);
                     login(res.data.token, res.data.username);
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`

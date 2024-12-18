@@ -1,11 +1,17 @@
 [
     {
-        "username": "user1",
-        "password": "098f6bcd4621d373cade4e832627b4f6"  
+      "username": "user1",
+      "role": "admin",
+      "password": "202cb962ac59075b964b07152d234b70"
     },
     {
-        "username": "user2",
-        "password": "5a105e8b9d40e1329780d62ea2265d8a"  
+      "username": "user2",
+      "role": "editor",
+      "password": "202cb962ac59075b964b07152d234b70"
+    },
+    {
+      "username": "user3",
+      "role": "viewer",
+      "password": "202cb962ac59075b964b07152d234b70"
     }
-
-]
+  ]
