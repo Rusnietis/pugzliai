@@ -7,44 +7,49 @@ import { Router } from '../../Contexts/Router';
 
 export default function Edit() {
 
-    const { customers, setCreateCustomer, setCustomers } = useContext(Customers);
+    const { customers, setEditCustomer, setCustomers } = useContext(Customers);
     const params = useContext(Router);
 
     const [name, setName] = useState('');
     const [account, setAccount] = useState('');
-    const [amount, setAmount] = useState('0');
-
-
-
-
+    const [amount, setAmount] = useState('');
+    const [customer, setCustomer] = useState(null);
 
     useEffect(_ => {
-        if (null == customers) {
+        if (null === customers) {
             return;
         }
+        // Patikriname ar yra klientas
         const customer = customers.find(customer => customer.id === +params[1])
-        if (null == customer) {
-            return;
+        if (!customer) {
+            setCustomer(null)
+        } else {
+            setCustomer(customer);
         }
 
+    }, [customers, params[1]])
+
+    useEffect(_ => {
+        if (null === customer) {
+            return;
+        }
         setName(customer.name);
         setAccount(customer.account);
         setAmount(customer.amount);
+    }, [customer, setName, setAccount, setAmount])
 
-    }, [customers, params[1]], setName, setAccount, setAmount)
-
-    const add = _ => {
-        const customer = {
+    const save = _ => {
+        const editedCustomer = {
 
             name,
             account,
-            amount: '0',
-            id: uuidv4()
+            amount,
+            id: customer.id
 
         }
         console.log(customer);
-        setCustomers(c => [...c, { ...customer, temp: true }]);
-        setCreateCustomer(customer);
+        setCustomers(c => [...c, { ...editedCustomer, temp: true }]);
+        setEditCustomer(customer);
         window.location.href = '#customers';
     }
 
@@ -53,6 +58,14 @@ export default function Edit() {
             <div>
                 <TopNav />
                 <h1>Loading...</h1>
+            </div>
+        )
+
+    if (!customer)
+        return (
+            <div>
+                <TopNav />
+                <h1>Customer not Found</h1>
             </div>
         )
 
@@ -75,23 +88,19 @@ export default function Edit() {
                         <tr>
                             <th scope="row">#</th>
                             <td>
-                                <div className="form">
-                                    <input type="text" value={name} />
-                                </div>
+                                {name}
+                            </td>
+                            <td>
+                                {account}
                             </td>
                             <td>
                                 <div className="form">
-                                    <input type="text" value={account} />
-                                </div>
-                            </td>
-                            <td>
-                            <div className="form">
                                     <input type="text" value={amount} onChange={e => setAmount(e.target.value)} />
                                 </div>
                             </td>
                             <td>
                                 <div className="buttons">
-                                    <button className="yellow" onClick={add} >Pridėti</button>
+                                    <button className="yellow" onClick={save} >Išsaugoti</button>
                                 </div>
                             </td>
                         </tr>

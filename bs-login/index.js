@@ -111,7 +111,6 @@ app.get('/customers', doAuth, (req, res) => {
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
   const { name, account, amount } = req.body;
-  console.log('114',req.body)
 
   if (!name || !account || !amount) {
     return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
@@ -123,24 +122,62 @@ app.post('/customers', (req, res) => {
     }
 
     const customers = JSON.parse(data);
-    const newCustomer = {
-      id: customers.length + 1,
-      name,
-      account,
-      amount
-    };
-
-    customers.push(newCustomer);
+    const id =  uuidv4();
+    customers.push({ id, name, account, amount });
 
     fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
       if (err) {
-        return res.status(500).json({ error: 'Nepavyko įrašyti kliento duomenų.' });
+        return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
 
-      res.status(201).json({ message: 'Klientas pridėtas sėkmingai!', customer: newCustomer, uuid: req.body.id });
+      res.json({ message: 'Klientas pridėtas sėkmingai!', id });
     });
+  });
+});
 
-    console.log(customers)
+
+
+
+
+
+
+
+
+
+
+// PUT maršrutas atnaujinti klientą
+app.put('/customers/:id', (req, res) => {
+  
+  const { name, account, amount } = req.body;
+  const { id } = req.params;
+
+  if (!name || !account || !amount) {
+    return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
+  }
+
+  fs.readFile('./data/customers.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
+    }
+
+    const customers = JSON.parse(data);
+    const customer = customers.find(c => c.id === id);
+
+    if (!customer) {
+      return res.status(404).json({ error: 'Klientas nerastas.' });
+    }
+
+    customer.name = name;
+    customer.account = account;
+    customer.amount = amount;
+
+    fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
+      }
+
+      res.json({ message: 'Kliento duomenys atnaujinti sėkmingai!' });
+    });
   });
 });
 

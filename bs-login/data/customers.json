@@ -16,5 +16,11 @@
         "name": "Stasys Stasėnas",
         "account": "LT 555 777",
         "amount": "0"
+    },
+    {
+        "id": "d4b9c334-e799-4f19-a29f-d72e89f8836b",
+        "name": "Stasys Girėnas",
+        "account": "LT 555 666",
+        "amount": "0"
     }
 ]

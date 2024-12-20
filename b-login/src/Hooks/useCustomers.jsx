@@ -68,7 +68,22 @@ export default function useCustomers() {
         }
     }, [createCustomer])
 
+    //edit customer 
+    
+    useEffect(_ => {
+        if (null !== editCustomer) {
+            axios.put(`${SERVER_URL}/customers/${editCustomer.id}`, editCustomer)
+            .then(res => {
+                setEditCustomer(null);
+                console.log(res.data);
+                setCustomers(c => c.map(customer => customer.id === res.data.id ? { ...customer, temp: false } : customer))
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }
 
+    }, [editCustomer])
 
     return {
 
