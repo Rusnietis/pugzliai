@@ -4,6 +4,7 @@ import { createContext, useState } from "react";
 export const Auth = createContext();
 
 export const AuthProvider = ({ children }) => {
+    
     const [user, setUser] = useState(_ => {
         const token = window.localStorage.getItem('token');
         const user = window.localStorage.getItem('user');

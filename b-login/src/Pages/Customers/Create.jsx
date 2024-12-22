@@ -18,7 +18,7 @@ export default function Create() {
 
             name,
             account,
-            amount: '0',
+            amount: 0,
             id: uuidv4()
 
         }
@@ -31,6 +31,8 @@ export default function Create() {
     return (
         <div>
             <TopNav />
+            
+            
             <h1>Sukurti klienta</h1>
             <div className='row'>
                 <table className="table ">

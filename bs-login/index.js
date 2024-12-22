@@ -7,8 +7,6 @@ const { type } = require('node:os');
 const app = express();
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
-//const { URLSearchParams } = require('node:url');
-
 
 const port = 3001;
 
@@ -18,7 +16,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 const SECRET_KEY = 'aP*8!d19f_@#cKw!37D$&(*Ng02q31!abY';
-
 
 let user;
 
@@ -30,9 +27,7 @@ const checkUserIsLogged = (user, res) => {
   }
 }
 
-
-
-// // router
+// router
 
 app.get('/', (req, res) => {
   console.log('Buvo uzklausta/')
@@ -40,21 +35,6 @@ app.get('/', (req, res) => {
   //res.json(data);
   res.send('Labas Bebrai')
 });
-
-
-// const doAuth = (req, res, next) => {
-//   //console.log('Full request:', req);  // Patikrinkite visus parametrus
-
-//   const token = req.query.token || req.body.token || '';
-//   console.log('Received token:', req.query.token);  // Patikrinkite, kas pasiekiama
-
-//   if (token === '') {
-//     return next();
-//   }
-//   console.log('token', token)
-//   return next();
-// }
-
 
 const doAuth = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1] || req.body.token || req.query.token;
@@ -97,6 +77,7 @@ const doAuth = (req, res, next) => {
 //   }
 // });
 
+// klientu sarašo gavimas
 app.get('/customers', doAuth, (req, res) => {
 
   if (!checkUserIsLogged(req.user, res)) {
@@ -104,7 +85,7 @@ app.get('/customers', doAuth, (req, res) => {
   }
   const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
   //res.status(400).end();
-  res.json(data); //issiuntimas i serveri
+  res.json(data); //issiuntimas i klienta
 });
 
 
@@ -121,66 +102,48 @@ app.post('/customers', (req, res) => {
       return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
     }
 
-    const customers = JSON.parse(data);
-    const id =  uuidv4();
+    const customers = JSON.parse(data); // paverciam i masyva
+    const id =  uuidv4();//sukuriamas unikalus id
     customers.push({ id, name, account, amount });
 
     fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-
-      res.json({ message: 'Klientas pridėtas sėkmingai!', id });
+      res.json({ success: true, id  }); 
     });
   });
 });
-
-
-
-
-
-
-
-
-
-
 
 // PUT maršrutas atnaujinti klientą
 app.put('/customers/:id', (req, res) => {
   
   const { name, account, amount } = req.body;
-  const { id } = req.params;
-
+  const { id } = req.params; 
   if (!name || !account || !amount) {
     return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
   }
-
   fs.readFile('./data/customers.json', 'utf8', (err, data) => {
     if (err) {
       return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
     }
 
-    const customers = JSON.parse(data);
-    const customer = customers.find(c => c.id === id);
-
-    if (!customer) {
+    const customers = JSON.parse(data);// paverciam i masyva
+    const customerIndex = customers.findIndex(c => c.id === req.params.id);
+    if (customerIndex === -1) {
       return res.status(404).json({ error: 'Klientas nerastas.' });
     }
 
-    customer.name = name;
-    customer.account = account;
-    customer.amount = amount;
-
+    customers[customerIndex] = { id, name, account, amount };
     fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-
-      res.json({ message: 'Kliento duomenys atnaujinti sėkmingai!' });
+      res.json({ success: true, id: req.params.id });  
     });
   });
-});
 
+});
 
 // Prisijungimas
 

@@ -40,27 +40,15 @@ export default function useCustomers() {
             });
     }, [user]);
 
-
+    // kliento sukūrimas su axios post ir id siuntimas i serveri 
     useEffect(_ => {
         if (null !== createCustomer) {
-            axios.post(`${SERVER_URL}/customers`, createCustomer, {
-                headers: { 'Content-Type': 'application/json' }
-            })
+            axios.post(`${SERVER_URL}/customers`, createCustomer)
                 .then(res => {
                     setCreateCustomer(null)
                     console.log(res.data)
-                    // setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
-                    setCustomers(c => {
-                        console.log('res.data.uuid:', res.data.uuid);
-                        console.log('customers ids:', c.map(customer => customer.id));
-                        return c.map(customer => {
-                            if (String(customer.id) === String(res.data.uuid)) {
-                                console.log('Updating customer:', customer);
-                                return { ...customer, id: res.data.id, temp: res.data.temp ?? false };
-                            }
-                            return customer;
-                        });
-                    });
+                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -68,19 +56,21 @@ export default function useCustomers() {
         }
     }, [createCustomer])
 
+
+
     //edit customer 
-    
+
     useEffect(_ => {
         if (null !== editCustomer) {
             axios.put(`${SERVER_URL}/customers/${editCustomer.id}`, editCustomer)
-            .then(res => {
-                setEditCustomer(null);
-                console.log(res.data);
-                setCustomers(c => c.map(customer => customer.id === res.data.id ? { ...customer, temp: false } : customer))
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+                .then(res => {
+                    setEditCustomer(null);
+                    console.log(res.data);
+                    setCustomers(c => c.map(customer => customer.id === res.data.id ? { ...customer, temp: false } : customer)) 
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
 
     }, [editCustomer])

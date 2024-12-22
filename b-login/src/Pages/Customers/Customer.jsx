@@ -1,8 +1,10 @@
 export default function Customer({ customer }) {
 
+
     return (
         
-        <tr style={{color: customer?.temp ? 'red' : customer.color}}>
+
+        <tr style={{ color: customer?.temp ? 'red' : customer.color }}>
             <td>{customer.id}</td>
             <td>{customer.name}</td>
             <td>{customer.account}</td>
@@ -10,17 +12,17 @@ export default function Customer({ customer }) {
             <td>
                 <button className="red">Ištrinti</button>
             </td>
-            <td>
-                <div className="form">
-                    <input type="number" />
-                </div>
-            </td>
+
             <td>
                 <div className="buttonas">
                     <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b>
-                    {/* <button className="blue">Nuimti pinigus</button> */}
                 </div>
+                <div className="buttonas">
+                    <b><a href={'#customers/edit/' + customer.id}>Nuimti pinigus</a></b>
+                </div>
+
             </td>
         </tr>
+
     )
 }

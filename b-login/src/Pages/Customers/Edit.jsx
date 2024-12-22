@@ -8,7 +8,7 @@ import { Router } from '../../Contexts/Router';
 export default function Edit() {
 
     const { customers, setEditCustomer, setCustomers } = useContext(Customers);
-    const params = useContext(Router);
+    const params = useContext(Router); // is router konteksto paimame parametrus
 
     const [name, setName] = useState('');
     const [account, setAccount] = useState('');
@@ -16,40 +16,53 @@ export default function Edit() {
     const [customer, setCustomer] = useState(null);
 
     useEffect(_ => {
-        if (null === customers) {
+        if (null == customers) {
             return;
         }
         // Patikriname ar yra klientas
-        const customer = customers.find(customer => customer.id === +params[1])
+        const customer = customers.find(customer => customer.id === params[1])
+        console.log(customer)
         if (!customer) {
             setCustomer(null)
         } else {
-            setCustomer(customer);
+            setCustomer(customer)
         }
 
     }, [customers, params[1]])
 
+
+
     useEffect(_ => {
-        if (null === customer) {
+        if (!customer) {
             return;
         }
+        // Jei klientas yra, tai nustatome reiksmes
         setName(customer.name);
         setAccount(customer.account);
-        setAmount(customer.amount);
+        setAmount('');
     }, [customer, setName, setAccount, setAmount])
 
-    const save = _ => {
-        const editedCustomer = {
 
+
+
+    const save = () => {
+        const parsedAmount = parseFloat(amount);
+        if (isNaN(parsedAmount) || parsedAmount <= 0) {
+            alert('Įveskite teisingą teigiamą sumą.');
+            return;
+        }
+
+        const updatedAmount = parseFloat(customer.amount) + parsedAmount; // Nauja suma
+
+        const editedCustomer = {
             name,
             account,
-            amount,
-            id: customer.id
-
-        }
+            amount: updatedAmount, // Atnaujinta suma
+            id: customer.id,
+        };
         console.log(customer);
-        setCustomers(c => [...c, { ...editedCustomer, temp: true }]);
-        setEditCustomer(customer);
+        setCustomers(c => c.map(customer => customer.id === editedCustomer.id ? { ...editedCustomer, temp: true } : customer));
+        setEditCustomer({ ...customer, amount: updatedAmount }); // Siunciam i serveri 
         window.location.href = '#customers';
     }
 
@@ -72,7 +85,10 @@ export default function Edit() {
     return (
         <div>
             <TopNav />
+
+
             <h1>Pinigu pridejimas</h1>
+            {/* <h1>Pinigu atemimas</h1> */}
             <div className='row'>
                 <table className="table ">
                     <thead>
@@ -100,7 +116,7 @@ export default function Edit() {
                             </td>
                             <td>
                                 <div className="buttons">
-                                    <button className="yellow" onClick={save} >Išsaugoti</button>
+                                    <button className="yellow" onClick={save}  >Išsaugoti</button>
                                 </div>
                             </td>
                         </tr>

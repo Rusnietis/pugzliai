@@ -4,7 +4,7 @@ import { Customers } from '../../Contexts/Customers';
 import Customer from './Customer';
 
 export default function List() {
-    const { customers = [] } = useContext(Customers);
+    const { customers } = useContext(Customers);
 
     if (!customers)
         return (
@@ -13,15 +13,14 @@ export default function List() {
                 <h1>Loading...</h1>
             </div>
         )
-        
+
 
     return (
-      
+
         <div>
             <TopNav />
             <h1>Klientų sąrašas</h1>
-            <div className="row-1">
-            {console.log(customers)}
+            <div className="row-1"> 
                 <table className="table">
                     <thead>
                         <tr>
@@ -40,7 +39,10 @@ export default function List() {
                         ))}
                     </tbody>
                 </table>
+
             </div>
+
+
         </div>
     );
 }
