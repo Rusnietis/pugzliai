@@ -15,9 +15,9 @@ export default function Customer({ customer }) {
                 <div className="buttonas">
                     <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b>
                 </div>
-                {/* <div className="buttonas">
-                    <b><a href={'#customers/edit/' + customer.id}>Nuimti pinigus</a></b>
-                </div> */}
+                <div className="buttonas">
+                     <b><a href={'#customers/delete/' + customer.id}>Ištrinti</a></b>
+                </div>
 
             </td>
         </tr>

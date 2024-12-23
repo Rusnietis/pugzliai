@@ -83,7 +83,7 @@ app.get('/customers', doAuth, (req, res) => {
   if (!checkUserIsLogged(req.user, res)) {
     return
   }
-   
+
   const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
   //res.status(400).end();
   res.json(data); //issiuntimas i klienta
@@ -104,23 +104,23 @@ app.post('/customers', (req, res) => {
     }
 
     const customers = JSON.parse(data); // paverciam i masyva
-    const id =  uuidv4();//sukuriamas unikalus id
+    const id = uuidv4();//sukuriamas unikalus id
     customers.push({ id, name, account, amount });
 
     fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-      res.json({ success: true, id , uuid: req.body.id }); //issiuntimas i klienta
+      res.json({ success: true, id, uuid: req.body.id }); //issiuntimas i klienta
     });
   });
 });
 
 // PUT maršrutas atnaujinti klientą
 app.put('/customers/:id', (req, res) => {
-  
+
   const { name, account, amount } = req.body;
-  const { id } = req.params; 
+  const { id } = req.params;
   if (!name || !account || !amount) {
     return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
   }
@@ -140,12 +140,40 @@ app.put('/customers/:id', (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-      res.json({ success: true, id: req.params.id });  
+      res.json({ success: true, id: req.params.id });
     });
   });
 
 });
 
+// DELETE maršrutas ištrinti klientą
+
+app.delete('/customers/:id', (req, res) => {
+  const { id } = req.params;
+  console.log('Trinamas klientas:', id);
+  fs.readFile('./data/customers.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
+    }
+
+    const customers = JSON.parse(data);// paverciam i masyva
+    //ieskome kliento pagal id
+    const customerId = customers.find(c => c.id === req.params.id);
+    if (!customerId) {
+      return res.status(404).json({ error: 'Klientas nerastas.' });
+
+    }
+    //istriname klienta
+    customers.splice(customers.indexOf(customerId), 1);
+    fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
+      }
+      res.json({ success: true, id: +req.params.id });
+    });
+  });
+
+});
 // Prisijungimas
 
 app.post('/login', (req, res) => {

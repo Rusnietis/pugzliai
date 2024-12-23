@@ -75,6 +75,25 @@ export default function useCustomers() {
 
     }, [editCustomer])
 
+    //delete customer
+
+    useEffect(_ => {
+        if (null !== deleteCustomer) {
+            axios.delete(`${SERVER_URL}/customers/${deleteCustomer}`)
+                .then(res => {
+                    setDeleteCustomer(null);
+                    console.log(res.data);
+                    setCustomers(c => c.filter(customer => customer.id !== res.data.id)) 
+                })
+                .catch(err => {
+                    console.log(err);
+                    setDeleteCustomer(null);
+                    setCustomers(c => c.map(customer => customer.id === deleteCustomer ? { ...customer, temp: false } : customer)) 
+                })
+        }
+
+    }, [deleteCustomer])
+
     return {
 
         customers,
