@@ -2,8 +2,6 @@ export default function Customer({ customer }) {
 
 
     return (
-        
-
         <tr style={{ color: customer?.temp ? 'red' : customer.color }}>
             <td>{customer.id}</td>
             <td>{customer.name}</td>
@@ -17,9 +15,9 @@ export default function Customer({ customer }) {
                 <div className="buttonas">
                     <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b>
                 </div>
-                <div className="buttonas">
+                {/* <div className="buttonas">
                     <b><a href={'#customers/edit/' + customer.id}>Nuimti pinigus</a></b>
-                </div>
+                </div> */}
 
             </td>
         </tr>

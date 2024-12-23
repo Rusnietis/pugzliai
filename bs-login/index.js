@@ -83,6 +83,7 @@ app.get('/customers', doAuth, (req, res) => {
   if (!checkUserIsLogged(req.user, res)) {
     return
   }
+   
   const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
   //res.status(400).end();
   res.json(data); //issiuntimas i klienta
@@ -110,7 +111,7 @@ app.post('/customers', (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-      res.json({ success: true, id  }); 
+      res.json({ success: true, id , uuid: req.body.id }); //issiuntimas i klienta
     });
   });
 });

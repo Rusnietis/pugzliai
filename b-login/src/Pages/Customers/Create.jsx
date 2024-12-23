@@ -18,12 +18,12 @@ export default function Create() {
 
             name,
             account,
-            amount: 0,
+            amount: '0',
             id: uuidv4()
 
         }
         console.log(customer);
-        setCustomers(c => [...c, {...customer, temp: true}]);
+        setCustomers(c => [...c, {...customer, temp: true}]); 
         setCreateCustomer(customer);
         window.location.href = '#customers';
     }
