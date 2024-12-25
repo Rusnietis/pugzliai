@@ -24,15 +24,15 @@ export default function Delete() {
             if (!customer) {
                 setCustomer(null)
             } else {
-                setCustomer(customer)
+                setCustomer(customer) 
             }
     
         }, [customers, params[1]])
 
     const doDelete = _ => {
-        const customerId = customer.id;
+        const customerId = customer.id; 
         setCustomers(c => c.map(customer => customer.id === customerId ? { ...customer, temp: true } : customer));
-         setDeleteCustomer(customerId);
+         setDeleteCustomer(customerId); 
         window.location.href = '#customers';
     }
 

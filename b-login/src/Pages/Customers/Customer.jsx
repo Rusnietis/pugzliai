@@ -8,17 +8,15 @@ export default function Customer({ customer }) {
             <td>{customer.account}</td>
             <td>{customer.amount}</td>
             <td>
-                <button className="red">Ištrinti</button>
+            <div className="buttonas">
+                     <b><a href={'#customers/delete/' + customer.id}>Ištrinti</a></b>
+                </div>
             </td>
 
             <td>
                 <div className="buttonas">
                     <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b>
                 </div>
-                <div className="buttonas">
-                     <b><a href={'#customers/delete/' + customer.id}>Ištrinti</a></b>
-                </div>
-
             </td>
         </tr>
 

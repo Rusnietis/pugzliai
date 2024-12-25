@@ -23,7 +23,26 @@ const checkUserIsLogged = (user, res) => {
   if (user) {
     return true;
   } else {
-    res.status(401).json({ message: 'Not logged in' });
+    res.status(401).json({
+      message: 'Not logged in',
+      status: 'login'
+    });
+  }
+}
+
+const checkUserIsAuthorized = (user, res, roles) => {
+  if (user && roles.includes(user.role)) {
+    return true;
+  } else if (user) {
+    res.status(401).json({
+      message: 'Not authorized',
+      status: 'role'
+    });
+  } else {
+    res.status(401).json({
+      message: 'Not logged in',
+      status: 'login'
+    });
   }
 }
 
@@ -79,14 +98,29 @@ const doAuth = (req, res, next) => {
 
 // klientu sarašo gavimas
 app.get('/customers', doAuth, (req, res) => {
-
-  if (!checkUserIsLogged(req.user, res)) {
-    return
+  // Patikriname, ar vartotojas yra prisijungęs
+  if (!checkUserIsAuthorized(req.user, res, ['admin', 'user'])) {
+    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
   }
 
-  const data = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));// nuskaitymas ir pavertimas i masyva
-  //res.status(400).end();
-  res.json(data); //issiuntimas i klienta
+  // Nuskaitome klientų duomenų failą
+  fs.readFile('./data/customers.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Klaida skaitant klientų duomenis:', err.message);
+      return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
+    }
+
+    let customers;
+    try {
+      customers = JSON.parse(data); // Bandome paversti JSON į objektą
+    } catch (parseError) {
+      console.error('Klaida analizuojant JSON:', parseError.message);
+      return res.status(500).json({ error: 'Klientų duomenų formatas netinkamas.' });
+    }
+
+    // Sėkmingai grąžiname duomenis
+    res.json(customers);
+  });
 });
 
 
@@ -197,7 +231,7 @@ app.post('/login', (req, res) => {
 
       if (user) {
         const token = jwt.sign(
-          { username: user.username },
+          { username: user.username, role: user.role },
           SECRET_KEY,
           { expiresIn: '24h' }
         );

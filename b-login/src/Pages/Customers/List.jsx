@@ -28,8 +28,7 @@ export default function List() {
                             <th>Vardas</th>
                             <th>Sąskaita</th>
                             <th>Suma</th>
-                            <th>Veiksmai</th>
-                            <th>Sumos ivedimas</th>
+                            <th>Veiksmai su klientu</th>
                             <th>Operacijos</th>
                         </tr>
                     </thead>

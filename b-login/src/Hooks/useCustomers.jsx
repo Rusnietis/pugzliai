@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
+import { Router } from '../Contexts/Router';
 
 
 export default function useCustomers() {
@@ -12,6 +13,7 @@ export default function useCustomers() {
     const [deleteCustomer, setDeleteCustomer] = useState(null);
 
     const { user, logout } = useContext(Auth);
+    const {show401Page} = useContext(Router)
     console.log(user)
 
     useEffect(() => {
@@ -34,7 +36,10 @@ export default function useCustomers() {
             })
             .catch(err => {
                 if (err.response && err.response.status === 401) {
+                    if (err.response.status === 'login') {
                     logout();
+                    }
+                    show401Page();
                 }
                 console.log(err);
             });
@@ -46,12 +51,13 @@ export default function useCustomers() {
             axios.post(`${SERVER_URL}/customers`, createCustomer)
                 .then(res => {
                     setCreateCustomer(null)
-                    console.log(res.data)
+                    //console.log(res.data)
                     setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer)) 
 
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(_ => {
+                    setCreateCustomer(null)
+                    setCustomers(c => c.filter(customer => customer.id !== createCustomer.id))
                 })
         }
     }, [createCustomer])
@@ -65,11 +71,12 @@ export default function useCustomers() {
             axios.put(`${SERVER_URL}/customers/${editCustomer.id}`, editCustomer)
                 .then(res => {
                     setEditCustomer(null);
-                    console.log(res.data);
+                    //console.log(res.data);
                     setCustomers(c => c.map(customer => customer.id === res.data.id ? { ...customer, temp: false } : customer)) 
                 })
-                .catch(err => {
-                    console.log(err);
+                .catch(_ => {
+                    setEditCustomer(null);
+                    setCustomers(c => c.map(customer => customer.id === editCustomer.id ? { ...customer.preEdit, temp: false } : customer))
                 })
         }
 
@@ -86,7 +93,6 @@ export default function useCustomers() {
                     setCustomers(c => c.filter(customer => customer.id !== res.data.id)) 
                 })
                 .catch(err => {
-                    console.log(err);
                     setDeleteCustomer(null);
                     setCustomers(c => c.map(customer => customer.id === deleteCustomer ? { ...customer, temp: false } : customer)) 
                 })

@@ -61,7 +61,7 @@ export default function Edit() {
             id: customer.id,
         };
         console.log(customer);
-        setCustomers(c => c.map(customer => customer.id === editedCustomer.id ? { ...editedCustomer, temp: true } : customer));
+        setCustomers(c => c.map(customer => customer.id === editedCustomer.id ? { ...editedCustomer, temp: true, preEdit: customer } : customer));
         setEditCustomer({ ...customer, amount: updatedAmount }); // Siunciam i serveri 
         window.location.href = '#customers';
     }
