@@ -9,7 +9,7 @@ import Delete from './Delete';
 
 export default function Index() {
 
-    const params = useContext(Router);
+    const {params} = useContext(Router);
 
     console.log(params)
 

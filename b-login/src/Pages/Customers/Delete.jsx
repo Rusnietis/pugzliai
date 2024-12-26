@@ -9,7 +9,7 @@ import { Router } from '../../Contexts/Router';
 export default function Delete() {
 
     const [customer, setCustomer] = useState(null);
-    const params = useContext(Router); // is router konteksto paimame parametrus
+    const {params} = useContext(Router); // is router konteksto paimame parametrus
 
     const {customers ,setDeleteCustomer, setCustomers } = useContext(Customers);
 

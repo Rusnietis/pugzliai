@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Auth } from "../Contexts/Auth";
+import Gate from "./Auth/Gate";
 
 export default function TopNav() {
 
@@ -13,10 +14,9 @@ export default function TopNav() {
         <nav>
             <div className="menu">
                 <a href="#home">Pagrindinis</a>
-                {
-                    user && <a href="#customers">Banko klientu sarasas</a>
-                }
-                <a href="#customers/create">Prideti klienta</a>
+                
+                <Gate roles="admin|editor|viewer"><a href="#customers">Banko klientu sarasas</a></Gate>
+                <Gate roles="admin|editor"><a href="#customers/create">Prideti klienta</a></Gate>
             </div>
             <div className="login">
                 {

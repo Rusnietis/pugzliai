@@ -99,7 +99,7 @@ const doAuth = (req, res, next) => {
 // klientu sarašo gavimas
 app.get('/customers', doAuth, (req, res) => {
   // Patikriname, ar vartotojas yra prisijungęs
-  if (!checkUserIsAuthorized(req.user, res, ['admin', 'user'])) {
+  if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor', 'viewer'])) {
     return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
   }
 
@@ -208,7 +208,8 @@ app.delete('/customers/:id', (req, res) => {
   });
 
 });
-// Prisijungimas
+
+// Prisijungimas su json failu
 
 app.post('/login', (req, res) => {
   //console.log('Patikrinam, kas ateina login:', req.body);  // Patikrinam, kas ateina
@@ -242,6 +243,8 @@ app.post('/login', (req, res) => {
           message: 'Prisijungimas sėkmingas!',
           token,
           username: user.username,
+          // roles issiutimas i klienta
+          role: user.role //
         });
       } else {
         console.warn('Netinkamas vartotojo vardas arba slaptažodis.');
@@ -253,8 +256,6 @@ app.post('/login', (req, res) => {
     }
   });
 });
-
-
 
 // Serverio paleidimas
 app.listen(port, () => {

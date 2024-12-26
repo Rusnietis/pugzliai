@@ -8,7 +8,7 @@ import { Router } from '../../Contexts/Router';
 export default function Edit() {
 
     const { customers, setEditCustomer, setCustomers } = useContext(Customers);
-    const params = useContext(Router); // is router konteksto paimame parametrus
+    const {params} = useContext(Router); // is router konteksto paimame parametrus
 
     const [name, setName] = useState('');
     const [account, setAccount] = useState('');
