@@ -126,8 +126,13 @@ app.get('/customers', doAuth, (req, res) => {
 
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
-  const { name, account, amount } = req.body;
 
+  if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
+    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  }
+
+
+  const { name, account, amount } = req.body;
   if (!name || !account || !amount) {
     return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
   }
@@ -152,6 +157,11 @@ app.post('/customers', (req, res) => {
 
 // PUT maršrutas atnaujinti klientą
 app.put('/customers/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
+    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  }
+
 
   const { name, account, amount } = req.body;
   const { id } = req.params;
@@ -183,6 +193,11 @@ app.put('/customers/:id', (req, res) => {
 // DELETE maršrutas ištrinti klientą
 
 app.delete('/customers/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  }
+
   const { id } = req.params;
   console.log('Trinamas klientas:', id);
   fs.readFile('./data/customers.json', 'utf8', (err, data) => {

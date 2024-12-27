@@ -4,6 +4,7 @@ import CustomersIndex from '../Pages/Customers/Index.jsx';
 import Login from '../Pages/Auth/Login.jsx';
 import Page404 from '../Pages/Page404.jsx';
 import Page401 from '../Pages/Page401.jsx';
+import UserIndex from '../Pages/Users/Index.jsx';
 
 
 
@@ -13,11 +14,11 @@ export const RouterProvider = ({ children }) => {
 
     const page401 = <Page401 />
 
-    const [route, setRoute] = useState(_=> {
+    const [route, setRoute] = useState(_ => {
         const hash = window.location.hash || '#home';
         return hash.split('/').shift()
     });
-    const [params, setParams] = useState(_=>{
+    const [params, setParams] = useState(_ => {
         const hash = window.location.hash.split('/');
         hash.shift();
         return hash;
@@ -64,15 +65,16 @@ export const RouterProvider = ({ children }) => {
 
         { path: '#home', component: <HomeIndex /> },
         { path: '#customers', component: <CustomersIndex /> },
-        { path: '#login', component: <Login /> }
+        { path: '#login', component: <Login /> },
+        { path: '#register', component: <UserIndex to="register"/> }
 
     ];
 
-    const routeComponent = routes.find(r => r.path === route)?.component || <Page404/>;
+    const routeComponent = routes.find(r => r.path === route)?.component || <Page404 />;
 
     return (
-        <Router.Provider value={{params, show401Page}}>
-            { notAuthorized ?? routeComponent}
+        <Router.Provider value={{ params, show401Page }}>
+            {notAuthorized ?? routeComponent}
         </Router.Provider>
     )
 }

@@ -5,12 +5,12 @@ import { Auth } from '../Contexts/Auth';
 import { Router } from '../Contexts/Router';
 
 
-export default function useCustomers() {
+export default function useUsers() {
 
-    const [customers, setCustomers] = useState([]);
-    const [createCustomer, setCreateCustomer] = useState(null);
-    const [editCustomer, setEditCustomer] = useState(null);
-    const [deleteCustomer, setDeleteCustomer] = useState(null);
+    const [users, setUsers] = useState([]);
+    const [createUser, setCreateUser] = useState(null);
+    const [editUser, setEditUser] = useState(null);
+    const [deleteUser, setDeleteUser] = useState(null);
 
     const { user, logout } = useContext(Auth);
     const { show401Page } = useContext(Router)
@@ -23,7 +23,7 @@ export default function useCustomers() {
         }
 
         const withTokenUrl =
-            user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
+            user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
         console.log('Request URL:', withTokenUrl);
 
 
@@ -31,7 +31,7 @@ export default function useCustomers() {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
-                setCustomers(res.data);
+                setUsers(res.data);
                 console.log('Response data:', res.data);
             })
             .catch(err => {
@@ -46,20 +46,20 @@ export default function useCustomers() {
 
     // kliento sukūrimas su axios post ir id siuntimas i serveri 
     useEffect(_ => {
-        if (null !== createCustomer) {
+        if (null !== createUser) {
 
             const withTokenUrl = 
-            user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
-            axios.post(withTokenUrl, createCustomer)
+            user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
+            axios.post(withTokenUrl, createUser)
                 .then(res => {
-                    setCreateCustomer(null)
+                    setCreateUser(null)
                     //console.log(res.data)
-                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
+                    setUsers(c => c.map(user => user.id === res.data.uuid ? { ...user, id: res.data.id, temp: false } : user))
 
                 })
                 .catch(err => {
-                    setCreateCustomer(null)
-                    setCustomers(c => c.filter(customer => customer.id !== createCustomer.id))
+                    setCreateUser(null)
+                    setUsers(c => c.filter(user => user.id !== createUser.id))
                     if (err.response && err.response.status === 401) {
                         if (err.response.status === 'login') {
                             logout();
@@ -68,26 +68,26 @@ export default function useCustomers() {
                     }
                 })
         }
-    }, [createCustomer])
+    }, [createUser])
 
 
 
-    //edit customer 
+    //edit user 
 
     useEffect(_ => {
-        if (null !== editCustomer) {
+        if (null !== editUser) {
 
             const withTokenUrl =
-             user ? `${SERVER_URL}/customers/${editCustomer.id}?token=${user.token}` : `${SERVER_URL}/customers/${editCustomer.id}`;
-            axios.put(withTokenUrl, editCustomer)
+             user ? `${SERVER_URL}/users/${editUser.id}?token=${user.token}` : `${SERVER_URL}/users/${editUser.id}`;
+            axios.put(withTokenUrl, editUser)
                 .then(res => {
-                    setEditCustomer(null);
+                    setEditUser(null);
                     //console.log(res.data);
-                    setCustomers(c => c.map(customer => customer.id === res.data.id ? { ...customer, temp: false } : customer))
+                    setUsers(c => c.map(user => user.id === res.data.id ? { ...user, temp: false } : user))
                 })
                 .catch(err => {
-                    setEditCustomer(null);
-                    setCustomers(c => c.map(customer => customer.id === editCustomer.id ? { ...customer.preEdit, temp: false } : customer))
+                    setEditUser(null);
+                    setUsers(c => c.map(user => user.id === editUser.id ? { ...user.preEdit, temp: false } : user))
                     if (err.response && err.response.status === 401) {
                         if (err.response.status === 'login') {
                             logout();
@@ -97,24 +97,24 @@ export default function useCustomers() {
                 })
         }
 
-    }, [editCustomer])
+    }, [editUser])
 
-    //delete customer
+    //delete user
 
     useEffect(_ => {
-        if (null !== deleteCustomer) {
+        if (null !== deleteUser) {
 
            const withTokenUrl =
-            user ? `${SERVER_URL}/customers/${deleteCustomer}?token=${user.token}` : `${SERVER_URL}/customers/${deleteCustomer}`;
+            user ? `${SERVER_URL}/users/${deleteUser}?token=${user.token}` : `${SERVER_URL}/users/${deleteUser}`;
             axios.delete(withTokenUrl)
                 .then(res => {
-                    setDeleteCustomer(null);
+                    setDeleteUser(null);
                     console.log(res.data);
-                    setCustomers(c => c.filter(customer => customer.id !== res.data.id))
+                    setUsers(c => c.filter(user => user.id !== res.data.id))
                 })
                 .catch(err => {
-                    setDeleteCustomer(null);
-                    setCustomers(c => c.map(customer => customer.id === deleteCustomer ? { ...customer, temp: false } : customer))
+                    setDeleteUser(null);
+                    setUsers(c => c.map(user => user.id === deleteUser ? { ...user, temp: false } : user))
                     if (err.response && err.response.status === 401) {
                         if (err.response.status === 'login') {
                             logout();
@@ -124,18 +124,18 @@ export default function useCustomers() {
                 })
         }
 
-    }, [deleteCustomer])
+    }, [deleteUser])
 
     return {
 
-        customers,
-        setCustomers,
-        createCustomer,
-        setCreateCustomer,
-        editCustomer,
-        setEditCustomer,
-        deleteCustomer,
-        setDeleteCustomer
+        users,
+        setUsers,
+        createUser,
+        setCreateUser,
+        editUser,
+        setEditUser,
+        deleteUser,
+        setDeleteUser
 
     };
 };

@@ -1,3 +1,5 @@
+import Gate from "../Auth/Gate";
+
 export default function Customer({ customer }) {
 
 
@@ -9,13 +11,13 @@ export default function Customer({ customer }) {
             <td>{customer.amount}</td>
             <td>
             <div className="buttonas">
-                     <b><a href={'#customers/delete/' + customer.id}>Ištrinti</a></b>
+                   <Gate roles="admin" ><b><a href={'#customers/delete/' + customer.id}>Ištrinti</a></b></Gate> 
                 </div>
             </td>
 
             <td>
                 <div className="buttonas">
-                    <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b>
+                <Gate roles="admin|editor" > <b><a href={'#customers/edit/' + customer.id}>Pridėti pinigus</a></b></Gate>
                 </div>
             </td>
         </tr>
