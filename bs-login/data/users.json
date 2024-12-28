@@ -1,17 +1,26 @@
 [
     {
-      "username": "user1",
-      "role": "admin",
-      "password": "202cb962ac59075b964b07152d234b70"
+        "id": "43f065d0-0002-44a2-813b-d1523cc0513f",
+        "username": "user1",
+        "password": "202cb962ac59075b964b07152d234b70",
+        "role": "admin"
     },
     {
-      "username": "user2",
-      "role": "editor",
-      "password": "202cb962ac59075b964b07152d234b70"
+        "id": "6d6f2eb0-0179-4751-9732-cba560edc4b8",
+        "username": "user2",
+        "password": "202cb962ac59075b964b07152d234b70",
+        "role": "editor"
     },
     {
-      "username": "user3",
-      "role": "viewer",
-      "password": "202cb962ac59075b964b07152d234b70"
+        "id": "490c9363-f31c-42be-938a-1231ee24ae3d",
+        "username": "user3",
+        "password": "202cb962ac59075b964b07152d234b70",
+        "role": "viewer"
+    },
+    {
+        "id": "864a1b83-59c1-4130-9ae2-7b7091a71b78",
+        "username": "user4",
+        "password": "202cb962ac59075b964b07152d234b70",
+        "role": "viewer"
     }
-  ]
+]

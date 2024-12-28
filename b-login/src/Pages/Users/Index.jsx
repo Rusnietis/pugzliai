@@ -4,9 +4,10 @@ import Page404 from '../Page404';
 import { UsersProvider } from '../../Contexts/Users';
 import PageGate from '../Auth/PageGate';
 import Create from './Create';
+import List from './List';
 
 
-export default function Index() {
+export default function Index({to}) {
 
     const { params } = useContext(Router);
 
@@ -16,7 +17,10 @@ export default function Index() {
 
     if (to === 'register') {
         returnComponent = <Create />
+    } else if (params.length === 0) {
+        returnComponent = < List />;
     }
+
 
 
 

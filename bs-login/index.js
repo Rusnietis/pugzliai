@@ -272,6 +272,34 @@ app.post('/login', (req, res) => {
   });
 });
 
+// Vartotojo registracija su json failu
+
+app.post('/users', (req, res) => {
+  const { username, password} = req.body;
+  console.log('Patikrinam, kas ateina register:', req.body);
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Prašome nurodyti visus vartotojo duomenis.' });
+  }
+  
+  fs.readFile('./data/users.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
+    }
+
+    const users = JSON.parse(data);
+    const id = uuidv4();
+    users.push({ id, username, password: md5(password), role: 'viewer' });
+
+    fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Nepavyko išsaugoti vartotojo duomenų.' });
+      }
+      res.json({ success: true, id, uuid: req.body.id });
+    });
+  });
+
+})
+
 // Serverio paleidimas
 app.listen(port, () => {
   console.log(`Banko klientai klauso ${port} porto.`);

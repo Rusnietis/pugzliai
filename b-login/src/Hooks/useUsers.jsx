@@ -23,8 +23,7 @@ export default function useUsers() {
         }
 
         const withTokenUrl =
-            user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
-        console.log('Request URL:', withTokenUrl);
+        user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
 
 
         axios.get(withTokenUrl, {
@@ -48,24 +47,13 @@ export default function useUsers() {
     useEffect(_ => {
         if (null !== createUser) {
 
-            const withTokenUrl = 
-            user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
-            axios.post(withTokenUrl, createUser)
+            axios.post(`${SERVER_URL}/users`, createUser)
                 .then(res => {
                     setCreateUser(null)
-                    //console.log(res.data)
-                    setUsers(c => c.map(user => user.id === res.data.uuid ? { ...user, id: res.data.id, temp: false } : user))
-
+            
                 })
                 .catch(err => {
                     setCreateUser(null)
-                    setUsers(c => c.filter(user => user.id !== createUser.id))
-                    if (err.response && err.response.status === 401) {
-                        if (err.response.status === 'login') {
-                            logout();
-                        }
-                        show401Page();
-                    }
                 })
         }
     }, [createUser])

@@ -66,7 +66,8 @@ export const RouterProvider = ({ children }) => {
         { path: '#home', component: <HomeIndex /> },
         { path: '#customers', component: <CustomersIndex /> },
         { path: '#login', component: <Login /> },
-        { path: '#register', component: <UserIndex to="register"/> }
+        { path: '#register', component: <UserIndex to="register"/> },
+        { path: '#users', component: <UserIndex /> }
 
     ];
 
