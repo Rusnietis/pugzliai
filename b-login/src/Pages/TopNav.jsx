@@ -17,7 +17,7 @@ export default function TopNav() {
                 
                 <Gate roles="admin|editor|viewer"><a href="#customers">Banko klientu sarasas</a></Gate>
                 <Gate roles="admin|editor"><a href="#customers/create">Prideti klienta</a></Gate>
-                <a href="#users">Users</a>
+                <Gate roles="admin"><a href="#users">Vartotojai</a></Gate>
             </div>
             <div className="login">
                 {

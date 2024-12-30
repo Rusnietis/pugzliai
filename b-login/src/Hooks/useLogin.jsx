@@ -25,7 +25,7 @@ export default function useLogin() {
                     //localStorage.setItem('token', res.data.token);
                     //localStorage.setItem('user', res.data.username);
                     // console.log(res.data.username);
-                    login(res.data.token, res.data.username, res.data.role);
+                    login(res.data.token, res.data.username, res.data.role, res.data.id);
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`
                 })
                 .catch(error => {

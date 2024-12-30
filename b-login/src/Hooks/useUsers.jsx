@@ -23,7 +23,7 @@ export default function useUsers() {
         }
 
         const withTokenUrl =
-        user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
+            user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
 
 
         axios.get(withTokenUrl, {
@@ -40,6 +40,7 @@ export default function useUsers() {
                     }
                     show401Page();
                 }
+                setUsers({ error: true })
             });
     }, [user]);
 
@@ -50,7 +51,7 @@ export default function useUsers() {
             axios.post(`${SERVER_URL}/users`, createUser)
                 .then(res => {
                     setCreateUser(null)
-            
+
                 })
                 .catch(err => {
                     setCreateUser(null)
@@ -60,22 +61,39 @@ export default function useUsers() {
 
 
 
-    //edit user 
+    //Vartotojo redagavimas
 
     useEffect(_ => {
         if (null !== editUser) {
-
+            
             const withTokenUrl =
-             user ? `${SERVER_URL}/users/${editUser.id}?token=${user.token}` : `${SERVER_URL}/users/${editUser.id}`;
+                user ? `${SERVER_URL}/users/${editUser.id}?token=${user.token}` : `${SERVER_URL}/users/${editUser.id}`;
             axios.put(withTokenUrl, editUser)
+            
                 .then(res => {
-                    setEditUser(null);
+                    setEditUser(null);// išvalo editUser
                     //console.log(res.data);
-                    setUsers(c => c.map(user => user.id === res.data.id ? { ...user, temp: false } : user))
+                    setUsers(c => 
+                        c.map(user => 
+                            user.id === res.data.id 
+                                ? { ...user, ...res.data, temp: false } 
+                                : user
+                        )
+                    );
+                    
+                    //setUsers(c => c.map(user => user.id === res.data.id ? { ...user, temp: false } : user))   
                 })
                 .catch(err => {
-                    setEditUser(null);
-                    setUsers(c => c.map(user => user.id === editUser.id ? { ...user.preEdit, temp: false } : user))
+                    setEditUser(null);// išvalo editUser
+                    setUsers(c => 
+                        c.map(user => 
+                            user.id === editUser.id 
+                                ? { ...editUser, preEdit: user, temp: true } 
+                                : user
+                        )
+                    );
+                    
+                    //setUsers(c => c.map(user => user.id === editUser.id ? { ...user.preEdit, temp: false } : user))
                     if (err.response && err.response.status === 401) {
                         if (err.response.status === 'login') {
                             logout();
@@ -92,8 +110,8 @@ export default function useUsers() {
     useEffect(_ => {
         if (null !== deleteUser) {
 
-           const withTokenUrl =
-            user ? `${SERVER_URL}/users/${deleteUser}?token=${user.token}` : `${SERVER_URL}/users/${deleteUser}`;
+            const withTokenUrl =
+                user ? `${SERVER_URL}/users/${deleteUser}?token=${user.token}` : `${SERVER_URL}/users/${deleteUser}`;
             axios.delete(withTokenUrl)
                 .then(res => {
                     setDeleteUser(null);

@@ -5,13 +5,13 @@ import { UsersProvider } from '../../Contexts/Users';
 import PageGate from '../Auth/PageGate';
 import Create from './Create';
 import List from './List';
+import Delete from './Delete';
+import Edit from './Edit';
 
 
 export default function Index({to}) {
 
     const { params } = useContext(Router);
-
-    console.log(params)
 
     let returnComponent = <Page404 />;
 
@@ -19,6 +19,11 @@ export default function Index({to}) {
         returnComponent = <Create />
     } else if (params.length === 0) {
         returnComponent = < List />;
+    } else if (params.length === 2 && params[0] === 'delete') {
+        returnComponent = <Delete />
+        
+    } else if (params.length === 2 && params[0] === 'edit') {
+        returnComponent = <Edit />
     }
 
 

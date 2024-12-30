@@ -300,6 +300,89 @@ app.post('/users', (req, res) => {
 
 })
 
+// User CRUD
+app.get('/users', (req, res) => { 
+  // Autorizacija 
+  // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+  //   return;
+  // }
+  fs.readFile('./data/users.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
+    }
+
+    const users = JSON.parse(data);
+    res.json(users);
+  });
+})
+
+// User Delete
+
+app.delete('/users/:id', (req, res) => { 
+  // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+  //   return; 
+  // }
+  const { id  } = req.params; 
+  fs.readFile('./data/users.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
+    }
+
+    const users = JSON.parse(data);
+    const user = users.find(u => u.id === id);
+    if (!user) {
+      return res.status(404).json({ error: 'Vartotojas nerastas.' });
+    }
+
+    users.splice(users.indexOf(user), 1);
+    fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Nepavyko išsaugoti vartotojo duomenų.' });
+      }
+      res.json({ success: true, id });
+    });
+  });
+
+})
+
+//Vartotojo roles keitimas
+
+app.put('/users/:id', (req, res) => {
+  // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+  //   return; 
+  // }
+  const { role } = req.body;
+  console.log('Role:', role);
+  const { id } = req.params;
+  if (!role) {
+    return res.status(400).json({ error: 'Prašome nurodyti vartotojo rolę.' });
+  }
+
+  fs.readFile('./data/users.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
+    }
+
+    const users = JSON.parse(data);
+    const user = users.find(u => u.id === id);
+    if (!user) {
+      return res.status(404).json({ error: 'Vartotojas nerastas.' });
+    }
+
+    user.role = role;
+    fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Nepavyko išsaugoti vartotojo duomenų.' });
+      }
+      // grazinamas visas vartotojas
+      res.json(user);
+
+    });
+  });
+ 
+})
+
+
 // Serverio paleidimas
 app.listen(port, () => {
   console.log(`Banko klientai klauso ${port} porto.`);
