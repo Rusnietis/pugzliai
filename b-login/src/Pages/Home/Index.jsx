@@ -6,6 +6,7 @@ import Gate from "../Auth/PageGate";
 export default function Index() {
 
     const { user } = useContext(Auth);
+    console.log(user);
 
     return (
         <div>

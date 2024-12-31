@@ -18,7 +18,7 @@ export const CustomersProvider = ({ children }) => {
             deleteCustomer,
             setDeleteCustomer
         }}>
-            {children}
+            {children} 
         </Customers.Provider>
     )
 }

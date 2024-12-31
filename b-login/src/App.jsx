@@ -6,8 +6,9 @@ import './Style/app.scss';
 export default function App() {
   return (
     <div className="app">
-      <AuthProvider>
-        <RouterProvider>
+      
+      <AuthProvider> 
+        <RouterProvider> 
         </RouterProvider>
       </AuthProvider>
     </div>

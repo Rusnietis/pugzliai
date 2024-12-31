@@ -30,8 +30,12 @@ const checkUserIsLogged = (user, res) => {
   }
 }
 
+// Patikriname, ar vartotojas turi reikiamą rolę
+
 const checkUserIsAuthorized = (user, res, roles) => {
   if (user && roles.includes(user.role)) {
+    return true;
+  } else if (user && roles.includes('self:' + user.id)) {
     return true;
   } else if (user) {
     res.status(401).json({
@@ -258,6 +262,7 @@ app.post('/login', (req, res) => {
           message: 'Prisijungimas sėkmingas!',
           token,
           username: user.username,
+          id: user.id,
           // roles issiutimas i klienta
           role: user.role //
         });
@@ -319,9 +324,9 @@ app.get('/users', (req, res) => {
 // User Delete
 
 app.delete('/users/:id', (req, res) => { 
-  // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
-  //   return; 
-  // }
+  if (!checkUserIsAuthorized(req.user, res, ['admin', 'self:' + req.params.id])) {
+    return; 
+  }
   const { id  } = req.params; 
   fs.readFile('./data/users.json', 'utf8', (err, data) => {
     if (err) {

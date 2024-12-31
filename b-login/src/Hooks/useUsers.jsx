@@ -3,6 +3,7 @@ import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
 import { Router } from '../Contexts/Router';
+import { use } from 'react';
 
 
 export default function useUsers() {
@@ -17,8 +18,13 @@ export default function useUsers() {
 
 
     useEffect(() => {
-        if (!user || !user.token) {
-            console.log('Naudotojas arba prieigos raktas(token) dar nepasiekiamas');
+
+        if (null === user) {
+            return
+        }
+
+        if ('admin' !== user.role) {
+           //setUsers({name: user.user, id: user.id, role: user.role });
             return;
         }
 
