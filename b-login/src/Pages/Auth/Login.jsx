@@ -17,8 +17,9 @@ export default function Login() {
     }
 
     useEffect(_ => {
+        // Jei vartotojas jau yra prisijungęs, nukreipiame į pagrindinį puslapį
         if (user) {
-            window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`
+            window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`;
         }
     }, [user]);
 

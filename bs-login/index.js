@@ -84,6 +84,13 @@ const doAuth = (req, res, next) => {
   });
 };
 
+// const doAuth = (req, res, next) => {
+
+//   const token = req.query.token || req.body.token || '';
+
+//   return next();
+
+// };
 
 //app.use(doAuth)
 

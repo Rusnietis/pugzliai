@@ -4,6 +4,7 @@ import { SERVER_URL, AFTER_LOGIN_URL, SITE_URL } from '../Constants/main';
 import { useEffect } from 'react';
 import {Auth} from '../Contexts/Auth';
 
+// Hook'as, skirtas prisijungimo formos duomenims siųsti į serverį
 export default function useLogin() {
 
     const [inputs, setInputs] = useState(null);
@@ -26,7 +27,7 @@ export default function useLogin() {
                     //localStorage.setItem('user', res.data.username);
                     // console.log(res.data.username);
                     login(res.data.token, res.data.username, res.data.role, res.data.id);
-                    window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`
+                    window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}` // Nukreipiame į pagrindinį puslapį (redirektinam)
                 })
                 .catch(error => {
                     if (!error.response) {

@@ -8,10 +8,10 @@ import Edit from './Edit';
 import Delete from './Delete';
 import PageGate from '../Auth/PageGate';
 
-
+// pagalbinė funkcija, kuri pagal route ir params grąžina atitinkamą komponentą
 export default function Index() {
 
-    const {params} = useContext(Router);
+    const {params} = useContext(Router); 
 
     console.log(params)
 
@@ -28,8 +28,9 @@ export default function Index() {
     }
 
     return (
-        <CustomersProvider>
-            {returnComponent}
+        
+        <CustomersProvider> 
+            {returnComponent} 
         </CustomersProvider>
         
     )

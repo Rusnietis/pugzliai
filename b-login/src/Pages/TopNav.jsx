@@ -33,7 +33,7 @@ export default function TopNav() {
                     !user && <a href="#register">Register</a>
                 }
                 {
-                    user && <span> | </span>
+                    !user && <span> | </span>
                 }
                 {
                     !user && <a href="#login">Login</a>
