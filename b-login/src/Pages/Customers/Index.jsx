@@ -13,7 +13,7 @@ export default function Index() {
 
     const {params} = useContext(Router); 
 
-    console.log(params)
+    //console.log(params)
 
     let returnComponent = <Page404 />;
 

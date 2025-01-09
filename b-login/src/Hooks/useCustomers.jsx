@@ -14,7 +14,7 @@ export default function useCustomers() {
 
     const { user, logout } = useContext(Auth);
     const { show401Page } = useContext(Router)
-
+    console.log(user)
 
     useEffect(() => {
         if (!user || !user.token) {

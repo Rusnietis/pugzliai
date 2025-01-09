@@ -59,6 +59,7 @@ app.get('/', (req, res) => {
   res.send('Labas Bebrai')
 });
 
+// vartotojo profilis
 const doAuth = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1] || req.body.token || req.query.token;
 
@@ -138,9 +139,9 @@ app.get('/customers', doAuth, (req, res) => {
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
 
-  if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
-    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
-  }
+  // if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
+  //   return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  // }
 
 
   const { name, account, amount } = req.body;

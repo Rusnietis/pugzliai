@@ -8,7 +8,7 @@ export default function Gate({ children, roles }) {
 
     const hasRole = _ => {
         const rolesArray = roles.split('|');
-        console.log(rolesArray);
+        //console.log(rolesArray);
         return user && rolesArray.includes(user.role);
     }
 

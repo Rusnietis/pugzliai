@@ -10,5 +10,17 @@
         "name": "Jonis Ponis",
         "account": "LT 777 998",
         "amount": "0"
+    },
+    {
+        "id": "01bd19d9-f878-438d-9297-e484078e8d1f",
+        "name": "Pranas Pranaitis",
+        "account": "LT 777 444",
+        "amount": "0"
+    },
+    {
+        "id": "3823f769-da0b-4f00-bc27-63cf9c8257aa",
+        "name": "Linas Linaitis",
+        "account": "LT 666 444",
+        "amount": "0"
     }
 ]

@@ -1,8 +1,9 @@
 import Gate from "../Auth/Gate";
 
-export default function Customer({ customer }) {
 
 
+export default function Customer({ customer }) { 
+  
     return (
         <tr style={{ color: customer?.temp ? 'red' : customer.color }}>
             <td>{customer.id}</td>
