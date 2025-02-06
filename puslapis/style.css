@@ -1,0 +1,260 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* height: 700px; */
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.grid-item {
+    background-color: orange;
+    text-align: center;
+
+}
+
+.grid-item1 {
+    display: flex;
+    justify-content: flex-start;
+    text-align: center;
+    color: white;
+    font-family: Figtree, sans-serif;
+    font-size: 14px;
+    background-color: #272b42;
+    border-bottom: 1px solid #444b72;
+    box-sizing: border-box;
+    height: 32px;
+    padding: 6px 40px;
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
+
+
+
+.grid-item2 {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-family: Figtree, sans-serif;
+    font-size: 18px;
+    height: 65px;
+    padding: 5px 40px;
+    background-color: #42434D;
+    border-bottom: 1px solid #444b72;
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
+
+.logo {
+    height: 31px;
+    width: 150px;
+    align-content: center;
+}
+
+.sea {
+    width: 475px;
+}
+
+.search {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid white;
+    box-sizing: border-box;
+    border-radius: 25px;
+    background-color: #484D5E;
+    height: 45px;
+    width: 225px;
+    padding: 8px 16px;
+
+}
+
+.acc {
+    width: 700px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.account {
+    padding: 16px 12px;
+}
+
+.si-user {
+    padding: 0px 15px 0px 0px;
+    size: 20px;
+}
+
+.cart {
+    padding: 16px 12px;
+}
+
+.si-cart {
+    padding: 0px 15px 0px 0px;
+    size: 20px;
+}
+
+.grid-item3 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    color: white;
+    font-family: Figtree, sans-serif;
+    font-size: 18px;
+    /* height: 59px; */
+    padding: 0px 40px;
+    background-color: #42434D;
+    border-bottom: 2px solid #444b72;
+    box-sizing: border-box;
+    grid-column-start: 1;
+    grid-column-end: -1;
+
+}
+
+.item3 {
+    padding: 16px 20px;
+}
+
+.grid-item4 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    grid-column-start: 1;
+    grid-column-end: -1;
+
+}
+
+img {
+    box-sizing: border-box;
+}
+
+.item5 {
+    justify-items: center;
+    align-content: center;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    height: 800px;
+    width: calc(40% - 20px);
+    font-family: Figtree, sans-serif;
+
+}
+
+.home {
+    font-size: 20px;
+}
+
+.tim {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 42px;
+    font-weight: 600;
+}
+
+.shop {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 24px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    height: 52px;
+    width: 152px;
+    font-size: 20px;
+    font-weight: 600;
+    align-items: center;
+}
+
+.decor {
+    align-content: center;
+    height: 462px;
+    width: 415px;
+
+}
+
+.grid-item5 {
+    display: flex;
+    justify-content: center;
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    flex-wrap: wrap;
+    border: 1px solid blue;
+    gap: 20px;
+    width: 100%;
+
+}
+
+.card {
+    display: flex;
+    height: 233px;
+    width: 167px;
+    border: 1px solid red;
+    margin: 0px 0px 15px;
+    
+    text-align: center;
+}
+
+h2 {
+    display: inline;
+    font-family: Figtree, sans-serif;
+    font-size: 34px;
+    width: 1300px;
+    
+}
+   
+
+.image1, .image2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    background-color: #252d5d;
+    width: 100%;
+    height: 100vh;
+}
+
+.image1, .image2, img {
+    height: 167px;
+    width: 167px;
+    border-radius: 50%;
+}
+.title1 {
+    font-family: Figtree, sans-serif;
+    font-size: 18px;
+    padding: 0px 12px;
+    margin: 12px 0px 0px;
+}
+
+.item6,
+.item7,
+.item8,
+.item9,
+.item10,
+.item11 {
+
+    border: 3px solid rgb(216, 39, 39);
+    border-radius: 100px;
+    background-color: orange;
+    height: 200px;
+    width: 200px;
+}
