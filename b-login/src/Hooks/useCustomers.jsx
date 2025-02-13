@@ -50,11 +50,12 @@ export default function useCustomers() {
 
             const withTokenUrl = 
             user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
-            axios.post(withTokenUrl, createCustomer)
+            
+            axios.post(withTokenUrl, createCustomer) 
                 .then(res => {
-                    setCreateCustomer(null)
+                    setCreateCustomer(null) 
                     //console.log(res.data)
-                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
+                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer)) 
 
                 })
                 .catch(err => {

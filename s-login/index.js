@@ -72,9 +72,10 @@ app.get('/fruits', (req, res) => {
   if (!checkUserIsLogged(req.user, res)) {
     return;
   }
-
-  const sql = 'SELECT * FROM fruits';
-  connection.query(sql, (err, results) => {
+  
+  const sql = 'SELECT * FROM fruits'; 
+  
+  connection.query(sql, (err, results) => { 
     if (err) {
       res.status(500);
     } else {

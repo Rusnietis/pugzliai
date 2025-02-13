@@ -116,24 +116,12 @@ app.get('/customers', doAuth, (req, res) => {
   }
 
   // Nuskaitome klientų duomenų failą
-  fs.readFile('./data/customers.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error('Klaida skaitant klientų duomenis:', err.message);
-      return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
-    }
+  const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
 
-    let customers;
-    try {
-      customers = JSON.parse(data); // Bandome paversti JSON į objektą
-    } catch (parseError) {
-      console.error('Klaida analizuojant JSON:', parseError.message);
-      return res.status(500).json({ error: 'Klientų duomenų formatas netinkamas.' });
-    }
-
-    // Sėkmingai grąžiname duomenis
-    res.json(customers);
-  });
+  // Sėkmingai grąžiname duomenis
+  res.json(customers);
 });
+
 
 
 // Naujo kliento pridėjimas
@@ -149,30 +137,19 @@ app.post('/customers', (req, res) => {
     return res.status(400).json({ error: 'Prašome nurodyti visus kliento duomenis.' });
   }
 
-  fs.readFile('./data/customers.json', 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
-    }
-
-    const customers = JSON.parse(data); // paverciam i masyva
-    const id = uuidv4();//sukuriamas unikalus id
-    customers.push({ id, name, account, amount });
-
-    fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 4), (err) => {
-      if (err) {
-        return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
-      }
-      res.json({ success: true, id, uuid: req.body.id }); //issiuntimas i klienta
-    });
-  });
+  const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+  const id = uuidv4();//sukuriamas unikalus id
+  customers.push({ id, name, account, amount });
+  fs.writeFileSync('./data/customers.json', JSON.stringify(customers));
+  res.json({ success: true, id, uuid: req.body.id }); //issiuntimas i klienta
 });
 
 // PUT maršrutas atnaujinti klientą
 app.put('/customers/:id', (req, res) => {
 
-  if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
-    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
-  }
+  // if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor'])) {
+  //   return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  // }
 
 
   const { name, account, amount } = req.body;
@@ -206,9 +183,9 @@ app.put('/customers/:id', (req, res) => {
 
 app.delete('/customers/:id', (req, res) => {
 
-  if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
-    return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
-  }
+  // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+  //   return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
+  // }
 
   const { id } = req.params;
   console.log('Trinamas klientas:', id);
@@ -288,12 +265,12 @@ app.post('/login', (req, res) => {
 // Vartotojo registracija su json failu
 
 app.post('/users', (req, res) => {
-  const { username, password} = req.body;
+  const { username, password } = req.body;
   console.log('Patikrinam, kas ateina register:', req.body);
   if (!username || !password) {
     return res.status(400).json({ error: 'Prašome nurodyti visus vartotojo duomenis.' });
   }
-  
+
   fs.readFile('./data/users.json', 'utf8', (err, data) => {
     if (err) {
       return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
@@ -314,7 +291,7 @@ app.post('/users', (req, res) => {
 })
 
 // User CRUD
-app.get('/users', (req, res) => { 
+app.get('/users', (req, res) => {
   // Autorizacija 
   // if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
   //   return;
@@ -331,11 +308,11 @@ app.get('/users', (req, res) => {
 
 // User Delete
 
-app.delete('/users/:id', (req, res) => { 
+app.delete('/users/:id', (req, res) => {
   if (!checkUserIsAuthorized(req.user, res, ['admin', 'self:' + req.params.id])) {
-    return; 
+    return;
   }
-  const { id  } = req.params; 
+  const { id } = req.params;
   fs.readFile('./data/users.json', 'utf8', (err, data) => {
     if (err) {
       return res.status(500).json({ error: 'Nepavyko nuskaityti vartotojų duomenų.' });
@@ -392,7 +369,7 @@ app.put('/users/:id', (req, res) => {
 
     });
   });
- 
+
 })
 
 
