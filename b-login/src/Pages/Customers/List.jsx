@@ -10,6 +10,7 @@ import Create from './Create';
 export default function List() {
  
     const { customers } = useContext(Customers);
+    //console.log(customers)
 
     if (!customers)
         return (
@@ -42,6 +43,7 @@ export default function List() {
                         {customers.map(customer => ( 
                             <Customer key={customer.id} customer={customer} />
                         ))}
+                        
                     </tbody>
                 </table>
 

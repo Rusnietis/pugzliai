@@ -1,15 +1,9 @@
 [
     {
-        "id": "608ccc1a-9d9c-47a8-9a0d-95193612cf65",
-        "name": "Jonas Jonaitis",
-        "account": "LT 222 333",
-        "amount": 37
-    },
-    {
         "id": "1d9ab5c1-7d7d-484d-8ba8-a7a9835311d7",
         "name": "Jonis Ponis",
         "account": "LT 777 998",
-        "amount": "0"
+        "amount": 55
     },
     {
         "id": "01bd19d9-f878-438d-9297-e484078e8d1f",
@@ -22,5 +16,11 @@
         "name": "Linas Linaitis",
         "account": "LT 666 444",
         "amount": 101
+    },
+    {
+        "id": "090bf605-b664-487a-b957-6af01c9e15b9",
+        "name": "Jonas Japonas",
+        "account": "LT 582 369",
+        "amount": "0"
     }
 ]

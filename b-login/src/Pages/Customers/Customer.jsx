@@ -3,7 +3,7 @@ import Gate from "../Auth/Gate";
 
 
 export default function Customer({ customer }) { 
-  
+     console.log(customer)
     return (
         <tr style={{ color: customer?.temp ? 'red' : customer.color }}>
             <td>{customer.id}</td>

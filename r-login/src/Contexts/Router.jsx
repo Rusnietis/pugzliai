@@ -9,11 +9,12 @@ import Page404 from '../Pages/Page404.jsx';
 export const Router = createContext();
 
 export const RouterProvider = ({ children }) => {
-
+   //  pradinis kelias
     const [route, setRoute] = useState(_=> {
         const hash = window.location.hash || '#home';
         return hash.split('/').shift()
     });
+    // pradiniai parametrai
     const [params, setParams] = useState(_=>{
         const hash = window.location.hash.split('/');
         hash.shift();
