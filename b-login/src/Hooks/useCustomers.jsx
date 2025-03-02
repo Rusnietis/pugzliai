@@ -15,13 +15,13 @@ export default function useCustomers() {
     const { user, logout } = useContext(Auth);
     const { show401Page } = useContext(Router)
     console.log(user)
-
+    
     useEffect(() => {
         if (!user || !user.token) {
             console.log('Naudotojas arba prieigos raktas(token) dar nepasiekiamas');
             return;
         }
-
+        
         const withTokenUrl =
             user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
         console.log('Request URL:', withTokenUrl);
@@ -44,7 +44,7 @@ export default function useCustomers() {
             });
     }, [user]);
 
-    // kliento sukūrimas su axios post ir id siuntimas i serveri 
+    // kliento sukūrimas su axios post ir id siuntimas i serveri  
     useEffect(_ => {
         if (null !== createCustomer) {
 

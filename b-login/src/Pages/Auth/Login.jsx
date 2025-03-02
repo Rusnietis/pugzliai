@@ -8,8 +8,9 @@ export default function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [setInputs, response] = useLogin();
-    const { user } = useContext(Auth)
+    const [setInputs, response] = useLogin(); // Iškviečiame hook'ą, kuris siunčia duomenis į serverį
+    
+    const { user } = useContext(Auth) // Ištraukiame iš konteksto vartotojo duomenis
 
     const go = _ => {
         setInputs({ username, password });

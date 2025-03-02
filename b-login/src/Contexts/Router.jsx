@@ -12,6 +12,8 @@ export const Router = createContext();
 
 export const RouterProvider = ({ children }) => {
 
+    
+
     const page401 = <Page401 />
     // apskaičiuoja pradinę reikšmę, kuri bus naudojama kaip pradinė reikšmė
     const [route, setRoute] = useState(_ => {
@@ -62,9 +64,9 @@ export const RouterProvider = ({ children }) => {
         window.addEventListener('hashchange', handleHashChange);
         return _ => window.removeEventListener('hashchange', handleHashChange);
     }, []);
-
+    
     const routes = [
-
+        
         { path: '#home', component: <HomeIndex /> },
         { path: '#customers', component: <CustomersIndex /> },
         { path: '#login', component: <Login /> },
@@ -82,3 +84,5 @@ export const RouterProvider = ({ children }) => {
         </Router.Provider>
     )
 }
+
+

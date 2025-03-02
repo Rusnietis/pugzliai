@@ -53,6 +53,6 @@ export default function useLogin() {
         }
     }, [inputs,login])
 
-
+    // Grąžiname abi reikšmes - funkciją, kuri leidžia nustatyti naujus įvesties duomenis ir objektą su serverio atsakymu
     return [setInputs, response];
 }
