@@ -81,6 +81,7 @@ export const RouterProvider = ({ children }) => {
     return (
         <Router.Provider value={{ params, show401Page }}>
             {notAuthorized ?? routeComponent}
+              {/* jei notAuthorized yra null, rodomas routeComponent, jei ne, rodomas notAuthorized */}
         </Router.Provider>
     )
 }

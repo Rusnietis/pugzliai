@@ -6,8 +6,8 @@ import {Auth} from '../Contexts/Auth';
 
 // Hook'as, skirtas prisijungimo formos duomenims siųsti į serverį
 export default function useLogin() {
-
-    const [inputs, setInputs] = useState(null);
+    
+    const [inputs, setInputs] = useState(null); 
     const [response, setResponse] = useState(null);
 
     const {login} = useContext(Auth);
