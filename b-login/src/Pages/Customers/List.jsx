@@ -2,6 +2,9 @@ import { useContext } from 'react';
 import TopNav from '../TopNav';
 import { Customers } from '../../Contexts/Customers';
 import Customer from './Customer';
+
+//import Message from './Pages/Message.jsx';
+
 import Create from './Create';
 
 
@@ -9,7 +12,7 @@ import Create from './Create';
 
 export default function List() {
 
-    const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney } = useContext(Customers);
+    const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney,stats, message, messageType,} = useContext(Customers);
     console.log(customers)
 
     if (!customers)
@@ -26,6 +29,11 @@ export default function List() {
         <div>
             <TopNav />
             <h1>Klientų sąrašas</h1>
+            {/* <Message/> */}
+            <div className="stats">
+                <h3>Viso klientu: {stats.totalCustomers}</h3>
+                <h3>Viso pinigų: {stats.totalAmount} eur</h3>
+            </div>
             <div className="butons">
                 <button onClick={ _ => setCustomers(allCustomers)} >Visi klientai</button>
                 <button onClick={ _ => setCustomers(customersWithMoney)} >Tik turintys pinigų</button>
@@ -36,18 +44,18 @@ export default function List() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Eil. nr</th>
                             <th>Vardas</th>
                             <th>Sąskaita</th>
-                            <th>Suma</th>
+                            <th>Suma Eur</th>
                             <th>Veiksmai su klientu</th>
                             <th>Operacijos</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {customers.map(customer => (
-                            <Customer key={customer.id} customer={customer} />
+                        {customers.map((customer, index) => (
+                            <Customer key={customer.id} customer={customer} index={index} message={message} messageType={messageType}/>
                         ))}
 
                     </tbody>

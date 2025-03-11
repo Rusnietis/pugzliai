@@ -2,11 +2,16 @@ import Gate from "../Auth/Gate";
 
 
 
-export default function Customer({ customer }) { 
-     console.log(customer)
+
+
+export default function Customer({ customer, index }) {
+    console.log(customer)
     return (
+        <>
+    
         <tr style={{ color: customer?.temp ? 'red' : customer.color }}>
-            <td>{customer.id}</td>
+            
+            <td>{index + 1}</td>
             <td>{customer.name}</td>
             <td>{customer.account}</td>
             <td>{customer.amount}</td>
@@ -22,6 +27,10 @@ export default function Customer({ customer }) {
                 </div>
             </td>
         </tr>
-
+        </>
+        
     )
+   
+    
+    
 }

@@ -114,27 +114,40 @@ app.get('/customers', doAuth, (req, res) => {
   if (!checkUserIsAuthorized(req.user, res, ['admin', 'editor', 'viewer'])) {
     return; // Jei funkcija grąžino atsakymą, sustabdome užklausos apdorojimą
   }
-
   // Nuskaitome klientų duomenų failą
   const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+  // Asinchroninis failo nuskaitymas
+  // fs.readFile('./data/customers.json', 'utf8', (err, data) => {
+  //   if (err) {
+  //     return res.status(500).json({ error: 'Nepavyko nuskaityti klientų duomenų.' });
+  //   }
+  //   const customers = JSON.parse(data);
+  //   // Grąžiname klientus
+  //    //res.json(customers);
 
-  
+  // })
+
   customers.sort((a, b) => {
-    const lastNameA = a.name.split(' ').slice(-1)[0]; 
-    const lastNameB = b.name.split(' ').slice(-1)[0]; 
+    const lastNameA = a.name.split(' ').slice(-1)[0];
+    const lastNameB = b.name.split(' ').slice(-1)[0];
     return lastNameA.localeCompare(lastNameB);
   })
 
   // Klientu filtravimas
-  const customersWithMoney = customers.filter(c => c.amount > 0);
-  const customersWithoutMoney = customers.filter(c => c.amount <= 0);
+  const customersWithMoney = customers.filter(c => Number(c.amount) > 0);
+  const customersWithoutMoney = customers.filter(c => Number(c.amount) <= 0);
 
+  // Skaičiuojame statistika
+  // Benra pinigu suma pas klientus
+  const totalAmount = customers.reduce((total, c) => total + Number(c.amount), 0);
+  const totalCustomers = customers.length;
 
   // Sėkmingai grąžiname duomenis
-  res.json({  customers, customersWithMoney, customersWithoutMoney}); 
+  res.json({
+    customers, customersWithMoney, customersWithoutMoney,
+    stats: { totalAmount, totalCustomers }
+  });
 });
-
-
 
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {
@@ -152,8 +165,17 @@ app.post('/customers', (req, res) => {
   const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
   const id = uuidv4();//sukuriamas unikalus id
   customers.push({ id, name, account, amount });
-  fs.writeFileSync('./data/customers.json', JSON.stringify(customers));
-  res.json({ success: true, id, uuid: req.body.id }); //issiuntimas i klienta
+  // fs.writeFileSync('./data/customers.json', JSON.stringify(customers));
+  fs.writeFile('./data/customers.json', JSON.stringify(customers, null, 2), 'utf8', (err) => {
+    if (err) {
+      console.error("Klaida įrašant failą:", err);
+      return;
+    }
+    console.log("Failas sėkmingai atnaujintas!");
+    
+  });
+  
+  res.json({ success: true, message: 'Klientas pridetas sekmingai'  ,id, uuid: req.body.id }); //issiuntimas i klienta
 });
 
 // PUT maršrutas atnaujinti klientą
@@ -215,7 +237,7 @@ app.delete('/customers/:id', (req, res) => {
     }
     // neleisti kliento istrinti, jei turi pinigu
     if (customerId.amount > 0) {
-      return res.status(400).json({ message: 'Klientas turi pinigu, negalima istrinti.'});
+      return res.status(400).json({ message: 'Klientas turi pinigu, negalima istrinti.' });
     }
     //istriname klienta
     customers.splice(customers.indexOf(customerId), 1);
@@ -254,7 +276,7 @@ app.post('/login', (req, res) => {
         const token = jwt.sign(
           { username: user.username, role: user.role },
           SECRET_KEY,
-          { expiresIn: '24h' }
+          { expiresIn: '36h' }
         );
 
         console.log('Generuojamas token:', token);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
 import { Router } from '../Contexts/Router';
+import Message from '../Pages/Message';
 
 
 export default function useCustomers() {
@@ -11,6 +12,10 @@ export default function useCustomers() {
     const [allCustomers, setAllCustomers] = useState([]);
     const [customersWithMoney, setCustomersWithMoney] = useState([]);
     const [customersWithoutMoney, setCustomersWithoutMoney] = useState([]);
+    const [message, setMessage] = useState(null);
+    const [messageType, setMessageType] = useState("success");
+
+    const [stats, setStats] = useState({ totalAmount: 0, totalCustomers: 0 });
     const [createCustomer, setCreateCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
     const [deleteCustomer, setDeleteCustomer] = useState(null);
@@ -38,9 +43,11 @@ export default function useCustomers() {
                 setCustomers(res.data.customers); // Pradžioje rodome visus
                 setCustomersWithMoney(res.data.customersWithMoney);
                 setCustomersWithoutMoney(res.data.customersWithoutMoney);
+                setStats({ ...res.data.stats });
+                setMessage(res.data.message);
+                setMessageType(res.data.messageType)
 
 
-                console.log('Response data:', res.data);
             })
             .catch(err => {
                 if (err.response && err.response.status === 401) {
@@ -144,6 +151,10 @@ export default function useCustomers() {
         setCustomersWithMoney,
         customersWithoutMoney,
         setCustomersWithoutMoney,
+        stats,
+        setStats,
+        message,
+        messageType,
         setCustomers,
         createCustomer,
         setCreateCustomer,
