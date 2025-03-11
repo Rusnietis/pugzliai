@@ -26,7 +26,7 @@ export default function useLogin() {
                     //localStorage.setItem('token', res.data.token);
                     //localStorage.setItem('user', res.data.username);
                     // console.log(res.data.username);
-                    login(res.data.token, res.data.username, res.data.role, res.data.id);
+                    login(res.data.token, res.data.username, res.data.role, res.data.id); // Išsaugome prisijungimo duomenis į kontekstą
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}` // Nukreipiame į pagrindinį puslapį (redirektinam)
                 })
                 .catch(error => {

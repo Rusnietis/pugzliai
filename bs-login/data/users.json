@@ -22,6 +22,11 @@
         "username": "Briedis",
         "password": "202cb962ac59075b964b07152d234b70",
         "role": "admin"
+    },
+    {
+        "id": "8bd47ad7-86d7-4e95-aeb3-582ddc26ecd0",
+        "username": "user3",
+        "password": "202cb962ac59075b964b07152d234b70",
+        "role": "editor"
     }
-   
 ]

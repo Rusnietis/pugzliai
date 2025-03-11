@@ -8,9 +8,9 @@ import Create from './Create';
 
 
 export default function List() {
- 
-    const { customers } = useContext(Customers);
-    //console.log(customers)
+
+    const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney } = useContext(Customers);
+    console.log(customers)
 
     if (!customers)
         return (
@@ -26,7 +26,13 @@ export default function List() {
         <div>
             <TopNav />
             <h1>Klientų sąrašas</h1>
+            <div className="butons">
+                <button onClick={ _ => setCustomers(allCustomers)} >Visi klientai</button>
+                <button onClick={ _ => setCustomers(customersWithMoney)} >Tik turintys pinigų</button>
+                <button onClick={ _ => setCustomers(customersWithoutMoney)} >Be pinigų</button>
+                </div>
             <div className="row-1">
+                
                 <table className="table">
                     <thead>
                         <tr>
@@ -39,16 +45,16 @@ export default function List() {
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        {customers.map(customer => ( 
+
+                        {customers.map(customer => (
                             <Customer key={customer.id} customer={customer} />
                         ))}
-                        
+
                     </tbody>
                 </table>
 
             </div>
-           
+
         </div>
     );
 }

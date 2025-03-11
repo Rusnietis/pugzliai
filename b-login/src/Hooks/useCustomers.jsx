@@ -8,6 +8,9 @@ import { Router } from '../Contexts/Router';
 export default function useCustomers() {
 
     const [customers, setCustomers] = useState([]);
+    const [allCustomers, setAllCustomers] = useState([]);
+    const [customersWithMoney, setCustomersWithMoney] = useState([]);
+    const [customersWithoutMoney, setCustomersWithoutMoney] = useState([]);
     const [createCustomer, setCreateCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
     const [deleteCustomer, setDeleteCustomer] = useState(null);
@@ -15,13 +18,13 @@ export default function useCustomers() {
     const { user, logout } = useContext(Auth);
     const { show401Page } = useContext(Router)
     console.log(user)
-    
+
     useEffect(() => {
         if (!user || !user.token) {
             console.log('Naudotojas arba prieigos raktas(token) dar nepasiekiamas');
             return;
         }
-        
+
         const withTokenUrl =
             user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
         console.log('Request URL:', withTokenUrl);
@@ -31,7 +34,12 @@ export default function useCustomers() {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
-                setCustomers(res.data);
+                setAllCustomers(res.data.customers);
+                setCustomers(res.data.customers); // Pradžioje rodome visus
+                setCustomersWithMoney(res.data.customersWithMoney);
+                setCustomersWithoutMoney(res.data.customersWithoutMoney);
+
+
                 console.log('Response data:', res.data);
             })
             .catch(err => {
@@ -48,14 +56,14 @@ export default function useCustomers() {
     useEffect(_ => {
         if (null !== createCustomer) {
 
-            const withTokenUrl = 
-            user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
-            
-            axios.post(withTokenUrl, createCustomer) 
+            const withTokenUrl =
+                user ? `${SERVER_URL}/customers?token=${user.token}` : `${SERVER_URL}/customers`;
+
+            axios.post(withTokenUrl, createCustomer)
                 .then(res => {
-                    setCreateCustomer(null) 
+                    setCreateCustomer(null)
                     //console.log(res.data)
-                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer)) 
+                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
 
                 })
                 .catch(err => {
@@ -79,7 +87,7 @@ export default function useCustomers() {
         if (null !== editCustomer) {
 
             const withTokenUrl =
-             user ? `${SERVER_URL}/customers/${editCustomer.id}?token=${user.token}` : `${SERVER_URL}/customers/${editCustomer.id}`;
+                user ? `${SERVER_URL}/customers/${editCustomer.id}?token=${user.token}` : `${SERVER_URL}/customers/${editCustomer.id}`;
             axios.put(withTokenUrl, editCustomer)
                 .then(res => {
                     setEditCustomer(null);
@@ -105,8 +113,8 @@ export default function useCustomers() {
     useEffect(_ => {
         if (null !== deleteCustomer) {
 
-           const withTokenUrl =
-            user ? `${SERVER_URL}/customers/${deleteCustomer}?token=${user.token}` : `${SERVER_URL}/customers/${deleteCustomer}`;
+            const withTokenUrl =
+                user ? `${SERVER_URL}/customers/${deleteCustomer}?token=${user.token}` : `${SERVER_URL}/customers/${deleteCustomer}`;
             axios.delete(withTokenUrl)
                 .then(res => {
                     setDeleteCustomer(null);
@@ -130,6 +138,12 @@ export default function useCustomers() {
     return {
 
         customers,
+        allCustomers,
+        setAllCustomers,
+        customersWithMoney,
+        setCustomersWithMoney,
+        customersWithoutMoney,
+        setCustomersWithoutMoney,
         setCustomers,
         createCustomer,
         setCreateCustomer,

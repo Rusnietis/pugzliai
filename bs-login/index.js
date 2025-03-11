@@ -118,8 +118,20 @@ app.get('/customers', doAuth, (req, res) => {
   // Nuskaitome klientų duomenų failą
   const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
 
+  
+  customers.sort((a, b) => {
+    const lastNameA = a.name.split(' ').slice(-1)[0]; 
+    const lastNameB = b.name.split(' ').slice(-1)[0]; 
+    return lastNameA.localeCompare(lastNameB);
+  })
+
+  // Klientu filtravimas
+  const customersWithMoney = customers.filter(c => c.amount > 0);
+  const customersWithoutMoney = customers.filter(c => c.amount <= 0);
+
+
   // Sėkmingai grąžiname duomenis
-  res.json(customers);
+  res.json({  customers, customersWithMoney, customersWithoutMoney}); 
 });
 
 
@@ -200,6 +212,10 @@ app.delete('/customers/:id', (req, res) => {
     if (!customerId) {
       return res.status(404).json({ error: 'Klientas nerastas.' });
 
+    }
+    // neleisti kliento istrinti, jei turi pinigu
+    if (customerId.amount > 0) {
+      return res.status(400).json({ message: 'Klientas turi pinigu, negalima istrinti.'});
     }
     //istriname klienta
     customers.splice(customers.indexOf(customerId), 1);

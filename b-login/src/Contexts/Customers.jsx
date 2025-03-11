@@ -1,16 +1,28 @@
 import { createContext } from 'react';
 import useCustomers from '../Hooks/useCustomers';
 
-export const Customers = createContext(); 
+export const Customers = createContext();
 
 export const CustomersProvider = ({ children }) => {
-
-    const {customers, setCustomers ,createCustomer, setCreateCustomer, editCustomer, setEditCustomer, deleteCustomer, setDeleteCustomer } = useCustomers();
+    // hukas skirtas sukurti naujus klientus, redaguoti ir istrinti
+    const { customers, setCustomers, allCustomers,
+        setAllCustomers,
+        customersWithMoney,
+        setCustomersWithMoney,
+        customersWithoutMoney,
+        setCustomersWithoutMoney, createCustomer, setCreateCustomer, editCustomer, setEditCustomer, deleteCustomer, setDeleteCustomer } = useCustomers();
 
     return (
+
         <Customers.Provider value={{
             customers,
             setCustomers,
+            allCustomers,
+            setAllCustomers,
+            customersWithMoney,
+            setCustomersWithMoney,
+            customersWithoutMoney,
+            setCustomersWithoutMoney,
             createCustomer,
             setCreateCustomer,
             editCustomer,
@@ -18,7 +30,7 @@ export const CustomersProvider = ({ children }) => {
             deleteCustomer,
             setDeleteCustomer
         }}>
-            {children} 
+            {children}
         </Customers.Provider>
     )
 }
