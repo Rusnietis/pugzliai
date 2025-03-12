@@ -3,16 +3,12 @@ import TopNav from '../TopNav';
 import { Customers } from '../../Contexts/Customers';
 import Customer from './Customer';
 
-//import Message from './Pages/Message.jsx';
-
 import Create from './Create';
-
-
 
 
 export default function List() {
 
-    const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney,stats, message, messageType,} = useContext(Customers);
+    const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney,stats} = useContext(Customers);
     console.log(customers)
 
     if (!customers)
@@ -55,7 +51,7 @@ export default function List() {
                     <tbody>
 
                         {customers.map((customer, index) => (
-                            <Customer key={customer.id} customer={customer} index={index} message={message} messageType={messageType}/>
+                            <Customer key={customer.id} customer={customer} index={index} />
                         ))}
 
                     </tbody>

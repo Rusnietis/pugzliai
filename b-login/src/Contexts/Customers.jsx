@@ -13,8 +13,6 @@ export const CustomersProvider = ({ children }) => {
         setCustomersWithoutMoney,
         stats,
         setStats,
-        message,
-        messageType,
         createCustomer, setCreateCustomer, editCustomer, setEditCustomer, deleteCustomer, setDeleteCustomer } = useCustomers();
 
     return (
@@ -30,8 +28,6 @@ export const CustomersProvider = ({ children }) => {
             setCustomersWithoutMoney,
             stats,
             setStats,
-            message,
-            messageType,
             createCustomer,
             setCreateCustomer,
             editCustomer,

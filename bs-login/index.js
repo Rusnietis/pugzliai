@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 
 const SECRET_KEY = 'aP*8!d19f_@#cKw!37D$&(*Ng02q31!abY';
 
+const filePath = "./data/customers.json";
+
 let user;
 
 const checkUserIsLogged = (user, res) => {
@@ -148,6 +150,15 @@ app.get('/customers', doAuth, (req, res) => {
     stats: { totalAmount, totalCustomers }
   });
 });
+
+// API maršrutas statistikoms gauti
+app.get("/stats", async (req, res) => {
+  const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+  const totalAmount = customers.reduce((total, c) => total + Number(c.amount), 0);
+  const totalCustomers = customers.length;
+  res.json({stats: { totalAmount, totalCustomers }});
+
+})
 
 // Naujo kliento pridėjimas
 app.post('/customers', (req, res) => {

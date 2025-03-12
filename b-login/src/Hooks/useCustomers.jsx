@@ -3,7 +3,6 @@ import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
 import { Router } from '../Contexts/Router';
-import Message from '../Pages/Message';
 
 
 export default function useCustomers() {
@@ -12,9 +11,6 @@ export default function useCustomers() {
     const [allCustomers, setAllCustomers] = useState([]);
     const [customersWithMoney, setCustomersWithMoney] = useState([]);
     const [customersWithoutMoney, setCustomersWithoutMoney] = useState([]);
-    const [message, setMessage] = useState(null);
-    const [messageType, setMessageType] = useState("success");
-
     const [stats, setStats] = useState({ totalAmount: 0, totalCustomers: 0 });
     const [createCustomer, setCreateCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
@@ -44,10 +40,7 @@ export default function useCustomers() {
                 setCustomersWithMoney(res.data.customersWithMoney);
                 setCustomersWithoutMoney(res.data.customersWithoutMoney);
                 setStats({ ...res.data.stats });
-                setMessage(res.data.message);
-                setMessageType(res.data.messageType)
-
-
+                
             })
             .catch(err => {
                 if (err.response && err.response.status === 401) {
@@ -71,7 +64,7 @@ export default function useCustomers() {
                     setCreateCustomer(null)
                     //console.log(res.data)
                     setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
-
+                  
                 })
                 .catch(err => {
                     setCreateCustomer(null)
@@ -153,8 +146,6 @@ export default function useCustomers() {
         setCustomersWithoutMoney,
         stats,
         setStats,
-        message,
-        messageType,
         setCustomers,
         createCustomer,
         setCreateCustomer,
