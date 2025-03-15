@@ -218,7 +218,8 @@ app.put('/customers/:id', (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-      res.json({ success: true, id: req.params.id });
+      // res.json({ success: true, id: req.params.id, message: 'Klientas atnaujintas sekmingai', type: 'success' });
+      res.json({ message: 'Pinigai pridėti sėkmingai', type: 'success', success: true, id: req.params.id})
     });
   });
 

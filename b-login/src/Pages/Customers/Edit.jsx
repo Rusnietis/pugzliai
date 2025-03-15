@@ -1,14 +1,25 @@
 import { useContext, useEffect, useState } from 'react';
-import TopNav from '../TopNav';
 import { Customers } from '../../Contexts/Customers';
-import { v4 as uuidv4 } from 'uuid';
+import Customer from './Customer';
+//import { useMessage } from '../../Contexts/Message';
 import { Router } from '../../Contexts/Router';
+import TopNav from '../TopNav';
+import MessageAlert from '../MessageAlert';
+import axios from 'axios';
+import { SERVER_URL } from '../../Constants/main';
+import { useMessage } from '../../Hooks/useMessage';
+
+
+
 
 
 export default function Edit() {
 
     const { customers, setEditCustomer, setCustomers } = useContext(Customers);
-    const {params} = useContext(Router); // is router konteksto paimame parametrus
+    const { params } = useContext(Router); // is router konteksto paimame parametrus
+    // naudojame pranesimu konteksta
+    const { showMessage } = useMessage()
+
 
     const [name, setName] = useState('');
     const [account, setAccount] = useState('');
@@ -43,28 +54,74 @@ export default function Edit() {
     }, [customer, setName, setAccount, setAmount])
 
 
-
-
     const save = () => {
+        //const { showMessage } = useMessage(); // Gauti showMessage funkciją iš konteksto
+
         const parsedAmount = parseFloat(amount);
         if (isNaN(parsedAmount) || parsedAmount <= 0) {
-            alert('Įveskite teisingą teigiamą sumą.');
+            showMessage('Įveskite teisingą teigiamą sumą.', 'error');
             return;
         }
 
-        const updatedAmount = parseFloat(customer.amount) + parsedAmount; // Nauja suma
+        const updatedAmount = parseFloat(customer.amount) + parsedAmount;
 
         const editedCustomer = {
             name,
             account,
-            amount: updatedAmount, // Atnaujinta suma
+            amount: updatedAmount,
             id: customer.id,
         };
-        console.log(customer);
-        setCustomers(c => c.map(customer => customer.id === editedCustomer.id ? { ...editedCustomer, temp: true, preEdit: customer } : customer));
-        setEditCustomer({ ...customer, amount: updatedAmount }); // Siunciam i serveri 
-        window.location.href = '#customers';
-    }
+
+        // Siunčiame duomenis į serverį
+        axios.put(`${SERVER_URL}/customers/${customer.id}`, editedCustomer)
+            .then(response => {
+                // Atnaujiname customers sąrašą
+                setCustomers(c => c.map(customer =>
+                    customer.id === editedCustomer.id ? { ...editedCustomer, temp: true, preEdit: customer } : customer
+                ));
+
+                // Rodome pranešimą
+                showMessage(response.data.message || 'Kliento informacija atnaujinta', 'success');
+                console.log(response.data.message)
+                // Atnaujiname editCustomer
+                setEditCustomer({ ...customer, amount: updatedAmount });
+
+                // Peradresavimas į klientų sąrašą tik po sėkmingo atnaujinimo
+                window.location.href = '#customers';
+            })
+            .catch(error => {
+                showMessage(error.response?.data?.message || 'Įvyko klaida atnaujinant klientą', 'error');
+                console.error('Klaida:', error);
+            });
+    };
+
+    const withdraw = () => {
+        const parsedAmount = parseFloat(amount);
+        if (isNaN(parsedAmount) || parsedAmount <= 0) {
+            return showMessage('Įveskite teisingą teigiamą sumą.', 'error');
+        }
+    
+        if (parsedAmount > customer.amount) {
+            return showMessage('Nepakanka lėšų.', 'error');
+        }
+    
+        const updatedCustomer = { ...customer, amount: customer.amount - parsedAmount };
+    
+        axios.put(`${SERVER_URL}/customers/${customer.id}`, updatedCustomer)
+            .then(({ data }) => {
+                setCustomers(c => c.map(cust => 
+                    cust.id === customer.id ? { ...updatedCustomer, temp: true, preEdit: cust } : cust
+                ));
+    
+                setEditCustomer(updatedCustomer);
+                showMessage(data.message || 'Lėšos sėkmingai nuskaičiuotos', 'success');
+                window.location.href = '#customers';
+            })
+            .catch(error => {
+                showMessage(error.response?.data?.message || 'Įvyko klaida nuskaičiuojant lėšas', 'error');
+                console.error('Klaida:', error);
+            });
+    };
 
     if (!customers)
         return (
@@ -85,10 +142,10 @@ export default function Edit() {
     return (
         <div>
             <TopNav />
+            <MessageAlert />
+            <h1>{save === save ? 'Pinigu pridejimas' : 'Pinigu atemimas'}</h1>
+            {/* <h1>{ updatedAmount === save ? 'Pinigu pridejimas' : 'Pinigu atemimas' }</h1> */}
 
-
-            <h1>Pinigu pridejimas</h1>
-            {/* <h1>Pinigu atemimas</h1> */}
             <div className='row'>
                 <table className="table ">
                     <thead>

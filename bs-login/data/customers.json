@@ -1,44 +1,44 @@
 [
-  {
-    "id": "1d9ab5c1-7d7d-484d-8ba8-a7a9835311d7",
-    "name": "Jonis Ponis",
-    "account": "LT 777 998",
-    "amount": 55
-  },
-  {
-    "id": "01bd19d9-f878-438d-9297-e484078e8d1f",
-    "name": "Pranas Pranaitis",
-    "account": "LT 777 444",
-    "amount": 200
-  },
-  {
-    "id": "3823f769-da0b-4f00-bc27-63cf9c8257aa",
-    "name": "Linas Linaitis",
-    "account": "LT 666 444",
-    "amount": 106
-  },
-  {
-    "id": "644a2236-9e22-4f86-a198-c3124f1e11eb",
-    "name": "Antanas Antanaitis",
-    "account": "LT 699 888",
-    "amount": 30
-  },
-  {
-    "id": "546068c2-1c04-4cdc-a340-0ea505dc48fb",
-    "name": "Rusas Prusas",
-    "account": "LT 222 111",
-    "amount": "0"
-  },
-  {
-    "id": "2cc4e623-4614-4f5b-be14-8bdf890e9b14",
-    "name": "Stase Jadze",
-    "account": "LT 444 111",
-    "amount": "0"
-  },
-  {
-    "id": "8c7ad4bb-feec-4a50-b241-83096fef5a9c",
-    "name": "Stasys Girenas",
-    "account": "LT 753 159",
-    "amount": "0"
-  }
+    {
+        "id": "1d9ab5c1-7d7d-484d-8ba8-a7a9835311d7",
+        "name": "Jonis Ponis",
+        "account": "LT 777 998",
+        "amount": 141
+    },
+    {
+        "id": "01bd19d9-f878-438d-9297-e484078e8d1f",
+        "name": "Pranas Pranaitis",
+        "account": "LT 777 444",
+        "amount": 200
+    },
+    {
+        "id": "3823f769-da0b-4f00-bc27-63cf9c8257aa",
+        "name": "Linas Linaitis",
+        "account": "LT 666 444",
+        "amount": 128
+    },
+    {
+        "id": "644a2236-9e22-4f86-a198-c3124f1e11eb",
+        "name": "Antanas Antanaitis",
+        "account": "LT 699 888",
+        "amount": 680
+    },
+    {
+        "id": "546068c2-1c04-4cdc-a340-0ea505dc48fb",
+        "name": "Rusas Prusas",
+        "account": "LT 222 111",
+        "amount": "0"
+    },
+    {
+        "id": "2cc4e623-4614-4f5b-be14-8bdf890e9b14",
+        "name": "Stase Jadze",
+        "account": "LT 444 111",
+        "amount": "0"
+    },
+    {
+        "id": "8c7ad4bb-feec-4a50-b241-83096fef5a9c",
+        "name": "Stasys Girenas",
+        "account": "LT 753 159",
+        "amount": 616
+    }
 ]

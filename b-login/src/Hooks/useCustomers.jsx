@@ -63,7 +63,7 @@ export default function useCustomers() {
                 .then(res => {
                     setCreateCustomer(null)
                     //console.log(res.data)
-                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer))
+                    setCustomers(c => c.map(customer => customer.id === res.data.uuid ? { ...customer, id: res.data.id, temp: false } : customer)) 
                   
                 })
                 .catch(err => {

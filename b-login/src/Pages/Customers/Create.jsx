@@ -23,7 +23,7 @@ export default function Create() {
 
         }
         console.log(customer);
-        setCustomers(c => [...c, {...customer, temp: true}]); 
+        setCustomers(c => [...c, {...customer, temp: true}]);  
         setCreateCustomer(customer);
         window.location.href = '#customers';
     }
