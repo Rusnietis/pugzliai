@@ -68,7 +68,7 @@ export default function useCustomers() {
                 })
                 .catch(err => {
                     setCreateCustomer(null)
-                    setCustomers(c => c.filter(customer => customer.id !== createCustomer.id))
+                    setCustomers(c => c.filter(customer => customer.id !== createCustomer.id)) // ismetame, jei nera patvirtinimo is serverio
                     if (err.response && err.response.status === 401) {
                         if (err.response.status === 'login') {
                             logout();

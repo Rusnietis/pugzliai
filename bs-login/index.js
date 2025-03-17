@@ -219,7 +219,7 @@ app.put('/customers/:id', (req, res) => {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
       // res.json({ success: true, id: req.params.id, message: 'Klientas atnaujintas sekmingai', type: 'success' });
-      res.json({ message: 'Pinigai pridėti sėkmingai', type: 'success', success: true, id: req.params.id})
+      res.json({ message:'Klientas atnaijinta sekmingai', type: 'success', success: true, id: req.params.id})
     });
   });
 
@@ -257,7 +257,7 @@ app.delete('/customers/:id', (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Nepavyko išsaugoti kliento duomenų.' });
       }
-      res.json({ success: true, id: +req.params.id });
+      res.json({ message: 'Klentas istrintas sekmingai' , success: true, id: +req.params.id });
     });
   });
 
