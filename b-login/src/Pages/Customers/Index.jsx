@@ -22,7 +22,7 @@ export default function Index() {
     } else if (params.length === 1 && params[0] === 'create') {
         returnComponent = <PageGate roles="admin|editor"><Create /></PageGate>;;
     } else if (params.length === 2 && params[0] === 'edit') {
-        returnComponent = <PageGate roles="admin|viewer"><Edit /></PageGate>;
+        returnComponent = <PageGate roles="admin|viewer"><Edit customerId={params[1]} /></PageGate>;
     } else if (params.length === 2 && params[0] === 'delete') {
         returnComponent = <PageGate roles="admin"><Delete /></PageGate>;
     }

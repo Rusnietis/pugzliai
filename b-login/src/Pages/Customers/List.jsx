@@ -3,13 +3,13 @@ import TopNav from '../TopNav';
 import { Customers } from '../../Contexts/Customers';
 import Customer from './Customer';
 
-import Create from './Create';
+//import Create from './Create';
 
 
 export default function List() {
 
     const { customers, setCustomers, allCustomers, customersWithMoney, customersWithoutMoney,stats} = useContext(Customers);
-    console.log(customers)
+    //console.log(customers)
 
     if (!customers)
         return (
