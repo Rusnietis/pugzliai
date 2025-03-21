@@ -25,20 +25,17 @@ export default function useAuthors(dispatchAuthors) {
     }, [dispatchAuthors]);
 
 
-    // useEffect(_ => {
-    //     if (null !== createAuthor) {
-
-    //         axios.post(`${SERVER_URL}/fruits`, createAuthor)
-    //             .then(res => {
-    //                 setCreateAuthor(null);
-    //                 console.log(res.data);
-    //                 setAuthors(f => f.map(fruit => fruit.id === res.data.uuid ? {...fruit, id: res.data.id, temp: false} : fruit));
-    //             })
-    //             .catch(err => {
-    //                 console.log(err);
-    //             });
-    //     }
-    // }, [createAuthor]);
+    useEffect(_ => {
+        if (null !== createAuthor) {
+            axios.post(`${SERVER_URL}/authors`, createAuthor)
+                .then(res => {
+                    setCreateAuthor(null);
+                })
+                .catch(err => {
+                    setCreateAuthor(null);
+                });
+        }
+    }, [createAuthor]);
 
     // useEffect(_ => {
     //     if (null !== editAuthor) {
