@@ -12,7 +12,7 @@ export default function Create() {
 
     const [inputs, setInputs] = useState(defaultInputs);
 
-    const {setCreateAuthor} = useContext(Authors)
+    const {setstoreAuthor} = useContext(Authors)
 
     
     const handlerChange = e => {
@@ -20,13 +20,13 @@ export default function Create() {
     }
 
     const create = _ => {
-        setCreateAuthor(inputs);
+        setstoreAuthor(inputs);
         setInputs(defaultInputs);
 
     }
 
     return (
-        <div className="card mt-4 ">
+        <div className="card mt-2 ">
             <div className="card-header">
                 <h3>Create Author</h3>
             </div>

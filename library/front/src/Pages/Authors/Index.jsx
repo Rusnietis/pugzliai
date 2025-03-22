@@ -16,18 +16,14 @@ export default function Index() {
             </div>
             <div className="container ">
                 <div className="row">
-                    <div className="col-4">
+                    <div className="col-4 mt-4" >
                         <Create />
                     </div>
-                    <div className="col-8">
+                    <div className="col-8 mt-4">
                         <List />
                     </div>
-
                 </div>
             </div>
-
-
-
         </AuthorsProvider>
     )
 }

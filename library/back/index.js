@@ -28,13 +28,11 @@ app.get('/', (req, res) => {
   res.send('Labas Meškėnai!');
 });
 
-
 //paemimas is serverio
 
 app.get('/authors', (req, res) => {
-
   const sql = 'SELECT * FROM authors'; 
-  
+  console.log
   connection.query(sql, (err, results) => { 
     if (err) {
       res.status(500);

@@ -7,10 +7,10 @@ export const Authors = createContext();
 export const AuthorsProvider = ({ children }) => {
 
     // pagrindinis kur laikome visus autorius yra reduceris
-    const [authors, dispatchAuthors] = useReducer(authorsReducer, null);
+    const [authors, dispatchAuthors] = useReducer(authorsReducer, []);
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { createAuthor, setCreateAuthor, editAuthor, setEditAuthor, deleteAuthor, setDeleteAuthor } = useAuthors(dispatchAuthors);
+    const { storeAuthor, setstoreAuthor, editAuthor, setEditAuthor, deleteAuthor, setDeleteAuthor } = useAuthors(dispatchAuthors);
 
 
 
@@ -18,8 +18,8 @@ export const AuthorsProvider = ({ children }) => {
         <Authors.Provider value={{
             authors,
             dispatchAuthors,
-            createAuthor,
-            setCreateAuthor,
+            storeAuthor,
+            setstoreAuthor,
             editAuthor,
             setEditAuthor,
             deleteAuthor,

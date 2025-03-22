@@ -1,8 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 
 import Page404 from '../Pages/Page404.jsx';
-import AuthorIndex from '../Pages/Authors/Index.jsx'
-
+import AuthorIndex from '../Pages/Authors/Index.jsx';
 
 export const Router = createContext();
 

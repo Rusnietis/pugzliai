@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
-import { getAuthors } from '../Actions/authors';
+import { getAuthors, storeAuthorAsTemp, storeAuthorAsReal } from '../Actions/authors';
 
 
-
+//patikrinta
 export default function useAuthors(dispatchAuthors) {
 
-    const [createAuthor, setCreateAuthor] = useState(null);
+    const [storeAuthor, setstoreAuthor] = useState(null);
     const [editAuthor, setEditAuthor] = useState(null);
     const [deleteAuthor, setDeleteAuthor] = useState(null);
 
@@ -20,22 +21,25 @@ export default function useAuthors(dispatchAuthors) {
                 dispatchAuthors(getAuthors(res.data));
             })
             .catch(err => {
-                console.log(err); 
+                console.log(err);
             })
-    }, [dispatchAuthors]);
+    }, [deleteAuthor]);
 
 
     useEffect(_ => {
-        if (null !== createAuthor) {
-            axios.post(`${SERVER_URL}/authors`, createAuthor)
+        if (null !== storeAuthor) {
+            const uuid = uuidv4();
+            dispatchAuthors(storeAuthorAsTemp({ ...storeAuthor, id: uuid }));
+            axios.post(`${SERVER_URL}/authors`, { ...storeAuthor, id: uuid })
                 .then(res => {
-                    setCreateAuthor(null);
+                    setstoreAuthor(null);
+                    dispatchAuthors(storeAuthorAsReal(res.data))
                 })
                 .catch(err => {
-                    setCreateAuthor(null);
+                    setstoreAuthor(null);
                 });
         }
-    }, [createAuthor]);
+    }, [storeAuthor]);
 
     // useEffect(_ => {
     //     if (null !== editAuthor) {
@@ -58,8 +62,8 @@ export default function useAuthors(dispatchAuthors) {
 
     return {
 
-        createAuthor,
-        setCreateAuthor,
+        storeAuthor,
+        setstoreAuthor,
         editAuthor,
         setEditAuthor,
         deleteAuthor,
