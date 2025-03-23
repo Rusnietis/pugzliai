@@ -22,3 +22,17 @@ export function storeAuthorAsReal(response) {
         payload: response
     }
 }
+
+export function deleteAuthorAsTemp(author) {
+    return {
+        type: constants.DELETE_AUTHOR,
+        payload: author
+    }
+}
+
+export function deleteAuthorAsReal(response) {
+    return {
+        type: constants.DELETE_AUTHOR_REAL,
+        payload: response
+    }
+}

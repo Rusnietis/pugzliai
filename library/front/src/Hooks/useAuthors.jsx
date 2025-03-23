@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
-import { getAuthors, storeAuthorAsTemp, storeAuthorAsReal } from '../Actions/authors';
+import { getAuthors, storeAuthorAsTemp, storeAuthorAsReal, deleteAuthorAsTemp, deleteAuthorAsReal } from '../Actions/authors';
 
 
 //patikrinta
 export default function useAuthors(dispatchAuthors) {
 
     const [storeAuthor, setstoreAuthor] = useState(null);
-    const [editAuthor, setEditAuthor] = useState(null);
-    const [deleteAuthor, setDeleteAuthor] = useState(null);
+    const [updateAuthor, setUpdateAuthor] = useState(null);
+    const [destroyAuthor, setDestroyAuthor] = useState(null);
 
 
     useEffect(_ => {
@@ -23,7 +23,7 @@ export default function useAuthors(dispatchAuthors) {
             .catch(err => {
                 console.log(err);
             })
-    }, [deleteAuthor]);
+    }, [destroyAuthor]);
 
 
     useEffect(_ => {
@@ -41,11 +41,27 @@ export default function useAuthors(dispatchAuthors) {
         }
     }, [storeAuthor]);
 
+    useEffect(_ => {
+        if (null !== destroyAuthor) {
+
+            dispatchAuthors(deleteAuthorAsTemp(destroyAuthor));
+
+            axios.delete(`${SERVER_URL}/authors/${destroyAuthor.id}`)
+                .then(res => {
+                    setDestroyAuthor(null);
+                    dispatchAuthors(deleteAuthorAsReal(res.data));
+                })
+                .catch(err => {
+                    setDestroyAuthor(null);
+                })
+        }
+    }, [destroyAuthor])
+
     // useEffect(_ => {
-    //     if (null !== editAuthor) {
-    //         axios.put(`${SERVER_URL}/fruits/${editAuthor.id}`, editAuthor)
+    //     if (null !== updateAuthor) {
+    //         axios.put(`${SERVER_URL}/fruits/${updateAuthor.id}`, updateAuthor)
     //             .then(res => {
-    //                 setEditAuthor(null);
+    //                 setUpdateAuthor(null);
     //                 console.log(res.data)
     //                 setAuthors(f => f.map(fruit => fruit.id === res.data.id ? {...fruit, temp: false} : fruit));
     //             })
@@ -53,7 +69,7 @@ export default function useAuthors(dispatchAuthors) {
     //                console.log(err);
     //             });
     //     }
-    // }, [editAuthor]);
+    // }, [updateAuthor]);
 
 
 
@@ -64,9 +80,9 @@ export default function useAuthors(dispatchAuthors) {
 
         storeAuthor,
         setstoreAuthor,
-        editAuthor,
-        setEditAuthor,
-        deleteAuthor,
-        setDeleteAuthor
+        updateAuthor,
+        setUpdateAuthor,
+        destroyAuthor,
+        setDestroyAuthor
     };
 }

@@ -57,6 +57,18 @@ app.post('/authors', (req, res) => {
   });
 })
 
+// trynimas is duomenu bazes
+app.delete('/authors/:id', (req, res) => {
+  const sql = 'DELETE FROM authors WHERE id = ?';
+  connection.query(sql, [req.params.id], (err) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+});
+
 app.put('/fruits/:id', (req, res) => {
 
   const { name, color, form } = req.body;

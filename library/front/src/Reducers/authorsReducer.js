@@ -1,30 +1,35 @@
-import * as author from '../Constants/authors';
+import * as constants from '../Constants/authors';
 // patikrinta
 // funkcija, kuri apdoroja autoriu lista is serverio
 export default function authorsReducer(state, action) {
 
-    let newState;
+    let newState = structuredClone(state ? state : []);
+    let author = null;
 
     switch (action.type) {
-        case author.GET_AUTHORS_FROM_SERVER:
+        case constants.GET_AUTHORS_FROM_SERVER:
             newState = action.payload;
             break;
-        case author.CREATE_AUTHOR:
-            newState = [...state, { ...action.payload, temp: true }];
+        case constants.CREATE_AUTHOR:
+            newState.push({ ...action.payload, temp: true });
             break;
-        case author.CREATE_AUTHOR_REAL:
-            newState = state.map(author => {
-                if (author.id === action.payload.uuid) {
-                    const a = { ...author};
-                    delete a.temp;
-                    a.id = action.payload.id;
-                    return a;
-                }
-                return author;
-            });
+        case constants.CREATE_AUTHOR_REAL:
+            author = newState.find(author => author.id === action.payload.uuid);
+            if (author) {
+                delete author.temp;
+                author.id = action.payload.id;
+            }
+            break;
+        case constants.DELETE_AUTHOR:
+            author = newState.find(author => author.id === action.payload.id);
+            if (author) {
+                author.deleted = true;
+            }
+            break;
+        case constants.DELETE_AUTHOR_REAL:
+            newState = newState.filter(author => author.id === action.payload.id);
             break;
         default:
-            newState = [...state ?? []];
     }
 
     return newState;

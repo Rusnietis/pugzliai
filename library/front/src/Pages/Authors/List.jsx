@@ -3,7 +3,7 @@ import { Authors } from '../../Contexts/Authors';
 
 export default function List() {
 
-    const { authors } = useContext(Authors);
+    const { authors, setDeleteAuthor } = useContext(Authors);
 
     console.log(authors)
 
@@ -11,23 +11,50 @@ export default function List() {
         <>
             {
                 authors.map(author => (
-                    <div key={author.id} className="card mt-2" style={{
-                        opacity: author.temp ? 0.5 : 1
-                    }}>
-                        <div className="card-header">
-                            <h4>{author.name} {author.surname}</h4>
-                        </div>
-                        <div className="card-body">
-                            <p>Nickname: {author.nickname}</p>
-                            <p>Born: {new Date(author.born).toLocaleDateString("lt-LT")}</p>
-                        </div>
-                        <div className="card-footer">
-                            <button type="button" disabled={author.temp ? true : false} className="btn btn-primary m-3">Edit</button>
-                            <button type="button" disabled={author.temp ? true : false} className="btn btn-danger">Delete</button>
-                        </div>
-                    </div>
+                    <>
+                        {
+                            author.deleted
+                                ?
+                                <div key={author.id}>
+                                    <div className="alert alert-danger mt-2" role="alert">
+                                        {author.name} {author.surname} has been deleted
+                                    </div>
+                                </div>
+                                :
+
+                                <div key={author.id} className="card mt-2" style={{
+                                    opacity: author.temp ? 0.5 : 1
+                                }}>
+                                    <div className="card-header">
+                                        <h4>{author.name} {author.surname}</h4>
+                                    </div>
+                                    <div className="card-body">
+                                        <p>Nickname: {author.nickname}</p>
+                                        <p>Born: {new Date(author.born).toLocaleDateString("lt-LT")}</p>
+                                    </div>
+                                    <div className="card-footer">
+                                        <button
+                                            type="button"
+                                            disabled={author.temp ? true : false}
+                                            className="btn btn-danger"
+                                            onClick={_ => setDeleteAuthor(author)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button
+                                            type="button"
+                                            disabled={author.temp ? true : false}
+                                            className="btn btn-primary m-3"
+                                        >
+                                            Edit
+                                        </button>
+
+                                    </div>
+                                </div>
+                        }
+                    </>
                 ))
             }
-            </> 
+        </>
     )
 }

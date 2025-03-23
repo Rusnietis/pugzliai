@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useState } from 'react';
 import useAuthors from '../Hooks/useAuthors';
 import authorsReducer from '../Reducers/authorsReducer';
 
@@ -8,9 +8,10 @@ export const AuthorsProvider = ({ children }) => {
 
     // pagrindinis kur laikome visus autorius yra reduceris
     const [authors, dispatchAuthors] = useReducer(authorsReducer, []);
+    const [deleteAuthor, setDeleteAuthor] = useState(null);
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeAuthor, setstoreAuthor, editAuthor, setEditAuthor, deleteAuthor, setDeleteAuthor } = useAuthors(dispatchAuthors);
+    const { storeAuthor, setstoreAuthor, updateAuthor, setUpdateAuthor, destroyAuthor, setDestroyAuthor } = useAuthors(dispatchAuthors);
 
 
 
@@ -20,9 +21,11 @@ export const AuthorsProvider = ({ children }) => {
             dispatchAuthors,
             storeAuthor,
             setstoreAuthor,
-            editAuthor,
-            setEditAuthor,
-            deleteAuthor,
+            updateAuthor,
+            setUpdateAuthor,
+            destroyAuthor,
+            setDestroyAuthor,
+            deleteAuthor, 
             setDeleteAuthor
 
         }}>
