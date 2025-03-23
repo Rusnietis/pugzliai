@@ -11,7 +11,7 @@ export default function authorsReducer(state, action) {
             newState = action.payload;
             break;
         case constants.CREATE_AUTHOR:
-            newState.push({ ...action.payload, temp: true });
+            newState.unshift({ ...action.payload, temp: true });
             break;
         case constants.CREATE_AUTHOR_REAL:
             author = newState.find(author => author.id === action.payload.uuid);
@@ -20,6 +20,10 @@ export default function authorsReducer(state, action) {
                 author.id = action.payload.id;
             }
             break;
+        case constants.CREATE_AUTHOR_UNDO:
+            console.log('undo', action.payload)
+            newState = newState.filter(author => author.id !== action.payload.id);
+            break;
         case constants.DELETE_AUTHOR:
             author = newState.find(author => author.id === action.payload.id);
             if (author) {
@@ -27,7 +31,13 @@ export default function authorsReducer(state, action) {
             }
             break;
         case constants.DELETE_AUTHOR_REAL:
-            newState = newState.filter(author => author.id === action.payload.id);
+            newState = newState.filter(author => author.id !== action.payload.id);
+            break;
+        case constants.DELETE_AUTHOR_UNDO:
+            author = newState.find(author => author.id === action.payload.id);
+            if (author) {
+                delete author.deleted;
+            }
             break;
         default:
     }

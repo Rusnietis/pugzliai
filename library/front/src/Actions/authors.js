@@ -23,6 +23,13 @@ export function storeAuthorAsReal(response) {
     }
 }
 
+export function storeAuthorAsUndo(author) {
+    return {
+        type: constants.CREATE_AUTHOR_UNDO,
+        payload: author
+    }
+}
+
 export function deleteAuthorAsTemp(author) {
     return {
         type: constants.DELETE_AUTHOR,
@@ -34,5 +41,12 @@ export function deleteAuthorAsReal(response) {
     return {
         type: constants.DELETE_AUTHOR_REAL,
         payload: response
+    }
+}
+
+export function deleteAuthorAsUndo(author) {
+    return {
+        type: constants.DELETE_AUTHOR_UNDO,
+        payload: author
     }
 }

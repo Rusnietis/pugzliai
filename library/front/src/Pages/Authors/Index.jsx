@@ -3,8 +3,11 @@ import { AuthorsProvider } from '../../Contexts/Authors';
 import List from './List';
 import Create from './Create';
 import Delete from './Delete';
+import Edit from './Edit';
+
 
 export default function Index() {
+
     return (
         <AuthorsProvider>
             <Nav />
@@ -26,6 +29,8 @@ export default function Index() {
                 </div>
             </div>
             <Delete />
+            <Edit /> 
+            
         </AuthorsProvider>
     )
 }

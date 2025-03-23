@@ -3,26 +3,25 @@ import { Authors } from '../../Contexts/Authors';
 
 export default function List() {
 
-    const { authors, setDeleteAuthor } = useContext(Authors);
+    const { authors, setDeleteAuthor, setEditAuthor } = useContext(Authors);
 
-    console.log(authors)
+    //console.log(authors)
 
     return (
         <>
             {
                 authors.map(author => (
-                    <>
+                    <div key={author.id}>
                         {
                             author.deleted
                                 ?
-                                <div key={author.id}>
-                                    <div className="alert alert-danger mt-2" role="alert">
-                                        {author.name} {author.surname} has been deleted
-                                    </div>
+                                <div className="alert alert-danger mt-2" role="alert">
+                                    {author.name} {author.surname} has been deleted
                                 </div>
+
                                 :
 
-                                <div key={author.id} className="card mt-2" style={{
+                                <div className="card mt-2" style={{
                                     opacity: author.temp ? 0.5 : 1
                                 }}>
                                     <div className="card-header">
@@ -45,6 +44,7 @@ export default function List() {
                                             type="button"
                                             disabled={author.temp ? true : false}
                                             className="btn btn-primary m-3"
+                                            onClick={_ => setEditAuthor(author)}
                                         >
                                             Edit
                                         </button>
@@ -52,7 +52,7 @@ export default function List() {
                                     </div>
                                 </div>
                         }
-                    </>
+                    </div>
                 ))
             }
         </>

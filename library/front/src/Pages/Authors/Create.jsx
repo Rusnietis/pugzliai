@@ -12,7 +12,7 @@ export default function Create() {
 
     const [inputs, setInputs] = useState(defaultInputs);
 
-    const {setstoreAuthor} = useContext(Authors)
+    const {setStoreAuthor} = useContext(Authors)
 
     
     const handlerChange = e => {
@@ -20,7 +20,7 @@ export default function Create() {
     }
 
     const create = _ => {
-        setstoreAuthor(inputs);
+        setStoreAuthor(inputs);
         setInputs(defaultInputs);
 
     }

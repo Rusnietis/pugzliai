@@ -31,9 +31,9 @@ app.get('/', (req, res) => {
 //paemimas is serverio
 
 app.get('/authors', (req, res) => {
-  const sql = 'SELECT * FROM authors'; 
+  const sql = 'SELECT * FROM authors';
   console.log
-  connection.query(sql, (err, results) => { 
+  connection.query(sql, (err, results) => {
     if (err) {
       res.status(500);
     } else {
@@ -45,6 +45,10 @@ app.get('/authors', (req, res) => {
 
 // irasinejimas i duomenu baze
 app.post('/authors', (req, res) => {
+
+  res.status(401).json({ status: 'login' });
+  return;
+
   const { name, surname, nickname, born } = req.body;
   console.log(req.body)
   const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
@@ -59,6 +63,10 @@ app.post('/authors', (req, res) => {
 
 // trynimas is duomenu bazes
 app.delete('/authors/:id', (req, res) => {
+
+  res.status(401).json({ status: 'login' });
+  return;
+
   const sql = 'DELETE FROM authors WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {

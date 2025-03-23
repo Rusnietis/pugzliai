@@ -9,6 +9,7 @@ export const AuthorsProvider = ({ children }) => {
     // pagrindinis kur laikome visus autorius yra reduceris
     const [authors, dispatchAuthors] = useReducer(authorsReducer, []);
     const [deleteAuthor, setDeleteAuthor] = useState(null);
+    const [editAuthor, setEditAuthor] = useState(null);
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
     const { storeAuthor, setstoreAuthor, updateAuthor, setUpdateAuthor, destroyAuthor, setDestroyAuthor } = useAuthors(dispatchAuthors);
@@ -26,7 +27,9 @@ export const AuthorsProvider = ({ children }) => {
             destroyAuthor,
             setDestroyAuthor,
             deleteAuthor, 
-            setDeleteAuthor
+            setDeleteAuthor,
+            editAuthor, 
+            setEditAuthor
 
         }}>
             {children}
