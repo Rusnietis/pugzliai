@@ -50,3 +50,24 @@ export function deleteAuthorAsUndo(author) {
         payload: author
     }
 }
+
+export function updateAuthorAsTemp(author, oldAuthor) {
+    return {
+        type: constants.UPDATE_AUTHOR,
+        payload: {author, oldAuthor}
+    }
+}
+
+export function updateAuthorAsReal(response) {
+    return {
+        type: constants.UPDATE_AUTHOR_REAL,
+        payload: response
+    }
+}
+
+export function updateAuthorAsUndo(author) {
+    return {
+        type: constants.UPDATE_AUTHOR_UNDO,
+        payload: author
+    }
+}

@@ -46,8 +46,8 @@ app.get('/authors', (req, res) => {
 // irasinejimas i duomenu baze
 app.post('/authors', (req, res) => {
 
-  res.status(401).json({ status: 'login' });
-  return;
+  // res.status(401).json({ status: 'login' });
+  // return;
 
   const { name, surname, nickname, born } = req.body;
   console.log(req.body)
@@ -64,8 +64,8 @@ app.post('/authors', (req, res) => {
 // trynimas is duomenu bazes
 app.delete('/authors/:id', (req, res) => {
 
-  res.status(401).json({ status: 'login' });
-  return;
+  // res.status(401).json({ status: 'login' });
+  // return;
 
   const sql = 'DELETE FROM authors WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
@@ -76,6 +76,21 @@ app.delete('/authors/:id', (req, res) => {
     }
   });
 });
+
+// atnaujinimas
+
+app.put('/authors/:id', (req, res) => {
+  
+  const { name, surname, nickname, born } = req.body;
+  const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ? WHERE id = ?';
+  connection.query(sql, [name, surname, nickname, born, req.params.id], (err) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+})
 
 app.put('/fruits/:id', (req, res) => {
 

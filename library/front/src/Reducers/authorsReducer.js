@@ -39,6 +39,31 @@ export default function authorsReducer(state, action) {
                 delete author.deleted;
             }
             break;
+            case constants.UPDATE_AUTHOR:
+            author = newState.find(author => author.id === action.payload.author.id);
+            if (author) {
+                author.temp = true;
+                author.old = action.payload.oldAuthor;
+            }
+            break;
+            case constants.UPDATE_AUTHOR_REAL:
+                author = newState.find(author => author.id === action.payload.id);
+                if (author) {
+                    delete author.temp;
+                    delete author.old;
+                }
+                break; 
+                case constants.UPDATE_AUTHOR_UNDO:  
+                author = newState.find(author => author.id === action.payload.author.id);
+                if (author) {
+
+                    author = {...author.old};
+                    // delete author.temp;
+                    // delete author.old;
+                    // author.id = action.payload.oldAuthor.id;
+                    // author.name = action.payload.oldAuthor.name;
+                }
+                break; 
         default:
     }
 

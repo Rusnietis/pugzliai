@@ -43,6 +43,19 @@ export default function useAuthors(dispatchAuthors) {
     }, [storeAuthor, dispatchAuthors]);
 
     useEffect(_ => {
+        if (null !== updateAuthor) {
+            axios.put(`${SERVER_URL}/authors/${updateAuthor.id}`, updateAuthor)
+            .then(res => {
+                setUpdateAuthor(null);
+            })
+            .catch(err => {
+                setUpdateAuthor(null);
+            });
+
+        }
+    }, [updateAuthor])
+
+    useEffect(_ => {
         if (null !== destroyAuthor) {
 
             dispatchAuthors(a.deleteAuthorAsTemp(destroyAuthor));
