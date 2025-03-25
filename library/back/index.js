@@ -35,7 +35,7 @@ app.get('/authors', (req, res) => {
   console.log
   connection.query(sql, (err, results) => {
     if (err) {
-      res.status(500);
+      res.status(500).send(err);
     } else {
       res.json(results);
     }
@@ -54,7 +54,7 @@ app.post('/authors', (req, res) => {
   const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
   connection.query(sql, [name, surname, nickname, born], (err, result) => {
     if (err) {
-      res.status(500);
+      res.status(500).send(err);
     } else {
       res.json({ success: true, id: result.insertId, uuid: req.body.id });
     }
@@ -70,7 +70,7 @@ app.delete('/authors/:id', (req, res) => {
   const sql = 'DELETE FROM authors WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
-      res.status(500);
+      res.status(500).send(err);
     } else {
       res.json({ success: true, id: +req.params.id });
     }
@@ -80,12 +80,13 @@ app.delete('/authors/:id', (req, res) => {
 // atnaujinimas
 
 app.put('/authors/:id', (req, res) => {
-  
+
+  // res.status(403).send('no access');
   const { name, surname, nickname, born } = req.body;
   const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ? WHERE id = ?';
   connection.query(sql, [name, surname, nickname, born, req.params.id], (err) => {
     if (err) {
-      res.status(500);
+      res.status(500).send(err);
     } else {
       res.json({ success: true, id: +req.params.id });
     }

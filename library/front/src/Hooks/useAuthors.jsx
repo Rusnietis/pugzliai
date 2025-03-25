@@ -44,22 +44,23 @@ export default function useAuthors(dispatchAuthors) {
 
     useEffect(_ => {
         if (null !== updateAuthor) {
+            dispatchAuthors(a.updateAuthorAsTemp(updateAuthor));
             axios.put(`${SERVER_URL}/authors/${updateAuthor.id}`, updateAuthor)
-            .then(res => {
-                setUpdateAuthor(null);
-            })
-            .catch(err => {
-                setUpdateAuthor(null);
-            });
+                .then(res => {
+                    setUpdateAuthor(null);
+                    dispatchAuthors(a.updateAuthorAsReal(res.data));
+                })
+                .catch(err => {
+                    setUpdateAuthor(null);
+                    dispatchAuthors(a.updateAuthorAsUndo(updateAuthor));
+                });
 
         }
-    }, [updateAuthor])
+    }, [updateAuthor, dispatchAuthors])
 
     useEffect(_ => {
         if (null !== destroyAuthor) {
-
             dispatchAuthors(a.deleteAuthorAsTemp(destroyAuthor));
-
             axios.delete(`${SERVER_URL}/authors/${destroyAuthor.id}`)
                 .then(res => {
                     setDestroyAuthor(null);

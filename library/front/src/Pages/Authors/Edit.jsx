@@ -14,7 +14,7 @@ export default function Edit() {
     const [inputs, setInputs] = useState({...editAuthor, born: new Date(editAuthor.born).toLocaleDateString("lt-LT")});
 
 
-
+    //console.log(editAuthor)
     // useEffect(_ => {
     //     if (null !== editAuthor) {
     //         setInputs(editAuthor);
@@ -26,7 +26,7 @@ export default function Edit() {
     }
 
     const submit = _ => {
-        setUpdateAuthor({ ...editAuthor, ...inputs });
+        setUpdateAuthor({ ...editAuthor, ...inputs, old: editAuthor });
         setEditAuthor(null);
     }
 

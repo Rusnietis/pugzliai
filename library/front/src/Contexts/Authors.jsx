@@ -11,6 +11,8 @@ export const AuthorsProvider = ({ children }) => {
     const [deleteAuthor, setDeleteAuthor] = useState(null);
     const [editAuthor, setEditAuthor] = useState(null);
 
+    //console.log(authors)
+
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
     const { storeAuthor, setstoreAuthor, updateAuthor, setUpdateAuthor, destroyAuthor, setDestroyAuthor } = useAuthors(dispatchAuthors);
 

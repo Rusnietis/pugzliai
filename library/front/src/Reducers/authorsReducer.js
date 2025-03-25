@@ -21,7 +21,7 @@ export default function authorsReducer(state, action) {
             }
             break;
         case constants.CREATE_AUTHOR_UNDO:
-            console.log('undo', action.payload)
+            //console.log('undo', action.payload)
             newState = newState.filter(author => author.id !== action.payload.id);
             break;
         case constants.DELETE_AUTHOR:
@@ -39,31 +39,38 @@ export default function authorsReducer(state, action) {
                 delete author.deleted;
             }
             break;
-            case constants.UPDATE_AUTHOR:
-            author = newState.find(author => author.id === action.payload.author.id);
+        case constants.UPDATE_AUTHOR:
+            author = newState.find(author => author.id === action.payload.id);
             if (author) {
+                for (let key in action.payload) {
+                    author[key] = action.payload[key];
+                }
+                // author.id = action.payload.author.id;
+                // author.name = action.payload.author.name;
+                // author.surname = action.payload.author.surname;
+                // author.nickname = action.payload.author.nickname;
+                // author.born = action.payload.author.born;
                 author.temp = true;
-                author.old = action.payload.oldAuthor;
             }
             break;
-            case constants.UPDATE_AUTHOR_REAL:
-                author = newState.find(author => author.id === action.payload.id);
-                if (author) {
-                    delete author.temp;
-                    delete author.old;
+        case constants.UPDATE_AUTHOR_REAL:
+            author = newState.find(author => author.id === action.payload.id);
+            if (author) {
+                delete author.temp;
+                delete author.old;
+            }
+            break;
+        case constants.UPDATE_AUTHOR_UNDO:
+            //console.log('UNDO', action.payload)
+            author = newState.find(author => author.id === action.payload.id);
+            if (author) {
+                for (let key in action.payload.old) {
+                    author[key] = action.payload.old[key];
                 }
-                break; 
-                case constants.UPDATE_AUTHOR_UNDO:  
-                author = newState.find(author => author.id === action.payload.author.id);
-                if (author) {
-
-                    author = {...author.old};
-                    // delete author.temp;
-                    // delete author.old;
-                    // author.id = action.payload.oldAuthor.id;
-                    // author.name = action.payload.oldAuthor.name;
-                }
-                break; 
+                delete author.temp;
+                delete author.old;
+            }
+            break;
         default:
     }
 
