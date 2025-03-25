@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 
 import Page404 from '../Pages/Page404.jsx';
 import AuthorIndex from '../Pages/Authors/Index.jsx';
+import BookIndex from '../Pages/Books/Index.jsx'
 
 export const Router = createContext();
 
@@ -24,7 +25,7 @@ export const RouterProvider = () => {
     useEffect(_ => {
         const handleHashChange = _ => {
             const hash = window.location.hash.split('/');
-            console.log(hash);
+            //console.log(hash);
             setRoute(hash.shift());
             setParams(hash);
             //setRoute(window.location.hash);
@@ -39,7 +40,7 @@ export const RouterProvider = () => {
 
         const handleHashChange = _ => {
             const hash = window.location.hash.split('/');
-            console.log(hash);
+            //console.log(hash);
             setRoute(hash.shift());
             setParams(hash);
             //setRoute(window.location.hash);
@@ -52,6 +53,7 @@ export const RouterProvider = () => {
     const routes = [
 
         { path: '#authors', component: <AuthorIndex /> },
+        { path: '#books', component: <BookIndex />},
 
 
     ];
