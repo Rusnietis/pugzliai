@@ -1,8 +1,7 @@
 import Nav from '../../Components/Nav';
-// import Create from './Create';
-// import List from './List';
-// import Delete from './Delete';
-// import Edit from './Edit';
+import List from './List';
+import Delete from './Delete';
+import Edit from './Edit';
 import { useContext } from 'react';
 import { Books } from '../../Contexts/Books';
 import Create from './Create';
@@ -10,7 +9,7 @@ import Create from './Create';
 
 export default function Layout() {
 
-    const { editBook } = useContext(Books)
+    const { editBook, deleteBook } = useContext(Books)
 
     return (
         <>
@@ -28,11 +27,12 @@ export default function Layout() {
                         <Create />
                     </div>
                     <div className="col-8 mt-4">
-                       list
+                        <List />
                     </div>
                 </div>
             </div>
-
+            {deleteBook && <Delete />}
+            {editBook && <Edit />}
         </>
     )
 }

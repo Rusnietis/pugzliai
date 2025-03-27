@@ -8,7 +8,7 @@ import * as a from '../Actions/authors';
 //patikrinta
 export default function useAuthors(dispatchAuthors) {
 
-    const [storeAuthor, setstoreAuthor] = useState(null);
+    const [storeAuthor, setStoreAuthor] = useState(null);
     const [updateAuthor, setUpdateAuthor] = useState(null);
     const [destroyAuthor, setDestroyAuthor] = useState(null);
 
@@ -32,12 +32,12 @@ export default function useAuthors(dispatchAuthors) {
             dispatchAuthors(a.storeAuthorAsTemp({ ...storeAuthor, id: uuid }));
             axios.post(`${SERVER_URL}/authors`, { ...storeAuthor, id: uuid })
                 .then(res => {
-                    setstoreAuthor(null);
+                    setStoreAuthor(null);
                     dispatchAuthors(a.storeAuthorAsReal(res.data))
                 })
                 .catch(err => {
                     dispatchAuthors(a.storeAuthorAsUndo({ ...storeAuthor, id: uuid }));
-                    setstoreAuthor(null);
+                    setStoreAuthor(null);
                 });
         }
     }, [storeAuthor, dispatchAuthors]);
@@ -95,7 +95,7 @@ export default function useAuthors(dispatchAuthors) {
     return {
 
         storeAuthor,
-        setstoreAuthor,
+        setStoreAuthor,
         updateAuthor,
         setUpdateAuthor,
         destroyAuthor,

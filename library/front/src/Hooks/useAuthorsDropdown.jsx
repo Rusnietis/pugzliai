@@ -14,7 +14,6 @@ export default function useAuthorsDropdown() {
 
         axios.get(`${SERVER_URL}/authors`)
             .then(res => {
-                //console.log(res.data)
                 setAuthorsDropdown(res.data);
             })
             .catch(err => {

@@ -15,7 +15,7 @@ export const BooksProvider = ({ children }) => {
     //console.log(books)
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeBook, setstoreBook, updateBook, setUpdateBook, destroyBook, setDestroyBook } = useBooks(dispatchBooks);
+    const { storeBook, setStoreBook, updateBook, setUpdateBook, destroyBook, setDestroyBook } = useBooks(dispatchBooks);
 
 
 
@@ -24,7 +24,7 @@ export const BooksProvider = ({ children }) => {
             books,
             dispatchBooks,
             storeBook,
-            setstoreBook,
+            setStoreBook,
             updateBook,
             setUpdateBook,
             destroyBook,

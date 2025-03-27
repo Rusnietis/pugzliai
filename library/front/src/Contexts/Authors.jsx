@@ -14,7 +14,7 @@ export const AuthorsProvider = ({ children }) => {
     //console.log(authors)
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeAuthor, setstoreAuthor, updateAuthor, setUpdateAuthor, destroyAuthor, setDestroyAuthor } = useAuthors(dispatchAuthors);
+    const { storeAuthor, setStoreAuthor, updateAuthor, setUpdateAuthor, destroyAuthor, setDestroyAuthor } = useAuthors(dispatchAuthors);
 
 
 
@@ -23,7 +23,7 @@ export const AuthorsProvider = ({ children }) => {
             authors,
             dispatchAuthors,
             storeAuthor,
-            setstoreAuthor,
+            setStoreAuthor,
             updateAuthor,
             setUpdateAuthor,
             destroyAuthor,

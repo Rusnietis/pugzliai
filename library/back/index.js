@@ -43,6 +43,23 @@ app.get('/authors', (req, res) => {
 
 })
 
+app.get('/books', (req, res) => {
+  const sql = `
+  SELECT b.id, title, pages, genre, name, surname, author_id 
+  FROM books as b
+  LEFT JOIN authors as a
+  ON b.author_id = a.id
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
+
+})
+
 // irasinejimas i duomenu baze
 app.post('/authors', (req, res) => {
 
@@ -61,6 +78,18 @@ app.post('/authors', (req, res) => {
   });
 })
 
+app.post('/books', (req, res) => {
+    const { title, pages, genre, author_id } = req.body;
+    const sql = 'INSERT INTO books (title, pages, genre, author_id) VALUES (?, ?, ?, ?)';
+    connection.query(sql, [title, pages, genre, author_id], (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.json({ success: true, id: result.insertId, uuid: req.body.id });
+      }
+    });
+})
+
 // trynimas is duomenu bazes
 app.delete('/authors/:id', (req, res) => {
 
@@ -68,6 +97,21 @@ app.delete('/authors/:id', (req, res) => {
   // return;
 
   const sql = 'DELETE FROM authors WHERE id = ?';
+  connection.query(sql, [req.params.id], (err) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+});
+
+app.delete('/books/:id', (req, res) => {
+
+  // res.status(401).json({ status: 'login' });
+  // return;
+
+  const sql = 'DELETE FROM books WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
@@ -85,6 +129,19 @@ app.put('/authors/:id', (req, res) => {
   const { name, surname, nickname, born } = req.body;
   const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ? WHERE id = ?';
   connection.query(sql, [name, surname, nickname, born, req.params.id], (err) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+})
+
+app.put('/books/:id', (req, res) => {
+
+  const { title, pages, genre, author_id } = req.body;
+  const sql = 'UPDATE books SET title = ?, pages = ?, genre = ?, author_id = ? WHERE id = ?';
+  connection.query(sql, [ title, pages, genre, author_id, req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
     } else {

@@ -23,9 +23,12 @@ export default function Create() {
     }
 
     const create = _ => {
-        setStoreBook(inputs);
+        const author = {
+            surname: authorsDropdown.find(author => author.id === +inputs.author_id).surname,
+            name: authorsDropdown.find(author => author.id === +inputs.author_id).name
+        }
+        setStoreBook({...inputs, author});
         setInputs(defaultInputs);
-
     }
 
     return (
