@@ -2,7 +2,9 @@ import { createContext, useEffect, useState } from 'react';
 
 import Page404 from '../Pages/Page404.jsx';
 import AuthorIndex from '../Pages/Authors/Index.jsx';
-import BookIndex from '../Pages/Books/Index.jsx'
+import BookIndex from '../Pages/Books/Index.jsx';
+import HeroIndex from '../Pages/Heroes/Index.jsx';
+import HomeIndex from '../Pages/Home/Index.jsx';
 
 export const Router = createContext();
 
@@ -19,8 +21,6 @@ export const RouterProvider = () => {
         hash.shift();
         return hash;
     });
-
-
 
     useEffect(_ => {
         const handleHashChange = _ => {
@@ -54,7 +54,8 @@ export const RouterProvider = () => {
 
         { path: '#authors', component: <AuthorIndex /> },
         { path: '#books', component: <BookIndex />},
-
+        { path: '#heroes', component: < HeroIndex />},
+        { path: '#home', component: < HomeIndex />},
 
     ];
 
