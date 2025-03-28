@@ -1,7 +1,7 @@
 import * as constants from '../Constants/heroes';
 // patikrinta
 // funkcija, kuri apdoroja autoriu lista is serverio
-export default function herosReducer(state, action) {
+export default function heroesReducer(state, action) {
 
     let newState = structuredClone(state ? state : []);
     let hero = null;

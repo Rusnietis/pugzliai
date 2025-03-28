@@ -53,9 +53,9 @@ export const RouterProvider = () => {
     const routes = [
 
         { path: '#authors', component: <AuthorIndex /> },
-        { path: '#books', component: <BookIndex />},
-        { path: '#heroes', component: < HeroIndex />},
-        { path: '#home', component: < HomeIndex />},
+        { path: '#books', component: <BookIndex /> },
+        { path: '#heroes', component: < HeroIndex /> },
+        { path: '#home', component: < HomeIndex /> },
 
     ];
 
