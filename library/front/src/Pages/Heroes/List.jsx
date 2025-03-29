@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
+import { SERVER_URL } from '../../Constants/main';
+
 
 export default function List() {
 
@@ -30,9 +32,18 @@ export default function List() {
                                         <h4>{hero.name}</h4>
                                     </div>
                                     <div className="card-body">
-                                        <p>Hero is {hero.good ? 'Good': 'Bad'}</p>
-                                        <p>Book: {hero?.book?.title}</p>
-                                        <p>Author: {hero?.author?.name} {hero?.author?.surname}</p>
+                                        <div className="row">
+                                            <div className="col-5">
+                                                <p>Hero is {hero.good ? 'Good' : 'Bad'}</p>
+                                                <p>Book: {hero?.book?.title}</p>
+                                                <p>Author: {hero?.author?.name} {hero?.author?.surname}</p>
+                                            </div>
+                                            <div className="col-7">
+                                                {hero?.image &&<img src={hero?.image} alt={hero?.name} className="img-fliud"/>}
+                                                {!hero?.image && <img src={SERVER_URL + '/images/broken-image.jpg' } alt="broken-image" className="img-fliud"/>}
+                                            </div>
+
+                                        </div>
                                     </div>
                                     <div className="card-footer">
                                         <button

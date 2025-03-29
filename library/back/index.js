@@ -28,11 +28,34 @@ app.get('/', (req, res) => {
   res.send('Labas Meškėnai!');
 });
 
+//statistika
+app.get('/stats', (req, res) => {
+const sql = `
+SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
+FROM authors
+UNION
+SELECT 'books', COUNT(*), MAX(pages)
+FROM books
+UNION
+SELECT 'heroes', COUNT(*), SUM(good)
+FROM heroes
+`;
+connection.query(sql, (err, results) => {
+  if (err) {
+    res.status(500).send(err);
+  } else {
+    res.json(results);
+  }
+});
+
+
+})
+
+
 //paemimas is serverio
 
 app.get('/authors', (req, res) => {
   const sql = 'SELECT * FROM authors';
-  console.log
   connection.query(sql, (err, results) => {
     if (err) {
       res.status(500).send(err);
@@ -62,7 +85,7 @@ app.get('/books', (req, res) => {
 
 app.get('/heroes', (req, res) => {
   const sql = `
-  SELECT h.id, h.name, a.name As authorName, a.surname As authorSurname, good, book_id, title 
+  SELECT h.id, h.name, a.name As authorName, a.surname As authorSurname, good, book_id, title, h.image 
   FROM heroes as h
   LEFT JOIN books as b
   ON h.book_id = b.id
