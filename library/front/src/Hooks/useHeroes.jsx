@@ -32,6 +32,7 @@ export default function useHeroes(dispatchHeroes) {
             dispatchHeroes(a.storeHeroAsTemp({ ...storeHero, id: uuid }));
             const withOutHero = { ...storeHero };
             delete withOutHero.author;
+            delete withOutHero.book;
             axios.post(`${SERVER_URL}/heroes`, { ...withOutHero, id: uuid })
                 .then(res => {
                     setStoreHero(null);

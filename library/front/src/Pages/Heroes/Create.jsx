@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
 import useBooksDropdown from '../../Hooks/useBooksDropdown';
+import useImage from '../../Hooks/useImage';
 
 const defaultInputs = {
     name: '',
@@ -16,6 +17,8 @@ export default function Create() {
 
     const { setStoreHero } = useContext(Heroes)
 
+    const { image, readImage } = useImage()
+
 
     const handlerChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
@@ -29,7 +32,7 @@ export default function Create() {
         const book = {
             title: booksDropdown.find(book => book.id === +inputs.book_id).title
         }
-        setStoreHero({...inputs, author, book});
+        setStoreHero({ ...inputs, author, book, image });
         setInputs(defaultInputs);
     }
 
@@ -46,8 +49,8 @@ export default function Create() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="good" className="form-label">Good/Bad</label>
-                    <h5 style={{ cursor: 'pointer', display: inputs.good ? 'block' : 'none'}} onClick={_ => handlerChange({target: {value: 0, id: 'good'}})} >Good</h5>
-                    <h5 style={{ cursor: 'pointer', display: inputs.good ? 'none' : 'block'}} onClick={_ => handlerChange({target: {value: 1, id: 'good'}})}>Bad</h5>
+                    <h5 style={{ cursor: 'pointer', display: inputs.good ? 'block' : 'none' }} onClick={_ => handlerChange({ target: { value: 0, id: 'good' } })} >Good</h5>
+                    <h5 style={{ cursor: 'pointer', display: inputs.good ? 'none' : 'block' }} onClick={_ => handlerChange({ target: { value: 1, id: 'good' } })}>Bad</h5>
                 </div>
 
                 {booksDropdown &&
@@ -57,6 +60,16 @@ export default function Create() {
                             <option value="">Select book</option>
                             {booksDropdown.map(book => <option key={book.id} value={book.id}>{book.title}</option>)}
                         </select>
+                    </div>
+                }
+                <div className="mb-3">
+                    <label htmlFor="image" className="form-label">Image</label>
+                    <input type="file" className="form-control" id="image" onChange={readImage} />
+                </div>
+                {
+                    image &&
+                    <div className="mb-3">
+                        <img src={image} alt={inputs.name} className="img-fluids" />
                     </div>
                 }
             </div>

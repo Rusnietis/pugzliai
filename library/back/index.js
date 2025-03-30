@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const fs = require('fs');
 const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
 const connection = mysql.createConnection({
@@ -14,6 +15,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+app.use(express.json({ limit: '10mb' }))
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -30,7 +32,7 @@ app.get('/', (req, res) => {
 
 //statistika
 app.get('/stats', (req, res) => {
-const sql = `
+  const sql = `
 SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
 FROM authors
 UNION
@@ -40,13 +42,13 @@ UNION
 SELECT 'heroes', COUNT(*), SUM(good)
 FROM heroes
 `;
-connection.query(sql, (err, results) => {
-  if (err) {
-    res.status(500).send(err);
-  } else {
-    res.json(results);
-  }
-});
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
 
 
 })
@@ -136,6 +138,23 @@ app.post('/books', (req, res) => {
 })
 
 app.post('/heroes', (req, res) => {
+
+  let type;
+  let image;
+  if (req.body.image) {
+    if (req.body.image.indexOf('data:image/png;base64,') === 0) {
+      type = 'png';
+      image = Buffer.from(req.body.image.replace('data:image/png;base64,', ''), 'base64');
+    } else if (req.body.image.indexOf('data:image/jpeg;base64,') === 0) {
+      type = 'jpeg';
+      image = Buffer.from(req.body.image.replace('data:image/jpeg;base64,', ''), 'base64');
+    } else {
+      return res.status(400).send({ error: 'Unsupported image format' });
+    }
+  } else {
+    return res.status(400).send({ error: 'No image provided' });
+  }
+  
   const { name, good, book_id } = req.body;
   const sql = 'INSERT INTO heroes (name, good, book_id) VALUES (?, ?, ?)';
   connection.query(sql, [name, good, book_id], (err, result) => {
