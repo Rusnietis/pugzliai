@@ -1,4 +1,5 @@
 import * as constants from '../Constants/heroes';
+import { SERVER_URL } from '../Constants/main';
 // patikrinta
 // funkcija, kuri apdoroja autoriu lista is serverio
 export default function heroesReducer(state, action) {
@@ -9,6 +10,7 @@ export default function heroesReducer(state, action) {
     switch (action.type) {
         case constants.GET_HEROES_FROM_SERVER:
             newState = action.payload.map(hero => {
+                hero.image = hero.image ? SERVER_URL + '/' + hero.image : null;
                 hero.author = {};
                 hero.book = {};
                 hero.author.name = hero.authorName;

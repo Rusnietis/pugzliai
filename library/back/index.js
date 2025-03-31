@@ -141,23 +141,24 @@ app.post('/heroes', (req, res) => {
 
   let type;
   let image;
+  let filename = null;
   if (req.body.image) {
     if (req.body.image.indexOf('data:image/png;base64,') === 0) {
       type = 'png';
-      image = Buffer.from(req.body.image.replace('data:image/png;base64,', ''), 'base64');
+      image = Buffer.from(req.body.image.replace(/^data:image\/png;base64,/, ''), 'base64');
     } else if (req.body.image.indexOf('data:image/jpeg;base64,') === 0) {
       type = 'jpeg';
-      image = Buffer.from(req.body.image.replace('data:image/jpeg;base64,', ''), 'base64');
+      image = Buffer.from(req.body.image.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
     } else {
       return res.status(400).send({ error: 'Unsupported image format' });
     }
-  } else {
-    return res.status(400).send({ error: 'No image provided' });
+    filename = md5(uuidv4()) + '.' + type;
+    fs.writeFileSync('public/images/' + filename, image);
   }
-  
+
   const { name, good, book_id } = req.body;
-  const sql = 'INSERT INTO heroes (name, good, book_id) VALUES (?, ?, ?)';
-  connection.query(sql, [name, good, book_id], (err, result) => {
+  const sql = 'INSERT INTO heroes (name, good, book_id, image) VALUES (?, ?, ?, ?)';
+  connection.query(sql, [name, good, book_id, filename !== null ? ('images/' + filename) : null], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -204,7 +205,21 @@ app.delete('/books/:id', (req, res) => {
 app.delete('/heroes/:id', (req, res) => {
   // res.status(401).json({ status: 'login' });
   // return;
-  const sql = 'DELETE FROM heroes WHERE id = ?';
+
+  // paveikslelio istrynimas is servrio public
+  let sql = 'SELECT image FROM heroes WHERE id = ?';
+  connection.query(sql, [req.params.id], (err, results) => {
+    if (err) {
+      res.status
+    } else {
+      if (results[0].image) {
+        fs.unlinkSync('public/' + results[0].image)
+      }
+    }
+  })
+
+
+  sql = 'DELETE FROM heroes WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);

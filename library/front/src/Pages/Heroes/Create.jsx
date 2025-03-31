@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
 import useBooksDropdown from '../../Hooks/useBooksDropdown';
 import useImage from '../../Hooks/useImage';
@@ -13,11 +13,13 @@ export default function Create() {
 
     const [inputs, setInputs] = useState(defaultInputs);
 
-    const { booksDropdown } = useBooksDropdown()
+    const { booksDropdown } = useBooksDropdown();
 
-    const { setStoreHero } = useContext(Heroes)
+    const { setStoreHero } = useContext(Heroes);
 
-    const { image, readImage } = useImage()
+    const { image, readImage, setImage } = useImage();
+
+    const imageInput = useRef();
 
 
     const handlerChange = e => {
@@ -34,6 +36,8 @@ export default function Create() {
         }
         setStoreHero({ ...inputs, author, book, image });
         setInputs(defaultInputs);
+        imageInput.current.value = null;
+        setImage(null)
     }
 
     return (
@@ -64,7 +68,7 @@ export default function Create() {
                 }
                 <div className="mb-3">
                     <label htmlFor="image" className="form-label">Image</label>
-                    <input type="file" className="form-control" id="image" onChange={readImage} />
+                    <input ref={imageInput} type="file" className="form-control" id="image" onChange={readImage} />
                 </div>
                 {
                     image &&
