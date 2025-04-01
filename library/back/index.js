@@ -21,6 +21,41 @@ app.use(bodyParser.json());
 
 connection.connect();
 
+// files
+const writeImage = imageBase64 => {
+  if (!imageBase64) {
+    return null;
+  }
+  let type;
+  let image;
+  if (imageBase64.indexOf('data:image/png;base64,') === 0) {
+    type = 'png';
+    image = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
+  } else if (imageBase64.indexOf('data:image/jpeg;base64,') === 0) {
+    type = 'jpg';
+    image = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+  } else {
+    res.status(500).send('Bad image format');
+    return;
+  }
+  const filename = md5(uuidv4()) + '.' + type;
+  fs.writeFileSync('public/images/' + filename, image);
+  return filename;
+};
+
+const deleteImage = heroId => {
+  let sql = 'SELECT image FROM heroes WHERE id = ?';
+  connection.query(sql, [heroId], (err, results) => {
+    if (err) {
+      res.status
+    } else {
+      if (results[0].image) {
+        fs.unlinkSync('public/' + results[0].image);
+      }
+    }
+  });
+};
+
 
 
 // router  
@@ -139,22 +174,7 @@ app.post('/books', (req, res) => {
 
 app.post('/heroes', (req, res) => {
 
-  let type;
-  let image;
-  let filename = null;
-  if (req.body.image) {
-    if (req.body.image.indexOf('data:image/png;base64,') === 0) {
-      type = 'png';
-      image = Buffer.from(req.body.image.replace(/^data:image\/png;base64,/, ''), 'base64');
-    } else if (req.body.image.indexOf('data:image/jpeg;base64,') === 0) {
-      type = 'jpeg';
-      image = Buffer.from(req.body.image.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
-    } else {
-      return res.status(400).send({ error: 'Unsupported image format' });
-    }
-    filename = md5(uuidv4()) + '.' + type;
-    fs.writeFileSync('public/images/' + filename, image);
-  }
+  const filename = writeImage(req.body.image);
 
   const { name, good, book_id } = req.body;
   const sql = 'INSERT INTO heroes (name, good, book_id, image) VALUES (?, ?, ?, ?)';
@@ -205,20 +225,7 @@ app.delete('/books/:id', (req, res) => {
 app.delete('/heroes/:id', (req, res) => {
   // res.status(401).json({ status: 'login' });
   // return;
-
-  // paveikslelio istrynimas is servrio public
-  let sql = 'SELECT image FROM heroes WHERE id = ?';
-  connection.query(sql, [req.params.id], (err, results) => {
-    if (err) {
-      res.status
-    } else {
-      if (results[0].image) {
-        fs.unlinkSync('public/' + results[0].image)
-      }
-    }
-  })
-
-
+  deleteImage(req.params.id)
   sql = 'DELETE FROM heroes WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
@@ -261,9 +268,22 @@ app.put('/books/:id', (req, res) => {
 
 app.put('/heroes/:id', (req, res) => {
 
+  if (req.body.del) {
+    deleteImage(req.params.id)
+  }
+  const filename = writeImage(req.body.image);
   const { name, good, book_id } = req.body;
-  const sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ? WHERE id = ?';
-  connection.query(sql, [name, good, book_id, req.params.id], (err) => {
+  let sql;
+  let params = [];
+  if (req.body.del || filename !== null) {
+    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ?, image = ? WHERE id = ?';
+    params = [name, good, book_id, filename !== null ? ('images/' + filename) : null, req.params.id];
+  } else {
+    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ? WHERE id = ?';
+    params = [name, good, book_id, req.params.id];
+  }
+
+  connection.query(sql, params, (err) => {
     if (err) {
       res.status(500).send(err);
     } else {

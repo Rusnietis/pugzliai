@@ -30,10 +30,10 @@ export default function useHeroes(dispatchHeroes) {
         if (null !== storeHero) {
             const uuid = uuidv4();
             dispatchHeroes(a.storeHeroAsTemp({ ...storeHero, id: uuid }));
-            const withOutHero = { ...storeHero };
-            delete withOutHero.author;
-            delete withOutHero.book;
-            axios.post(`${SERVER_URL}/heroes`, { ...withOutHero, id: uuid })
+            const toServer = { ...storeHero };
+            delete toServer.author;
+            delete toServer.book;
+            axios.post(`${SERVER_URL}/heroes`, { ...toServer, id: uuid })
                 .then(res => {
                     setStoreHero(null);
                     dispatchHeroes(a.storeHeroAsReal(res.data))
@@ -48,9 +48,13 @@ export default function useHeroes(dispatchHeroes) {
     useEffect(_ => {
         if (null !== updateHero) {
             dispatchHeroes(a.updateHeroAsTemp(updateHero));
-            const withOutAuthor = {...updateHero};
-            delete withOutAuthor.author;
-            axios.put(`${SERVER_URL}/heroes/${updateHero.id}`, withOutAuthor)
+            const toServer = {...updateHero};
+            delete toServer.author;
+            delete toServer.book;
+            if(updateHero.image === updateHero.old.image) {
+                toServer.image = null;
+            }
+            axios.put(`${SERVER_URL}/heroes/${updateHero.id}`, toServer)
                 .then(res => {
                     setUpdateHero(null);
                     dispatchHeroes(a.updateHeroAsReal(res.data));

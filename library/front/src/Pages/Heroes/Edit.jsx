@@ -19,19 +19,18 @@ export default function Edit() {
     }, [editHero, setImage])
 
     useEffect(_ => {
-        if (image && deleteImage) {
-            setDeleteImage(false)
+        if (image && image !== editHero.image) {
+            setDeleteImage(true)
         }
-    }, [image, deleteImage, setDeleteImage])
+    }, [image, editHero.image])
 
     const handlerChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
     }
 
     const submit = _ => {
-
-        const imageToServer = image !== editHero.image ? image : null;
-
+        // console.log(deleteImage)
+        // return
         const author = {
             surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
             name: booksDropdown.find(book => book.id === +inputs.book_id).name
@@ -39,7 +38,7 @@ export default function Edit() {
         const book = {
             title: booksDropdown.find(book => book.id === +inputs.book_id).title
         }
-        setUpdateHero({ ...editHero, ...inputs, old: editHero, author, book, imageToServer, deleteImage });
+        setUpdateHero({ ...editHero, ...inputs, old: editHero, author, book, image: image, del: deleteImage });
         setEditHero(null);
     }
 
