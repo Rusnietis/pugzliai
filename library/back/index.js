@@ -155,7 +155,12 @@ app.post('/authors', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+      res.json({
+        success: true,
+        id: result.insertId,
+        uuid: req.body.id,
+        message: { type: 'success', text: 'Nice! Author added' }
+      });
     }
   });
 })
@@ -167,7 +172,12 @@ app.post('/books', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+      res.json({
+        success: true,
+        id: result.insertId,
+        uuid: req.body.id,
+        message: { type: 'success', text: 'Nice! Book added' }
+      });
     }
   });
 })
@@ -182,7 +192,12 @@ app.post('/heroes', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+      res.json({
+        success: true,
+        id: result.insertId,
+        uuid: req.body.id,
+        message: { type: 'success', text: 'Nice! Hero added' }
+      });
     }
   });
 
@@ -200,24 +215,47 @@ app.delete('/authors/:id', (req, res) => {
   const sql = 'DELETE FROM authors WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
-      res.status(500).send(err);
+      if (err.errno === 1451) {
+        res.status(422).json({ message: { type: 'danger', text: 'You can not delete this author. There are books assigned to him.' } });
+      } else {
+        res.status(500).send(err);
+      }
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({
+        success: true,
+        id: +req.params.id,
+        message: { type: 'info', text: 'Bum! Author deleted' }
+      });
     }
   });
 });
 
 app.delete('/books/:id', (req, res) => {
-
   // res.status(401).json({ status: 'login' });
   // return;
-
-  const sql = 'DELETE FROM books WHERE id = ?';
+  let sql;
+  sql = 'SELECT image FROM heroes WHERE book_id = ?';
+  connection.query(sql, [req.params.id], (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      results.forEach(hero => {
+        if (hero.image) {
+          fs.unlinkSync('public/' + hero.image);
+        }
+      });
+    }
+  });
+  sql = 'DELETE FROM books WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({
+        success: true,
+        id: +req.params.id,
+        message: { type: 'info', text: 'Bum! Book deleted! All heroes from this book gone' }
+      });
     }
   });
 });
@@ -231,7 +269,11 @@ app.delete('/heroes/:id', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({
+        success: true,
+        id: +req.params.id,
+        message: { type: 'info', text: 'Bum! Hero deleted' }
+      });
     }
   });
 });
@@ -248,7 +290,11 @@ app.put('/authors/:id', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({
+        success: true,
+        id: +req.params.id,
+        message: { type: 'success', text: 'Perfect! Author updated' }
+      });
     }
   });
 })
@@ -261,7 +307,11 @@ app.put('/books/:id', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({
+        success: true,
+        id: +req.params.id,
+        message: { type: 'success', text: 'Nice! Book updated' }
+      });
     }
   });
 })
@@ -287,7 +337,11 @@ app.put('/heroes/:id', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ success: true, id: +req.params.id });
+      res.json({ 
+        success: true,
+         id: +req.params.id,
+         message: { type: 'success', text: 'Perfect! Hero updated' }
+        });
     }
   });
 })

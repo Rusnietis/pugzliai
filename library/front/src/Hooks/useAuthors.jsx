@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as a from '../Actions/authors';
+import { MessagesContext } from '../Contexts/Messages';
 
 
 //patikrinta
@@ -11,6 +12,7 @@ export default function useAuthors(dispatchAuthors) {
     const [storeAuthor, setStoreAuthor] = useState(null);
     const [updateAuthor, setUpdateAuthor] = useState(null);
     const [destroyAuthor, setDestroyAuthor] = useState(null);
+    const {addMessage} = useContext(MessagesContext)
 
 
     useEffect(_ => {
@@ -33,14 +35,16 @@ export default function useAuthors(dispatchAuthors) {
             axios.post(`${SERVER_URL}/authors`, { ...storeAuthor, id: uuid })
                 .then(res => {
                     setStoreAuthor(null);
-                    dispatchAuthors(a.storeAuthorAsReal(res.data))
+                    dispatchAuthors(a.storeAuthorAsReal(res.data));
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     dispatchAuthors(a.storeAuthorAsUndo({ ...storeAuthor, id: uuid }));
                     setStoreAuthor(null);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
-    }, [storeAuthor, dispatchAuthors]);
+    }, [storeAuthor, dispatchAuthors, addMessage]);
 
     useEffect(_ => {
         if (null !== updateAuthor) {
@@ -49,14 +53,16 @@ export default function useAuthors(dispatchAuthors) {
                 .then(res => {
                     setUpdateAuthor(null);
                     dispatchAuthors(a.updateAuthorAsReal(res.data));
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     setUpdateAuthor(null);
                     dispatchAuthors(a.updateAuthorAsUndo(updateAuthor));
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
 
         }
-    }, [updateAuthor, dispatchAuthors])
+    }, [updateAuthor, dispatchAuthors, addMessage])
 
     useEffect(_ => {
         if (null !== destroyAuthor) {
@@ -65,13 +71,15 @@ export default function useAuthors(dispatchAuthors) {
                 .then(res => {
                     setDestroyAuthor(null);
                     dispatchAuthors(a.deleteAuthorAsReal(res.data));
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     dispatchAuthors(a.deleteAuthorAsUndo(destroyAuthor));
                     setDestroyAuthor(null);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 })
         }
-    }, [destroyAuthor, dispatchAuthors]);
+    }, [destroyAuthor, dispatchAuthors, addMessage]);
 
     // useEffect(_ => {
     //     if (null !== updateAuthor) {
