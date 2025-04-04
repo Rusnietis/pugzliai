@@ -2,12 +2,12 @@
 export const validate = (value, input, errors, rules) => {
     for (let i = 0; i < rules.length; i++) {
         let result;
-        if(!Array.isArray(rules[i])) {
+        if (!Array.isArray(rules[i])) {
             result = rules[i](value);
-        }else {
+        } else {
             result = rules[i][0](value, rules[i][1]);
         }
-      
+
         if (result === 1) {
             return true
         }
@@ -37,9 +37,9 @@ export const required = value => {
 }
 
 export const min = (value, min) => {
-    if( typeof value === 'number') {
+    if (typeof value === 'number') {
         if (value >= min) {
-        return true;
+            return true;
         }
         return 'Too small minimum' + min;
     }
@@ -50,9 +50,9 @@ export const min = (value, min) => {
 }
 
 export const max = (value, max) => {
-    if( typeof value === 'number') {
+    if (typeof value === 'number') {
         if (value <= max) {
-        return true;
+            return true;
         }
         return 'Too big maximum' + max;
     }
@@ -67,6 +67,17 @@ export const string = value => {
         return true;
     }
     return 'Not a string';
+}
+
+export const integer = value => {
+    const n = Number(value);
+    if (!isNaN(n)) {
+        return 'Not a number'
+    }
+    if (n === parseInt(n, 10)) {
+        return true;
+    }
+    return 'Not an integer';
 }
 
 export const number = value => {
@@ -85,5 +96,17 @@ export const lettersOnly = value => {
 
 export const date = value => {
 
+    const d = new Date(value);
 
+    if (d instanceof Date && !isNaN(d)) {
+        return true;
+    }
+    return 'Invalid date format or date is missing';
+}
+
+export const inNumbers = (value, numbers) => {
+    if (numbers.includes(+value)) {
+        return true;
+    }
+    return 'Invalid value';
 }

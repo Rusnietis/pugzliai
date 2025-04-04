@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Authors } from '../../Contexts/Authors';
 import * as v from '../../Validators/textInputs';
-import { MessagesContext } from '../../Contexts/Messages'
+import { MessagesContext } from '../../Contexts/Messages';
 
 const defaultInputs = {
     name: '',
@@ -38,7 +38,7 @@ export default function Create() {
             return;
         }
 
-        return;
+        // return;
         setStoreAuthor(inputs);
         setInputs(defaultInputs);
     }
@@ -64,7 +64,7 @@ export default function Create() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="born" className="form-label">Born</label>
-                    <input type="date" className="form-control" style={{borderColor: e.has('born') ? 'crimson' : null }} id="born" value={inputs.born} onChange={handlerChange} />
+                    <input type="text" className="form-control" style={{borderColor: e.has('born') ? 'crimson' : null }} id="born" value={inputs.born} onChange={handlerChange} />
                 </div>
             </div>
             <div className="card-footer">

@@ -2,6 +2,11 @@ import { useState, useContext, useRef } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
 import useBooksDropdown from '../../Hooks/useBooksDropdown';
 import useImage from '../../Hooks/useImage';
+import * as v from '../../Validators/textInputs';
+import { MessagesContext } from '../../Contexts/Messages';
+
+
+
 
 const defaultInputs = {
     name: '',
@@ -12,14 +17,12 @@ const defaultInputs = {
 export default function Create() {
 
     const [inputs, setInputs] = useState(defaultInputs);
-
     const { booksDropdown } = useBooksDropdown();
-
     const { setStoreHero } = useContext(Heroes);
-
     const { image, readImage, setImage } = useImage();
-
     const imageInput = useRef();
+    const { addMessage } = useContext(MessagesContext);
+    const [e, setE] = useState(new Map());
 
 
     const handlerChange = e => {
@@ -27,6 +30,23 @@ export default function Create() {
     }
 
     const create = _ => {
+
+        const booksIds = booksDropdown.map(book => book.id);
+
+        const errors = new Map();
+        v.validate(inputs.name, 'name', errors, [v.required, v.string, [v.min, 3], [v.max, 100]]);
+        v.validate(inputs.good, 'good', errors, [v.required, [v.integer, [0, 1]]]);
+        v.validate(inputs.book_id, 'book_id', errors, [v.required, [v.inNumbers, booksIds]]);
+        v.validate(image, 'image', errors, [v.sometimes]);
+
+        if (errors.size > 0) {
+            errors.forEach(err => addMessage({ type: 'danger', text: err }));
+            setE(errors);
+            return;
+        }
+
+
+
         const author = {
             surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
             name: booksDropdown.find(book => book.id === +inputs.book_id).name
@@ -49,7 +69,7 @@ export default function Create() {
 
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" value={inputs.name} onChange={handlerChange} />
+                    <input type="text" className="form-control" style={{borderColor: e.has('name') ? 'crimson' : null }} id="name" value={inputs.name} onChange={handlerChange} />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="good" className="form-label">Good/Bad</label>
@@ -60,7 +80,7 @@ export default function Create() {
                 {booksDropdown &&
                     <div className="mb-3">
                         <label htmlFor="book_id" className="form-label">Books</label>
-                        <select className="form-select" id="book_id" value={inputs.book_id} onChange={handlerChange}>
+                        <select className="form-select" style={{borderColor: e.has('book_id') ? 'crimson' : null }} id="book_id" value={inputs.book_id} onChange={handlerChange}>
                             <option value="">Select book</option>
                             {booksDropdown.map(book => <option key={book.id} value={book.id}>{book.title}</option>)}
                         </select>
@@ -68,7 +88,7 @@ export default function Create() {
                 }
                 <div className="mb-3">
                     <label htmlFor="image" className="form-label">Image</label>
-                    <input ref={imageInput} type="file" className="form-control" id="image" onChange={readImage} />
+                    <input ref={imageInput} type="file" className="form-control" style={{borderColor: e.has('image') ? 'crimson' : null }} id="image" onChange={readImage} />
                 </div>
                 {
                     image &&
