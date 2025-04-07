@@ -1,4 +1,4 @@
-
+//TODO: validate to separate file
 export const validate = (value, input, errors, rules) => {
     for (let i = 0; i < rules.length; i++) {
         let result;
@@ -23,6 +23,10 @@ export const validate = (value, input, errors, rules) => {
 }
 
 export const sometimes = value => {
+
+    if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'object') {
+        return 0;
+    }
     if (value) {
         return 0;
     }
@@ -30,6 +34,10 @@ export const sometimes = value => {
 }
 
 export const required = value => {
+
+    if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'object') {
+        return true
+    }
     if (value) {
         return true;
     }
@@ -109,4 +117,19 @@ export const inNumbers = (value, numbers) => {
         return true;
     }
     return 'Invalid value';
+}
+
+export const imageType = (value, types) => {
+    if (types.includes(value.type.split('/').pop())) {
+        return true;
+    }
+    return 'Invalid image type or not an image';
+
+}
+
+export const imageSize = (value, size) => {
+    if (value.size <= size) {
+        return true;
+    }
+    return 'Image too big. Maximum size is ' + size / 1000000 + 'MB';
 }

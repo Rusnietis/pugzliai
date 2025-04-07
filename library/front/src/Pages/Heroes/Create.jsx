@@ -31,13 +31,15 @@ export default function Create() {
 
     const create = _ => {
 
+        //console.log(image, imageInput.current.files[0]);
+
         const booksIds = booksDropdown.map(book => book.id);
 
         const errors = new Map();
         v.validate(inputs.name, 'name', errors, [v.required, v.string, [v.min, 3], [v.max, 100]]);
         v.validate(inputs.good, 'good', errors, [v.required, [v.integer, [0, 1]]]);
         v.validate(inputs.book_id, 'book_id', errors, [v.required, [v.inNumbers, booksIds]]);
-        v.validate(image, 'image', errors, [v.sometimes]);
+        v.validate(imageInput.current.files[0], 'image', errors, [v.sometimes, [v.imageType, ['jpeg', 'png']], [v.imageSize, 1000000]]);
 
         if (errors.size > 0) {
             errors.forEach(err => addMessage({ type: 'danger', text: err }));

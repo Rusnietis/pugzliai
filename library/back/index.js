@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql');
 const fs = require('fs');
 const md5 = require('md5');
@@ -14,7 +15,13 @@ const connection = mysql.createConnection({
 const app = express();
 const port = 3001;
 
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }
+));
+app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }))
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -67,15 +74,16 @@ app.get('/', (req, res) => {
 
 //statistika
 app.get('/stats', (req, res) => {
+  res.cookie('BebroCookis', '***Valio***')
   const sql = `
-SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
-FROM authors
-UNION
-SELECT 'books', COUNT(*), MAX(pages)
-FROM books
-UNION
-SELECT 'heroes', COUNT(*), SUM(good)
-FROM heroes
+   SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
+   FROM authors
+   UNION
+   SELECT 'books', COUNT(*), MAX(pages)
+   FROM books
+   UNION
+   SELECT 'heroes', COUNT(*), SUM(good)
+   FROM heroes
 `;
   connection.query(sql, (err, results) => {
     if (err) {
@@ -149,6 +157,12 @@ app.post('/authors', (req, res) => {
   // return;
 
   const { name, surname, nickname, born } = req.body;
+
+  if (!name || !surname || !born) {
+    res.status(422).json({ message: { type: 'danger', text: 'Name, surname and born are required.' } });
+    return;
+  }
+
   console.log(req.body)
   const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
   connection.query(sql, [name, surname, nickname, born], (err, result) => {
@@ -167,6 +181,11 @@ app.post('/authors', (req, res) => {
 
 app.post('/books', (req, res) => {
   const { title, pages, genre, author_id } = req.body;
+
+  if (!title || !pages || !genre || !author_id) {
+    res.status(422).json({ message: { type: 'danger', text: 'Title, pages, genre and author are required.' } });
+    return;
+  }
   const sql = 'INSERT INTO books (title, pages, genre, author_id) VALUES (?, ?, ?, ?)';
   connection.query(sql, [title, pages, genre, author_id], (err, result) => {
     if (err) {
@@ -187,6 +206,11 @@ app.post('/heroes', (req, res) => {
   const filename = writeImage(req.body.image);
 
   const { name, good, book_id } = req.body;
+
+  if (!name || ![0, 1].includes(good) || !book_id) {
+    res.status(422).json({ message: { type: 'danger', text: 'Name, good and book are required.' } });
+    return;
+  }
   const sql = 'INSERT INTO heroes (name, good, book_id, image) VALUES (?, ?, ?, ?)';
   connection.query(sql, [name, good, book_id, filename !== null ? ('images/' + filename) : null], (err, result) => {
     if (err) {
@@ -285,6 +309,12 @@ app.put('/authors/:id', (req, res) => {
 
   // res.status(403).send('no access');
   const { name, surname, nickname, born } = req.body;
+
+  if (!name || !surname || !born) {
+    res.status(422).json({ message: { type: 'danger', text: 'Name, surname and born are required.' } });
+    return;
+  }
+
   const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ? WHERE id = ?';
   connection.query(sql, [name, surname, nickname, born, req.params.id], (err) => {
     if (err) {
@@ -302,6 +332,12 @@ app.put('/authors/:id', (req, res) => {
 app.put('/books/:id', (req, res) => {
 
   const { title, pages, genre, author_id } = req.body;
+
+  if (!title || !pages || !genre || !author_id) {
+    res.status(422).json({ message: { type: 'danger', text: 'Title, pages, genre and author are required.' } });
+    return;
+  }
+
   const sql = 'UPDATE books SET title = ?, pages = ?, genre = ?, author_id = ? WHERE id = ?';
   connection.query(sql, [title, pages, genre, author_id, req.params.id], (err) => {
     if (err) {
@@ -323,6 +359,12 @@ app.put('/heroes/:id', (req, res) => {
   }
   const filename = writeImage(req.body.image);
   const { name, good, book_id } = req.body;
+
+  if (!name || ![0, 1].includes(good) || !book_id) {
+    res.status(422).json({ message: { type: 'danger', text: 'Name, good and book are required.' } });
+    return;
+  }
+
   let sql;
   let params = [];
   if (req.body.del || filename !== null) {
@@ -337,11 +379,11 @@ app.put('/heroes/:id', (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ 
+      res.json({
         success: true,
-         id: +req.params.id,
-         message: { type: 'success', text: 'Perfect! Hero updated' }
-        });
+        id: +req.params.id,
+        message: { type: 'success', text: 'Perfect! Hero updated' }
+      });
     }
   });
 })
