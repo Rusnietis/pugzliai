@@ -21,7 +21,7 @@ export default function Nav() {
                         </li>
                     </ul>
                     <span className="navbar-text">
-                        Login / Logout
+                    <a className="nav-link" href="#login">Login</a>
                     </span>
                 </div>
             </div>
