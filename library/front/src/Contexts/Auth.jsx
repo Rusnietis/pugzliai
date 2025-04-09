@@ -1,9 +1,12 @@
 import { createContext, useState } from 'react';
 
 
+
 export const Auth = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+    
 
     const [user, setUser] = useState(_ => {
         const user = window.localStorage.getItem('user');
@@ -15,14 +18,6 @@ export const AuthProvider = ({ children }) => {
             id
         } : null;
     });
-
-    const logout = _ => {
-        window.localStorage.removeItem('user');
-        window.localStorage.removeItem('role');
-        window.localStorage.removeItem('id');
-        setUser(null);
-        window.location.href = '#login';
-    }
 
     const login = (user, role, id) => {
         window.localStorage.setItem('user', user);
@@ -36,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <Auth.Provider value={{ user, setUser, logout, login }}>
+        <Auth.Provider value={{ user, setUser, login }}>
             {children}
         </Auth.Provider>
     );

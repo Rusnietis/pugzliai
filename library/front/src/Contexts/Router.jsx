@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from 'react';
 
 import Page404 from '../Pages/Page404.jsx';
+import Page503 from '../Pages/Page503.jsx';
+import Page401 from '../Pages/Page401.jsx';
 import AuthorIndex from '../Pages/Authors/Index.jsx';
 import BookIndex from '../Pages/Books/Index.jsx';
 import HeroIndex from '../Pages/Heroes/Index.jsx';
@@ -23,6 +25,8 @@ export const RouterProvider = () => {
         hash.shift();
         return hash;
     });
+
+    const [errorPageType, setErrorPageType] = useState(null);
 
     useEffect(_ => {
         const handleHashChange = _ => {
@@ -61,13 +65,19 @@ export const RouterProvider = () => {
         { path: '#login', component: <Login /> }
     ];
 
+    const errorPages = [
+        {type: 503, component: <Page503 />},
+        {type: 401,component: <Page401 />}
+    ]
+
     // routeComponent - kintamasis, kuriame bus komponentas, kurį reikia rodyti
     const routeComponent = routes.find(r => r.path === route)?.component || <Page404 />;
+    const errorComponent = errorPages.find(r => r.type === errorPageType)?.component || null;
 
     return (
-        <Router.Provider value={{ params }}>
+        <Router.Provider value={{ params, setErrorPageType }}>
             <MessagesProvider>
-                {routeComponent}
+                {errorComponent || routeComponent}
             </MessagesProvider>
         </Router.Provider>
     )

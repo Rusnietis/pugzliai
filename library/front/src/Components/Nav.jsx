@@ -1,4 +1,11 @@
+import { useContext } from 'react';
+import { Auth } from '../Contexts/Auth';
+import useLogin from '../Hooks/useLogin';
+
 export default function Nav() {
+
+    const { user} = useContext(Auth);
+    const {logout} = useLogin();
 
     return (
 
@@ -20,9 +27,29 @@ export default function Nav() {
                             <a className="nav-link" href="#heroes">Heroes</a>
                         </li>
                     </ul>
-                    <span className="navbar-text">
-                    <a className="nav-link" href="#login">Login</a>
-                    </span>
+                    <div className="d-flex">
+                        {/* <a className="nav-link" href="#login">Login</a> */}
+                       
+                        {
+                            user && <span className="user">{user.user}</span>
+                        }
+                        {
+                            user && <span className="sep"> | </span>
+                        }
+                        {
+                            user && <i className="logout" onClick={logout}>Logout</i>
+                        }
+                        {
+                            !user && <a className="nav-link" href="#register">Register</a>
+                        }
+                        {
+                            !user && <span className="sep"> | </span>
+                        }
+                        {
+                            !user && <a className="nav-link" href="#login">Login</a>
+                        }
+                   
+                    </div>
                 </div>
             </div>
         </nav>

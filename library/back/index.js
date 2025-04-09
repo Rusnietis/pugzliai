@@ -63,10 +63,26 @@ const deleteImage = heroId => {
   });
 };
 
+const checkUserIsAuthorized = (user, res, roles) => {
+  if (user && roles.includes(user.role)) {
+    return true;
+  } else if (user && roles.includes('self:' + user.id)) {
+    return true;
+  } else if (user) {
+    res.status(401).json({ 
+      message: 'Not authorized',
+      type: 'role' 
+    });
+  } else {
+    res.status(401).json({ 
+      message: 'Not logged in',
+      type: 'login' 
+    });
+  }
+}
+
 const doAuth = (req, res, next) => {
   const token = req.cookies.libSession || '';
-
-
   if (token === '') {
     return next();
   }
@@ -121,6 +137,21 @@ app.post('/login', (req, res) => {
   });
 });
 
+//logout 
+
+app.post('/logout', (req, res) => {
+  const token = req.cookies.libSession || '';
+  const sql = 'UPDATE users SET session = NULL WHERE session = ?';
+  connection.query(sql, [token], (err) => {
+    if (err) {
+      res.status(500).json({message: {type: 'danger', text: 'Server error On Logout' }});
+    } else {
+      res.clearCookie('libSession');
+      res.json({ message: { type: 'success', text: 'Goodbye!' } });
+    }
+  });
+})
+
 
 
 // router  
@@ -132,7 +163,11 @@ app.get('/', (req, res) => {
 
 //statistika
 app.get('/stats', (req, res) => {
-  res.cookie('BebroCookis', '***Valio***', { maxAge: 66*60*60*1000})
+ 
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const sql = `
    SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
    FROM authors

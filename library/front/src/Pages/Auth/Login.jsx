@@ -7,7 +7,7 @@ export default function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [setInputs, response] = useLogin();
+    const {setInputs} = useLogin();
     const { user } = useContext(Auth);
 
     const go = _ => {
