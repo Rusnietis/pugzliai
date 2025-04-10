@@ -8,7 +8,7 @@ export const Heroes = createContext();
 export const HeroesProvider = ({ children }) => {
 
     // pagrindinis kur laikome visus autorius yra reduceris
-    const [heroes, dispatchHeroes] = useReducer(heroesReducer, []);
+    const [heroes, dispatchHeroes] = useReducer(heroesReducer, null);
     const [deleteHero, setDeleteHero] = useState(null);
     const [editHero, setEditHero] = useState(null);
 

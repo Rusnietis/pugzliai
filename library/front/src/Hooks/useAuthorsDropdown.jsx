@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
+import { Router } from '../Contexts/Router';
+
 
 
 
@@ -8,18 +10,19 @@ import { SERVER_URL } from '../Constants/main';
 export default function useAuthorsDropdown() {
 
     const [authorsDropdown, setAuthorsDropdown] = useState(null);
+    const {setErrorPageType} = useContext(Router)
 
 
     useEffect(_ => {
 
-        axios.get(`${SERVER_URL}/authors`)
+        axios.get(`${SERVER_URL}/authors`, { withCredentials: true })
             .then(res => {
                 setAuthorsDropdown(res.data);
             })
             .catch(err => {
-                console.log(err);
+               setErrorPageType('ups');
             })
-    }, []);
+    }, [setErrorPageType]);
 
     return {authorsDropdown};
 

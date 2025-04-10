@@ -163,7 +163,7 @@ app.get('/', (req, res) => {
 
 //statistika
 app.get('/stats', (req, res) => {
- 
+
   if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
     return;
   }
@@ -193,6 +193,11 @@ app.get('/stats', (req, res) => {
 //paemimas is serverio
 
 app.get('/authors', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const sql = 'SELECT * FROM authors';
   connection.query(sql, (err, results) => {
     if (err) {
@@ -205,6 +210,11 @@ app.get('/authors', (req, res) => {
 })
 
 app.get('/books', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const sql = `
   SELECT b.id, title, pages, genre, name, surname, author_id 
   FROM books as b
@@ -222,6 +232,11 @@ app.get('/books', (req, res) => {
 })
 
 app.get('/heroes', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const sql = `
   SELECT h.id, h.name, a.name As authorName, a.surname As authorSurname, good, book_id, title, h.image 
   FROM heroes as h
@@ -249,6 +264,10 @@ app.post('/authors', (req, res) => {
   // res.status(401).json({ status: 'login' });
   // return;
 
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const { name, surname, nickname, born } = req.body;
 
   if (!name || !surname || !born) {
@@ -273,6 +292,10 @@ app.post('/authors', (req, res) => {
 })
 
 app.post('/books', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
   const { title, pages, genre, author_id } = req.body;
 
   if (!title || !pages || !genre || !author_id) {
@@ -295,6 +318,10 @@ app.post('/books', (req, res) => {
 })
 
 app.post('/heroes', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
 
   const filename = writeImage(req.body.image);
 
@@ -326,6 +353,10 @@ app.post('/heroes', (req, res) => {
 // trynimas is duomenu bazes
 app.delete('/authors/:id', (req, res) => {
 
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   // res.status(401).json({ status: 'login' });
   // return;
 
@@ -348,6 +379,10 @@ app.delete('/authors/:id', (req, res) => {
 });
 
 app.delete('/books/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
   // res.status(401).json({ status: 'login' });
   // return;
   let sql;
@@ -378,6 +413,10 @@ app.delete('/books/:id', (req, res) => {
 });
 
 app.delete('/heroes/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
   // res.status(401).json({ status: 'login' });
   // return;
   deleteImage(req.params.id)
@@ -399,6 +438,10 @@ app.delete('/heroes/:id', (req, res) => {
 // atnaujinimas
 
 app.put('/authors/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
 
   // res.status(403).send('no access');
   const { name, surname, nickname, born } = req.body;
@@ -424,6 +467,10 @@ app.put('/authors/:id', (req, res) => {
 
 app.put('/books/:id', (req, res) => {
 
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
+
   const { title, pages, genre, author_id } = req.body;
 
   if (!title || !pages || !genre || !author_id) {
@@ -446,6 +493,10 @@ app.put('/books/:id', (req, res) => {
 })
 
 app.put('/heroes/:id', (req, res) => {
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
 
   if (req.body.del) {
     deleteImage(req.params.id)

@@ -9,6 +9,7 @@ import HeroIndex from '../Pages/Heroes/Index.jsx';
 import HomeIndex from '../Pages/Home/Index.jsx';
 import Login from '../Pages/Auth/Login.jsx'
 import { MessagesProvider } from './Messages.jsx';
+import PageUps from '../Pages/PageUps.jsx';
 
 export const Router = createContext();
 
@@ -67,7 +68,8 @@ export const RouterProvider = () => {
 
     const errorPages = [
         {type: 503, component: <Page503 />},
-        {type: 401,component: <Page401 />}
+        {type: 401,component: <Page401 />},
+        {type: 'ups', component: <PageUps />}
     ]
 
     // routeComponent - kintamasis, kuriame bus komponentas, kurį reikia rodyti

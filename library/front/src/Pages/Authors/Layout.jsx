@@ -9,7 +9,11 @@ import { Authors } from '../../Contexts/Authors';
 
 export default function Layout() {
 
-    const { editAuthor } = useContext(Authors)
+    const { editAuthor, authors } = useContext(Authors)
+
+    if (null === authors) {
+        return < div className="loader"><div></div></div>
+    }
 
     return (
         <>

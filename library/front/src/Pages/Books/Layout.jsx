@@ -9,7 +9,11 @@ import Create from './Create';
 
 export default function Layout() {
 
-    const { editBook, deleteBook } = useContext(Books)
+    const { editBook, deleteBook, books } = useContext(Books)
+
+    if (null === books) {
+        return < div className="loader"><div></div></div>
+    }
 
     return (
         <>

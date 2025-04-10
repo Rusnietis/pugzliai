@@ -7,7 +7,7 @@ export const Authors = createContext();
 export const AuthorsProvider = ({ children }) => {
 
     // pagrindinis kur laikome visus autorius yra reduceris
-    const [authors, dispatchAuthors] = useReducer(authorsReducer, []);
+    const [authors, dispatchAuthors] = useReducer(authorsReducer, null);
     const [deleteAuthor, setDeleteAuthor] = useState(null);
     const [editAuthor, setEditAuthor] = useState(null);
 

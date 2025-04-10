@@ -9,7 +9,11 @@ import Create from './Create';
 
 export default function Layout() {
 
-    const { editHero, deleteHero } = useContext(Heroes)
+    const { editHero, deleteHero, heroes } = useContext(Heroes)
+
+    if (null === heroes) {
+        return < div className="loader"><div></div></div>
+    }
 
     return (
         <>

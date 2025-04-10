@@ -31,7 +31,7 @@ export default function useLogin() {
 
    const logout = _=> {
         
-        axios.post(`${SERVER_URL}/logout`, { withCredentials: true })
+        axios.post(`${SERVER_URL}/logout`, {}, { withCredentials: true })
             .then(res => {
                 window.localStorage.removeItem('user');
                 window.localStorage.removeItem('role');
