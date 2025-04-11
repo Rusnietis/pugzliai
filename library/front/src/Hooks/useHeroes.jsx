@@ -4,7 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as a from '../Actions/heroes';
 import { MessagesContext } from '../Contexts/Messages';
-import { Router} from '../Contexts/Router';
+import { Router } from '../Contexts/Router';
+import { Auth } from '../Contexts/Auth';
 
 //patikrinta
 export default function useHeroes(dispatchHeroes) {
@@ -12,8 +13,9 @@ export default function useHeroes(dispatchHeroes) {
     const [storeHero, setStoreHero] = useState(null);
     const [updateHero, setUpdateHero] = useState(null);
     const [destroyHero, setDestroyHero] = useState(null);
+    const { setUser} = useContext(Auth)
     const { addMessage } = useContext(MessagesContext);
-    const {setErrorPageType} = useContext(Router)
+    const { setErrorPageType } = useContext(Router)
 
     useEffect(_ => {
         axios.get(`${SERVER_URL}/heroes`, { withCredentials: true })
@@ -24,15 +26,19 @@ export default function useHeroes(dispatchHeroes) {
             .catch(err => {
                 if (err?.response?.status === 401) {
                     if (err.response.data.type === 'login') {
+                        window.localStorage.removeItem('user');
+                        window.localStorage.removeItem('role');
+                        window.localStorage.removeItem('id');
+                        setUser(null);
                         window.location.href = '#login'
-                    }else {
-                    setErrorPageType(401)
+                    } else {
+                        setErrorPageType(401)
                     }
                 } else {
                     setErrorPageType(503)
                 }
             })
-    }, [dispatchHeroes, setErrorPageType])
+    }, [dispatchHeroes, setErrorPageType, setUser])
 
     //store
 
