@@ -10,9 +10,9 @@ export default function useGet(startUrl) {
     const {setErrorPageType} = useContext(Router);
     
     const [url, setUrl] = useState(startUrl);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-
+console.log(data)
     useEffect(_ => {
         axios.get(SERVER_URL + url)
             .then(response => {
