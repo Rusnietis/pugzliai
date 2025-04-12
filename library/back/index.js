@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
   database: 'library'
 })
 const app = express();
-const port = 3001;
+const port = 80;
 
 app.use(cors(
   {
@@ -83,6 +83,8 @@ const checkUserIsAuthorized = (user, res, roles) => {
 
 const doAuth = (req, res, next) => {
   const token = req.cookies.libSession || '';
+
+  //console.log('token', token)
   if (token === '') {
     return next();
   }
@@ -164,9 +166,9 @@ app.get('/', (req, res) => {
 //statistika
 app.get('/stats', (req, res) => {
 
-  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
-    return;
-  }
+  // if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+  //   return;
+  // }
 
   const sql = `
    SELECT 'authors' AS name, COUNT(*) AS count, NULL as stats
