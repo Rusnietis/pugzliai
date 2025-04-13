@@ -4,7 +4,8 @@ import Page404 from '../Pages/Page404.jsx';
 import Page503 from '../Pages/Page503.jsx';
 import Page401 from '../Pages/Page401.jsx';
 import PageUps from '../Pages/PageUps.jsx';
-import HomeIndex from '../Pages/Home/Index.jsx'
+import HomeIndex from '../Pages/Home/Index.jsx';
+import HeroIndex from '../Pages/Hero/Index.jsx'
 
 export const Router = createContext();
 
@@ -54,11 +55,10 @@ export const RouterProvider = () => {
 
     const routes = [
 
-        // { path: '#authors', component: <AuthorIndex /> },
-        // { path: '#books', component: <BookIndex /> },
-        // { path: '#heroes', component: <HeroIndex /> },
+         
         { path: '#home', component: <HomeIndex /> },
-        // { path: '#login', component: <Login /> }
+        { path: '#hero', component: <HeroIndex /> }
+     
     ];
 
     const errorPages = [

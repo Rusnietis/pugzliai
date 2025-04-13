@@ -12,7 +12,7 @@ export default function useGet(startUrl) {
     const [url, setUrl] = useState(startUrl);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-console.log(data)
+      //console.log(data)
     useEffect(_ => {
         axios.get(SERVER_URL + url)
             .then(response => {
