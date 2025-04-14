@@ -1,9 +1,5 @@
 
-
-
 export default function Nav() {
-
-
     return (
 
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -14,7 +10,9 @@ export default function Nav() {
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#home">Home</a>
                         </li>
-                        
+                        <li className="nav-item">
+                            <a className="nav-link" aria-current="page" href="#heroes">Heroes</a>
+                        </li>
                     </ul>
                     <div className="d-flex">
                         

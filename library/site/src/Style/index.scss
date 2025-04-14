@@ -112,3 +112,33 @@ span.sep {
     transform: rotate(360deg);
   }
 }
+
+.icon svg {
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+}
+
+.icon.good svg {
+  fill: skyblue;
+}
+
+.icon.bad svg {
+  fill: crimson;
+}
+
+.hero-info {
+  font-size: 20px;
+  margin-top: 20px;
+  a {
+    color: red;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.heroes-table {
+  vertical-align: middle;
+}

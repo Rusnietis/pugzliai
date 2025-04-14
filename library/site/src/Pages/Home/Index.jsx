@@ -129,7 +129,7 @@ export default function Index() {
                                                                                         <a style={{ color: hero.good ? 'orange' : 'skyblue',
                                                                                             textDecoration: 'none' 
                                                                                         }}
-                                                                                         href={'#hero/' + hero.id}>{hero.name}</a>
+                                                                                         href={'#hero/' + hero.id}><b>{hero.name}</b></a>
                                                                                         </li>)
                                                                                 }
                                                                             </ol>
