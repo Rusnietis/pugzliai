@@ -139,6 +139,28 @@ span.sep {
   }
 }
 
+nav.paginator {
+  display: flex;
+  justify-content: flex-start;
+  margin: 20px 0 20px 30px;
+  align-items: center;
+  gap: 10px;
+  ul.pagination {
+    margin: 0;
+  }
+
+}
+
 .heroes-table {
   vertical-align: middle;
+}
+
+.page-item svg {
+  fill: black;
+  width: 20px;
+  height: 20px;
+}
+
+.page-item.prev svg {
+  transform: rotate(180deg);
 }

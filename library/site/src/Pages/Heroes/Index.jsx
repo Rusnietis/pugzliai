@@ -13,10 +13,33 @@ export default function Index() {
 
     const go = (e, page) => {
         e.preventDefault();
+        if (page === 'prev'){
+            page = data.page - 1;
+            page = Math.max(1,page);
+        }
+        if (page === 'next'){
+            page = data.page + 1;
+            page = Math.min(data.totalPages, page);
+        }
+
         setUrl('/heroes-list?page=' + page)
     }
 
+    //const pages = Array.from({ length: data.totalPages }, (v, k) => k + 1);
 
+    const getPages = _ => {
+        const showPaginators = 3;
+        const activePage = data.page;
+        const pages = [];
+        let start = activePage - showPaginators;
+        let end = activePage + showPaginators;
+        for (let i = start; i <= end; i++) {
+            if (i >= 1 && i <= data.totalPages) {
+                pages.push(i);
+            }
+        }
+        return pages;
+    }
 
     if (loading) return (< div className="loader"><div></div></div>)
 
@@ -68,14 +91,38 @@ export default function Index() {
                                     </tbody>
                                 </table>
                             </div>
-                            <nav>
+                            <nav className="paginator">
                                 <ul className="pagination">
-                                    <li className="page-item"><a className="page-link" onClick={e => go(e, 'prev')} href="/">Previous</a></li>
-                                    <li className="page-item"><a className="page-link" onClick={e => go(e, '1')} href="/">1</a></li>
-                                    <li className="page-item"><a className="page-link" onClick={e => go(e, '2')} href="/">2</a></li>
-                                    <li className="page-item"><a className="page-link" onClick={e => go(e, '3')} href="/">3</a></li>
-                                    <li className="page-item"><a className="page-link" onClick={e => go(e, 'next')} href="/">Next</a></li>
+                                    {
+                                        data.page === 1 || <li className="page-item prev"><a className="page-link" onClick={e => go(e, 1)} href="/">{icon.last}</a></li>
+                                    }
+                                    {
+                                        data.page === 1 || <li className="page-item prev"><a className="page-link" onClick={e => go(e, 'prev')} href="/">{icon.next}</a></li>
+                                    }
+                                    {
+                                        getPages().map(page => {
+                                            return (
+                                                <li key={page} className={'page-item' + (data.page === page ? ' active' : '')}>
+                                                    {
+                                                        data.page === page && <span className="page-link">{page}</span>
+                                                    }
+                                                    {
+                                                        data.page === page || <a className="page-link" onClick={e => go(e, page)} href="/">{page}</a>
+                                                    }
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                    {
+                                        data.page === data.totalPages || <li className="page-item next"><a className="page-link" onClick={e => go(e, 'next')} href="/">{icon.next}</a></li>
+                                    }
+                                    {
+                                        data.page === data.totalPages || <li className="page-item next"><a className="page-link" onClick={e => go(e, data.totalPages)} href="/">{icon.last}</a></li>
+                                    }                                   
                                 </ul>
+                                <div className="pages-info">
+                                    Page {data.page} of {data.totalPages}
+                                </div>
                             </nav>
 
                         </div>
