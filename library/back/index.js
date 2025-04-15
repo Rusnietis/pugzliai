@@ -13,7 +13,8 @@ const connection = mysql.createConnection({
   database: 'library'
 })
 const app = express();
-const port = 80;
+const port = 3001;
+//const port = 80;
 
 app.use(cors(
   {
@@ -21,6 +22,7 @@ app.use(cors(
     credentials: true,
   }
 ));
+//app.use(cors());
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }))
 app.use(express.static('public'));

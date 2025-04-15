@@ -7,9 +7,8 @@ export const validate = (value, input, errors, rules) => {
         } else {
             result = rules[i][0](value, rules[i][1]);
         }
-
         if (result === 1) {
-            return true
+            return true;
         }
         if (result === 0) {
             continue;
@@ -19,7 +18,7 @@ export const validate = (value, input, errors, rules) => {
             return false;
         }
     }
-    return true
+    return true;
 }
 
 export const sometimes = value => {
@@ -79,14 +78,14 @@ export const string = value => {
 
 export const integer = value => {
     const n = Number(value);
-    if (!isNaN(n)) {
-        return 'Not a number'
+    if (isNaN(n)) {
+        return 'Not a number';
     }
     if (n === parseInt(n, 10)) {
         return true;
     }
     return 'Not an integer';
-}
+};
 
 export const number = value => {
     if (typeof value === 'number') {

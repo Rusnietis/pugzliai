@@ -37,7 +37,7 @@ export default function Create() {
 
         const errors = new Map();
         v.validate(inputs.name, 'name', errors, [v.required, v.string, [v.min, 3], [v.max, 100]]);
-        v.validate(inputs.good, 'good', errors, [v.required, [v.integer, [0, 1]]]);
+        v.validate(inputs.good, 'good', errors, [v.required, [v.inNumbers, [0, 1]]]);
         v.validate(inputs.book_id, 'book_id', errors, [v.required, [v.inNumbers, booksIds]]);
         v.validate(imageInput.current.files[0], 'image', errors, [v.sometimes, [v.imageType, ['jpeg', 'png']], [v.imageSize, 1000000]]);
 

@@ -2,34 +2,34 @@ const mysql = require('mysql');
 const md5 = require('md5');
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'library'
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'library'
 });
 
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log('Conected to the database!');
-})
+    console.log('Connected to the database!');
+});
+
 
 // Create users table
-
 const createUsersTable = _ => {
     const sql = `CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100) NOT NULL UNIQUE,
+        name VARCHAR(100) NOT NULL,
         session CHAR(32) NULL,
         email VARCHAR(100) NOT NULL UNIQUE,
         role ENUM('admin', 'user', 'lib') NOT NULL DEFAULT 'user',
-        password CHAR(32) NOT NULL
+        password VARCHAR(32) NOT NULL
     )`;
-    connection.query(sql, (err, result) => {
+    connection.query(sql, function(err) {
         if (err) throw err;
-        console.log('Users table created or already exists!');
+        console.log('Users table created');
     });
-}
+};
 
 // Create authors table
 const createAuthorsTable = _ => {
@@ -207,7 +207,7 @@ const dropAllTables = _ => {
     dropAuthorsTable();
 };
 
-// Create all tables
+//Create all tables
 const createAllTables = _ => {
     createUsersTable();
     createAuthorsTable();
@@ -223,7 +223,10 @@ const seedAllTables = _ => {
     seedHeroesTable();
 };
 
+
 dropAllTables();
 createAllTables();
+seedAllTables();
+
 
 connection.end();
