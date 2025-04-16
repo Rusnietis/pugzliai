@@ -175,13 +175,28 @@ app.get('/hero/:id', (req, res) => {
 
 app.get('/heroes-list', (req, res) => {
   let sql;
-  const inPage = 5;
+  let query ;
+  const inPage = 3;
   const page = req.query.page || 1;
+  let filter = req.query.filter || '';
+  filter = filter === 'good' ? 1 : filter === 'bad' ? 0 : '';
   let total = 0;
   let totalPages = 0;
-
-  sql = 'SELECT COUNT(*) AS total FROM heroes';
-  connection.query(sql, (err, countResult) => {
+  if (filter === '') {
+    sql = `
+    SELECT COUNT(*) AS total
+    FROM heroes
+  `;
+   query = [];
+  } else {
+    sql = `
+     SELECT COUNT(*) AS total
+     FROM heroes
+     WHERE good = ?
+    `;
+    query = [filter];
+  }
+  connection.query(sql, query, (err, countResult) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -190,16 +205,27 @@ app.get('/heroes-list', (req, res) => {
     }
   });
 
+ if (filter === '') {
   sql = `
   SELECT *
   FROM heroes
   LIMIT ?, ?
   `;
-  connection.query(sql, [(page - 1) * inPage, inPage], (err, result) => {
+  query = [(page - 1) * inPage, inPage]
+ } else {
+  sql = `
+  SELECT *
+  FROM heroes
+  WHERE good = ?
+  LIMIT ?, ?
+  `;
+  query = [filter, (page - 1) * inPage, inPage]
+ }
+  connection.query(sql, query, (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json({ result, total, totalPages, page: +page});
+      res.json({ result, total, totalPages, page: +page });
     }
   });
 })

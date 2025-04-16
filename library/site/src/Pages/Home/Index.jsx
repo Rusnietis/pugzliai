@@ -98,14 +98,14 @@ export default function Index() {
                             <div className="card-body">
                                 <div className="container">
                                     <div className="row mb-3">
-                                        <div className="col-2"><h4>Authors</h4></div>
+                                        <div className="col-4"><h4>Authors</h4></div>
                                         <div className="col-4"><h4>Books</h4></div>
                                         <div className="col-4"><h4>Heroes</h4></div>
                                     </div>
                                     {
                                         authorsBooksHeroes(data).map(item =>
                                             <div className="row" key={item.id}>
-                                                <div className="col-2">
+                                                <div className="col-4">
                                                     {item.name} {item.surname}
                                                 </div>
                                                 <div className="col-4">
