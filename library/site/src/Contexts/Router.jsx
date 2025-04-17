@@ -7,6 +7,8 @@ import PageUps from '../Pages/PageUps.jsx';
 import HomeIndex from '../Pages/Home/Index.jsx';
 import HeroIndex from '../Pages/Hero/Index.jsx';
 import HeroesList from '../Pages/Heroes/Index.jsx';
+import BookIndex from '../Pages/Book/Index.jsx';
+
 
 export const Router = createContext();
 
@@ -60,7 +62,7 @@ export const RouterProvider = () => {
         { path: '#home', component: <HomeIndex /> },
         { path: '#hero', component: <HeroIndex /> },
         { path: '#heroes', component: <HeroesList /> },
-     
+        { path: '#book', component: <BookIndex /> }
     ];
 
     const errorPages = [

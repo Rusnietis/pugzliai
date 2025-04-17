@@ -49,8 +49,8 @@ export default function Index() {
                                             ?
                                             <img className="img-thumbnail" src={SERVER_URL + '/' + data.image} alt={data.name} />
                                             :
-                                            <img className = "img-thumbnail" src={SERVER_URL + '/images/broken-image.jpg'} alt={data.name} />
-}
+                                            <img className="img-thumbnail" src={SERVER_URL + '/images/broken-image.jpg'} alt={data.name} />
+                                    }
                                 </div>
                                 <div className="hero-info">
                                     <div>Book: {data.title}</div>

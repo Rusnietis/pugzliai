@@ -10,7 +10,7 @@ export default function useGet(startUrl) {
     const {setErrorPageType} = useContext(Router);
     
     const [url, setUrl] = useState(startUrl);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
       //console.log(data)
     useEffect(_ => {
