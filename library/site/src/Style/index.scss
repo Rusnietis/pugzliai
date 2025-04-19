@@ -164,3 +164,13 @@ nav.paginator {
 .page-item.prev svg {
   transform: rotate(180deg);
 }
+
+.heroes-list {
+  position: relative;
+
+  .icon {
+    position: absolute;
+    top: 0px;
+    left: 0;
+  }
+}
