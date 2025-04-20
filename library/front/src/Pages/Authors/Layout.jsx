@@ -14,7 +14,7 @@ export default function Layout() {
     if (null === authors) {
         return < div className="loader"><div></div></div>
     }
-
+  
     return (
         <>
             <Nav />
