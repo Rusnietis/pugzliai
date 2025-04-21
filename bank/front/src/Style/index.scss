@@ -12,10 +12,84 @@ code {
     monospace;
 }
 
-// .navbar-brand {
-//   margin: 0;
-//   padding: 0;
-// }
+.navbar {
+  background-color: rgb(30, 210, 132) !important;
+  height: 80px;
+  margin: 20px;
+  border-radius: 16px;
+  padding: 0.5rem;
+}
+
+a.navbar-brand {
+  border-radius: 25px !important;
+}
+
+a.navbar-brand {
+  margin: 0;
+  padding: 0;
+}
+
+.login-button {
+  background-color: #009970;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: 0.3s background-color;
+}
+
+.login-button:hover {
+  background-color: #00b383;
+}
+
+.register-button {
+  background-color: #009970;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: 0.3s background-color;
+}
+
+.register-button:hover {
+  background-color: #00b383;
+}
+
+.collapse.navbar-collapse {
+ 
+  margin: 0px 10px !important;
+}
+
+.nav-link {
+
+  color: #666777;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #000;
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #009970;
+  visibility: hidden;
+  transition: 0.3s ease-in-out;
+}
+
+.nav-link:hover::before, .nav-link.active::before {
+  width: 100%;
+  visibility: visible;
+}
 
 
 .img-fliud {

@@ -1,4 +1,4 @@
-import {Logo} from '../Pages/Icons'
+import { Logo } from '../Pages/Icons'
 
 //import { useContext } from 'react';
 //import { Auth } from '../Contexts/Auth';
@@ -13,21 +13,24 @@ export default function Nav() {
 
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
-                <a className="navbar-brand" href="/"><Logo/></a>
+                <a className="navbar-brand" href="/"><Logo /></a>
                 <div className="collapse navbar-collapse" id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#home">Pagrindinis</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#authors">Klientai</a>
+                            <a className="nav-link" href="#customers">Klientai</a>
                         </li>
-                      
+
                     </ul>
                     <div className="d-flex">
-                        <a className="nav-link" href="#login">Login</a>
-{/* 
-                        {
+                        <span>
+                        <a className="register-button m-2" href="#register">Registruotis</a>
+                        arba
+                        <a className="login-button m-2" href="#login">Prisijungti</a>
+                        </span>
+                        {/* {
                             user && <span className="user">{user.user}</span>
                         }
                         {
@@ -50,5 +53,6 @@ export default function Nav() {
                 </div>
             </div>
         </nav>
+
     )
 }
