@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -58,7 +59,7 @@ a.navbar-brand {
 }
 
 .collapse.navbar-collapse {
- 
+
   margin: 0px 10px !important;
 }
 
@@ -69,7 +70,8 @@ a.navbar-brand {
   position: relative;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover,
+.nav-link.active {
   color: #000;
 }
 
@@ -86,9 +88,26 @@ a.navbar-brand {
   transition: 0.3s ease-in-out;
 }
 
-.nav-link:hover::before, .nav-link.active::before {
+.nav-link:hover::before,
+.nav-link.active::before {
   width: 100%;
   visibility: visible;
+}
+
+a.nav-link {
+  margin: 10px;
+}
+
+.card {
+  width: 1200px;
+  margin: 20px;
+  border-color: coral;
+  border-radius: 10px;
+}
+
+.card-header {
+  background-color: coral;
+  color: #fff;
 }
 
 
@@ -189,3 +208,5 @@ span.sep {
     transform: rotate(360deg);
   }
 }
+
+

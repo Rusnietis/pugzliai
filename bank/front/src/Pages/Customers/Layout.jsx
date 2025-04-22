@@ -5,6 +5,7 @@ import Nav from '../../Components/Nav';
 // import Edit from './Edit';
 import { useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
+import Create from './Create';
 
 
 export default function Layout() {
@@ -12,13 +13,20 @@ export default function Layout() {
     const { editCustomer, customers } = useContext(Customers)
 
     if (null === customers) {
-        return < div className="loader"><div></div></div>
+        return < div classNameName="loader"><div></div></div>
     }
-  
+
     return (
-        <div>
+        <div >
             <Nav />
-            <h1>Klientai</h1>
+            <div className="card">
+                <h5 className="card-header">Naujo kliento pridejimas</h5>
+                <div className="card-body">
+                <Create />
+                </div>
+            </div>
+           
+
         </div>
     )
 }
