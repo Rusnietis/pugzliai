@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
+import generateInvoiceNumber from '../../Functions/generate'
 //import * as v from '../../Validators/textInputs';
 // import { MessagesContext } from '../../Contexts/Messages';
 
 const defaultInputs = {
     name: '',
     surname: '',
-    nickname: '',
-    born: ''
+    account: generateInvoiceNumber(),
+    amount: '0'
 }
 
 export default function Create() {
@@ -16,36 +17,28 @@ export default function Create() {
 
     const { setStoreCustomer } = useContext(Customers);
     // const { addMessage } = useContext(MessagesContext);
-    // const [e, setE] = useState(new Map());
+   
+
+   
 
 
-
+   
 
     const handlerChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
     }
 
     const create = _ => {
-        // const errors = new Map();
-        // v.validate(inputs.name, 'name', errors, [v.required, v.string, v.lettersOnly, [v.min, 3], [v.max, 100]]);
-        // v.validate(inputs.surname, 'surname', errors, [v.required, v.string, v.lettersOnly, [v.min, 3], [v.max, 100]]);
-        // v.validate(inputs.nickname, 'nickname', errors, [v.sometimes, v.string, [v.min, 3], [v.max, 100]]);
-        // v.validate(inputs.born, 'born', errors, [v.required, v.date]);
 
-        // if (errors.size > 0) {
-        //     // errors.forEach(err => addMessage({ type: 'danger', text: err }));
-        //     // setE(errors);
-        //     return;
-        // }
-
-        // return;
         setStoreCustomer(inputs);
         setInputs(defaultInputs);
     }
 
+    //console.log(create)
+
     return (
 
-        <table class="table">
+        <table className="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -62,12 +55,12 @@ export default function Create() {
                     <th scope="row">#</th>
                     <td>
                         <div className="forms">
-                            <input type="text" />
+                            <input type="text"  value={inputs.name} id='name' onChange={handlerChange}  />
                         </div>
                     </td>
                     <td>
                         <div className="forms">
-                            <input type="text" />
+                            <input type="text"  value={inputs.surname} id='surname' onChange={handlerChange} />
                         </div>
                     </td>
                     <td>
@@ -77,7 +70,7 @@ export default function Create() {
                         <h5>Gen. automatiškai</h5>
                     </td>
                     <td>
-                        <button className="button-18">Pridėti klienta</button>
+                        <button className="button-18" onClick={create}>Pridėti klienta</button>
 
                     </td>
 

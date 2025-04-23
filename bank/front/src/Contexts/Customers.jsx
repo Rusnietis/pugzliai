@@ -1,15 +1,15 @@
 import { createContext, useReducer, useState } from 'react';
 import useCustomers from '../Hooks/useCustomers';
-//import customersReducer from '../Reducers/customersReducer';
+import customersReducer from '../Reducers/customersReducer';
 
 export const Customers = createContext();
 
 export const CustomersProvider = ({ children }) => {
 
-    console.log(children)
+    //console.log(children)
 
     // pagrindinis kur laikome visus autorius yra reduceris
-    //const [customers, dispatchCustomers] = useReducer(customersReducer, null);
+    const [customers, dispatchCustomers] = useReducer(customersReducer, null);
     const [deleteCustomer, setDeleteCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
 
@@ -22,17 +22,17 @@ export const CustomersProvider = ({ children }) => {
 
     return (
         <Customers.Provider value={{
-            // customers,
-            // dispatchCustomers,
+            customers,
+            dispatchCustomers,
             storeCustomer,
             setStoreCustomer,
             updateCustomer,
             setUpdateCustomer,
             destroyCustomer,
             setDestroyCustomer,
-            deleteCustomer, 
+            deleteCustomer,
             setDeleteCustomer,
-            editCustomer, 
+            editCustomer,
             setEditCustomer
 
         }}>

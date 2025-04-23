@@ -13,7 +13,7 @@ export default function Layout() {
     const { editCustomer, customers } = useContext(Customers)
 
     if (null === customers) {
-        return < div classNameName="loader"><div></div></div>
+        return < div className="loader"><div></div></div>
     }
 
     return (
