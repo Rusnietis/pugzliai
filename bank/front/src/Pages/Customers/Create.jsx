@@ -7,7 +7,7 @@ import generateInvoiceNumber from '../../Functions/generate'
 const defaultInputs = {
     name: '',
     surname: '',
-    account: generateInvoiceNumber(),
+    acount: generateInvoiceNumber(),
     amount: '0'
 }
 

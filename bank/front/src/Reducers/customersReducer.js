@@ -5,7 +5,7 @@ export default function customersReducer(state, action) {
 
     let newState = structuredClone(state ? state : []);
     let customer = null;
-
+    console.log(newState)
     switch (action.type) {
         case constants.GET_CUSTOMERS_FROM_SERVER:
             newState = action.payload;

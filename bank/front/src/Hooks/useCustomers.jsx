@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
-import * as a from '../Actions/customers';
+import * as c from '../Actions/customers';
 // import { MessagesContext } from '../Contexts/Messages';
 import { Router } from '../Contexts/Router';
 //import { Auth } from '../Contexts/Auth';
@@ -17,16 +17,16 @@ export default function useCustomers(dispatchCustomers) {
     // const { setUser } = useContext(Auth);
     // const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
-
+    
     useEffect(_ => {
 
         axios.get(`${SERVER_URL}/customers`)
             .then(res => {
-                //console.log(res.data)
-                dispatchCustomers(a.getCustomers(res.data));
+                console.log(res.data)
+                dispatchCustomers(c.getCustomers(res.data));
             })
             .catch(err => {
-              console.log(err)
+                console.log(err)
             })
     }, [dispatchCustomers]);
 

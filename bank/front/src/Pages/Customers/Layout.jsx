@@ -6,6 +6,7 @@ import Nav from '../../Components/Nav';
 import { useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import Create from './Create';
+import List from './List';
 
 
 export default function Layout() {
@@ -22,10 +23,12 @@ export default function Layout() {
             <div className="card">
                 <h5 className="card-header">Naujo kliento pridejimas</h5>
                 <div className="card-body">
-                <Create />
+                    <Create />
                 </div>
             </div>
-           
+            <ul>
+                <List />
+            </ul>
 
         </div>
     )
