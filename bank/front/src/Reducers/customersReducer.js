@@ -1,6 +1,6 @@
 import * as constants from '../Constants/customers';
 // patikrinta
-// funkcija, kuri apdoroja autoriu lista is serverio
+// funkcija, kuri apdoroja klientu lista is serverio
 export default function customersReducer(state, action) {
 
     let newState = structuredClone(state ? state : []);

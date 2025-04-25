@@ -72,14 +72,14 @@ app.get('/customers', (req, res) => {
   // if (!checkUserIsLogged(req.user, res)) {
   //   return;
   // }
-  
+
   const sql = `
   SELECT * 
   FROM customers
-  JOIN acount ON customers.id = acount.customer_id;
-  `; 
-  
-  connection.query(sql, (err, results) => { 
+  JOIN accounts ON customers.id = accounts.customer_id;
+  `;
+
+  connection.query(sql, (err, results) => {
     if (err) {
       res.status(500);
     } else {
@@ -90,18 +90,33 @@ app.get('/customers', (req, res) => {
 });
 
 // // irasinejimas i duomenu baze
-// app.post('/fruits', (req, res) => {
-//   const { name, color, form } = req.body;
-//   const sql = 'INSERT INTO fruits (name, color, form) VALUES ( ?, ?, ?)';
-//   connection.query(sql, [name, color, form], (err, result) => {
-//     if (err) {
-//       res.status(500);
-//     } else {
-//       res.json({ success: true, id: result.insertId, uuid: req.body.id });
-//     }
-//   })
+app.post('/customers', (req, res) => {
+  const { name, surname, account, amount } = req.body;
 
-// })
+  const customerSql = 'INSERT INTO customers (name, surname) VALUES (?, ?)';
+  connection.query(customerSql, [name, surname], (err, customerResult) => {
+    if (err) {
+      console.error('Klaida įrašant klientą:', err);
+      return res.status(500).json({ error: 'Nepavyko įrašyti kliento.' });
+    }
+
+    const customer_id = customerResult.insertId;
+    const accountSql = 'INSERT INTO accounts (customer_id, account, amount) VALUES (?, ?, ?)';
+    connection.query(accountSql, [customer_id, account, amount], (err2, accountResult) => {
+      if (err2) {
+        console.error('Klaida įrašant sąskaitą:', err2);
+        return res.status(500).json({ error: 'Nepavyko įrašyti sąskaitos.' });
+      }
+
+      res.json({
+        success: true,
+        customerId: customer_id,
+        accountId: accountResult.insertId
+      });
+    });
+  });
+});
+
 
 // app.put('/fruits/:id', (req, res) => {
 

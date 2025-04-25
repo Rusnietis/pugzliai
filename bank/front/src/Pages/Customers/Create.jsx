@@ -7,7 +7,7 @@ import generateInvoiceNumber from '../../Functions/generate'
 const defaultInputs = {
     name: '',
     surname: '',
-    acount: generateInvoiceNumber(),
+    account: generateInvoiceNumber(),
     amount: '0'
 }
 
@@ -34,7 +34,7 @@ export default function Create() {
         setInputs(defaultInputs);
     }
 
-    //console.log(create)
+    //console.log(setStoreCustomer)
 
     return (
 

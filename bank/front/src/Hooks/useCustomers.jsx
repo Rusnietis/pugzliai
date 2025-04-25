@@ -30,6 +30,9 @@ export default function useCustomers(dispatchCustomers) {
             })
     }, [dispatchCustomers]);
 
+
+
+
     // useEffect(_ => {
 
     //     axios.get(`${SERVER_URL}/customers`, { withCredentials: true })
@@ -54,6 +57,19 @@ export default function useCustomers(dispatchCustomers) {
     //         })
     // }, [dispatchCustomers, setErrorPageType, setUser]);
 
+    useEffect(_ => {
+        if (null !== storeCustomer) {
+            axios.post(`${SERVER_URL}/customers`,storeCustomer)
+                .then(res => {
+                    setStoreCustomer(null);
+                    //dispatchCustomers(a.storeCustomerAsReal(res.data));
+                })
+                .catch(err => {
+
+                    setStoreCustomer(null);
+                });
+        }
+    }, [storeCustomer,]);
 
     // useEffect(_ => {
     //     if (null !== storeCustomer) {

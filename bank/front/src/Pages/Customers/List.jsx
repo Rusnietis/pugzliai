@@ -21,14 +21,15 @@ export default function List() {
 
                                 :
 
-                                <div className="card mt-2" style={{
+                                <div className="card" style={{
                                     opacity: customer.temp ? 0.5 : 1
                                 }}>
                                     <div className="card-header">
-                                        <h4>{customer.name} {customer.surname}</h4>
+                                        <h5>Informacija apie klientą</h5>
                                     </div>
                                     <div className="card-body">
-                                        <p>Saskaita: {customer.acount}</p>
+                                        <h4>{customer.name} {customer.surname}</h4>
+                                        <p>Saskaita: {customer.account}</p>
                                         <p>Saskaitoje yra: {customer.amount} Eur</p>
                                     </div>
                                     <div className="card-footer">

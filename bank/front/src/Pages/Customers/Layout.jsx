@@ -26,9 +26,8 @@ export default function Layout() {
                     <Create />
                 </div>
             </div>
-            <ul>
-                <List />
-            </ul>
+
+            <List />
 
         </div>
     )
