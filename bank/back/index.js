@@ -111,7 +111,8 @@ app.post('/customers', (req, res) => {
       res.json({
         success: true,
         customerId: customer_id,
-        accountId: accountResult.insertId
+        accountId: accountResult.insertId, 
+        uuid: req.body.id
       });
     });
   });

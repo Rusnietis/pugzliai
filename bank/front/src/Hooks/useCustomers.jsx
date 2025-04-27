@@ -59,17 +59,19 @@ export default function useCustomers(dispatchCustomers) {
 
     useEffect(_ => {
         if (null !== storeCustomer) {
-            axios.post(`${SERVER_URL}/customers`,storeCustomer)
+            const uuid = uuidv4();
+            dispatchCustomers(c.storeCustomerAsTemp({ ...storeCustomer, id: uuid }));
+            axios.post(`${SERVER_URL}/customers`,{...storeCustomer, id: uuid})
                 .then(res => {
                     setStoreCustomer(null);
-                    //dispatchCustomers(a.storeCustomerAsReal(res.data));
+                    dispatchCustomers(c.storeCustomerAsReal(res.data));
                 })
                 .catch(err => {
 
                     setStoreCustomer(null);
                 });
         }
-    }, [storeCustomer,]);
+    }, [storeCustomer, dispatchCustomers]);
 
     // useEffect(_ => {
     //     if (null !== storeCustomer) {
