@@ -15,6 +15,8 @@ export const Router = createContext();
 
 export const RouterProvider = () => {
 
+
+
     // apskaičiuoja pradinę reikšmę, kuri bus naudojama kaip pradinė reikšmė
     const [route, setRoute] = useState(_ => {
         const hash = window.location.hash || '#home';
@@ -73,9 +75,9 @@ export const RouterProvider = () => {
     // routeComponent - kintamasis, kuriame bus komponentas, kurį reikia rodyti
     const routeComponent = routes.find(r => r.path === route)?.component || <Page404 />;
     //const errorComponent = errorPages.find(r => r.type === errorPageType)?.component || null;
-     //setErrorPageType
+    //setErrorPageType
     return (
-        <Router.Provider value={ params }>
+        <Router.Provider value={{ params, route }}>
             {routeComponent}
         </Router.Provider>
     )
