@@ -34,6 +34,7 @@ export default function customersReducer(state, action) {
             newState = newState.filter(customer => customer.id !== action.payload.id);
             break;
         case constants.DELETE_CUSTOMER_UNDO:
+
             customer = newState.find(customer => customer.id === action.payload.id);
             if (customer) {
                 delete customer.deleted;

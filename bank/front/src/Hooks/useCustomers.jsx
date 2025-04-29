@@ -5,6 +5,7 @@ import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/customers';
 // import { MessagesContext } from '../Contexts/Messages';
 import { Router } from '../Contexts/Router';
+
 //import { Auth } from '../Contexts/Auth';
 
 
@@ -17,7 +18,7 @@ export default function useCustomers(dispatchCustomers) {
     // const { setUser } = useContext(Auth);
     // const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
-    
+
     useEffect(_ => {
 
         axios.get(`${SERVER_URL}/customers`)
@@ -61,13 +62,13 @@ export default function useCustomers(dispatchCustomers) {
         if (null !== storeCustomer) {
             const uuid = uuidv4();
             dispatchCustomers(c.storeCustomerAsTemp({ ...storeCustomer, id: uuid }));
-            axios.post(`${SERVER_URL}/customers`,{...storeCustomer, id: uuid})
+            axios.post(`${SERVER_URL}/customers`, { ...storeCustomer, id: uuid })
                 .then(res => {
                     setStoreCustomer(null);
                     dispatchCustomers(c.storeCustomerAsReal(res.data));
                 })
                 .catch(err => {
-
+                    dispatchCustomers(c.storeCustomerAsUndo({ ...storeCustomer, id: uuid }));
                     setStoreCustomer(null);
                 });
         }
@@ -108,6 +109,22 @@ export default function useCustomers(dispatchCustomers) {
 
     //     }
     // }, [updateCustomer, dispatchCustomers, addMessage])
+
+    useEffect(() => {
+        if (null !== destroyCustomer) {
+            console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
+            dispatchCustomers(c.deleteCustomerAsTemp(destroyCustomer));
+            axios.delete(`${SERVER_URL}/customers/${destroyCustomer.customer_id}`)
+                .then(res => {
+                    setDestroyCustomer(null);
+                    dispatchCustomers(c.deleteCustomerAsReal(res.data));
+                })
+                .catch(err => {
+                    dispatchCustomers(c.deleteCustomerAsUndo(destroyCustomer));
+                    setDestroyCustomer(null);
+                });
+        }
+    }, [destroyCustomer, dispatchCustomers]);
 
     // useEffect(_ => {
     //     if (null !== destroyCustomer) {

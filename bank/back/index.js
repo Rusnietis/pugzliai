@@ -74,11 +74,17 @@ app.get('/customers', (req, res) => {
   // }
 
   const sql = `
-  SELECT * 
-  FROM customers
-  JOIN accounts ON customers.id = accounts.customer_id;
+  SELECT 
+      customers.id AS customer_id,
+      customers.name,
+      customers.surname,
+      customers.image,
+      accounts.id AS account_id,
+      accounts.account,
+      accounts.amount
+    FROM customers
+    JOIN accounts ON customers.id = accounts.customer_id;
   `;
-
   connection.query(sql, (err, results) => {
     if (err) {
       res.status(500);
@@ -91,33 +97,56 @@ app.get('/customers', (req, res) => {
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
+  // res.status(401).json({status: 'Login'})
+  // return;
   const { name, surname, account, amount } = req.body;
-
-  const customerSql = 'INSERT INTO customers (name, surname) VALUES (?, ?)';
+  // Tikrinam ir konvertuojam amount į skaičių
+  const amountNumber = parseFloat(amount) || 0;
+  const customerSql = `
+    INSERT INTO customers (name, surname)
+    VALUES (?, ?)
+  `;
   connection.query(customerSql, [name, surname], (err, customerResult) => {
     if (err) {
       console.error('Klaida įrašant klientą:', err);
       return res.status(500).json({ error: 'Nepavyko įrašyti kliento.' });
     }
-
     const customer_id = customerResult.insertId;
-    const accountSql = 'INSERT INTO accounts (customer_id, account, amount) VALUES (?, ?, ?)';
-    connection.query(accountSql, [customer_id, account, amount], (err2, accountResult) => {
+    const accountSql = `
+      INSERT INTO accounts (customer_id, account, amount)
+      VALUES (?, ?, ?)
+    `;
+    connection.query(accountSql, [customer_id, account, amountNumber], (err2, accountResult) => {
       if (err2) {
         console.error('Klaida įrašant sąskaitą:', err2);
         return res.status(500).json({ error: 'Nepavyko įrašyti sąskaitos.' });
       }
-
+      // Grąžinam pilną informaciją klientui
       res.json({
         success: true,
-        customerId: customer_id,
-        accountId: accountResult.insertId, 
+        account_id: accountResult.insertId,
         uuid: req.body.id
       });
     });
   });
 });
 
+
+app.delete('/customers/:id', (req, res) => {
+  const customerId = req.params.id;
+  const sql = 'DELETE FROM customers WHERE id = ?';
+  connection.query(sql, [customerId], (err, result) => {
+    if (err) {
+      console.error('DB klaida:', err);
+      return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Klientas nerastas' });
+    }
+
+    res.json({ success: true, id: +customerId });
+  });
+});
 
 // app.put('/fruits/:id', (req, res) => {
 
