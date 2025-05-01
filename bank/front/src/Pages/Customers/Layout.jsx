@@ -1,12 +1,11 @@
 import Nav from '../../Components/Nav';
 // import Create from './Create';
-// import List from './List';
-// import Delete from './Delete';
-// import Edit from './Edit';
+import Delete from './Delete';
 import { useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import Create from './Create';
 import List from './List';
+import Edit from './Edit';
 
 
 export default function Layout() {
@@ -26,9 +25,9 @@ export default function Layout() {
                     <Create />
                 </div>
             </div>
-
+            <Delete />
             <List />
-
+           {editCustomer && <Edit />}
         </div>
     )
 }
