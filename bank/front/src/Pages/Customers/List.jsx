@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
+import { SERVER_URL } from '../../Constants/main';
 
 export default function List() {
 
@@ -11,9 +12,9 @@ export default function List() {
         <>
             {
                 customers.map(customer => (
-                    
+
                     <div key={customer.customer_id}>
-                        
+
                         {
                             customer.deleted
                                 ?
@@ -29,9 +30,18 @@ export default function List() {
                                         <h5>Informacija apie klientą</h5>
                                     </div>
                                     <div className="card-body">
-                                        <h4>{customer.name} {customer.surname}</h4>
-                                        <p>Saskaita: {customer.account}</p>
-                                        <p>Saskaitoje yra: {customer.amount} Eur</p>
+                                        <div className="row">
+                                            <div className="col-5">
+                                                <h4>{customer.name} {customer.surname}</h4>
+                                                <p>Saskaita: {customer.account}</p>
+                                                <p>Saskaitoje yra: {customer.amount} Eur</p>
+                                            </div>
+                                            <div className="col-7">
+                                                {customer?.image && <img src={customer?.image} alt={customer?.name} className="img-fluid"/>}
+                                                {!customer?.image && <img src={SERVER_URL + '/images/broken-image.jpg'} alt="broken-image" className="img-fluid"/>}
+
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="card-footer">
                                         <button
