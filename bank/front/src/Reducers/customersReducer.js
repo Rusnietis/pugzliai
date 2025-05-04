@@ -1,4 +1,5 @@
 import * as constants from '../Constants/customers';
+import { SERVER_URL } from '../Constants/main';
 // patikrinta
 // funkcija, kuri apdoroja klientu lista is serverio
 export default function customersReducer(state, action) {
@@ -8,7 +9,10 @@ export default function customersReducer(state, action) {
     console.log(newState)
     switch (action.type) {
         case constants.GET_CUSTOMERS_FROM_SERVER:
-            newState = action.payload;
+            newState = action.payload.map(customer => {
+                customer.image = customer.image ? SERVER_URL + '/' + customer.image : null;
+                return customer;
+            })
             break;
         case constants.CREATE_CUSTOMER:
             newState.unshift({ ...action.payload, temp: true });

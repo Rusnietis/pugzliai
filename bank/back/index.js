@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const fs = require('fs');
 const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
 const connection = mysql.createConnection({
@@ -14,6 +15,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -97,21 +99,43 @@ app.get('/customers', (req, res) => {
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
-  // res.status(401).json({status: 'Login'})
-  // return;
-  const { name, surname, account, amount } = req.body;
-  // Tikrinam ir konvertuojam amount į skaičių
+  const { name, surname, account, amount, image: imageBase64 } = req.body;
+
+  let filename = null;
+
+  // Apdorojam nuotrauką (jei yra)
+  if (imageBase64) {
+    let type;
+    let imageBuffer;
+
+    if (imageBase64.startsWith('data:image/png;base64,')) {
+      type = 'png';
+      imageBuffer = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
+    } else if (imageBase64.startsWith('data:image/jpeg;base64,')) {
+      type = 'jpg';
+      imageBuffer = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+    } else {
+      return res.status(400).json({ error: 'Netinkamas paveikslėlio formatas' });
+    }
+
+    filename = md5(uuidv4()) + '.' + type;
+    fs.writeFileSync('public/images/' + filename, imageBuffer);
+  }
+
   const amountNumber = parseFloat(amount) || 0;
+
   const customerSql = `
-    INSERT INTO customers (name, surname)
-    VALUES (?, ?)
+    INSERT INTO customers (name, surname, image)
+    VALUES (?, ?, ?)
   `;
-  connection.query(customerSql, [name, surname], (err, customerResult) => {
+  connection.query(customerSql, [name, surname,'images/' + filename], (err, customerResult) => {
     if (err) {
       console.error('Klaida įrašant klientą:', err);
       return res.status(500).json({ error: 'Nepavyko įrašyti kliento.' });
     }
+
     const customer_id = customerResult.insertId;
+
     const accountSql = `
       INSERT INTO accounts (customer_id, account, amount)
       VALUES (?, ?, ?)
@@ -121,15 +145,17 @@ app.post('/customers', (req, res) => {
         console.error('Klaida įrašant sąskaitą:', err2);
         return res.status(500).json({ error: 'Nepavyko įrašyti sąskaitos.' });
       }
-      // Grąžinam pilną informaciją klientui
+
       res.json({
         success: true,
         account_id: accountResult.insertId,
-        uuid: req.body.id
+        uuid: req.body.id,
+        image: filename ? `/images/${filename}` : null
       });
     });
   });
 });
+
 
 
 app.delete('/customers/:id', (req, res) => {

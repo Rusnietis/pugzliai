@@ -129,7 +129,7 @@ a.navbar-brand {
 }
 
 .card {
-  width: 1200px;
+  width: 100%;
   margin: 20px;
   border-color: coral;
   border-radius: 10px;
@@ -238,9 +238,15 @@ span.sep {
     transform: rotate(360deg);
   }
 }
-.img-fluid {
+.img-fluids {
   width: 250px;
   height: 250px;
   border: 1px solid brown;
   border-radius: 5px;
+}
+.atention {
+  padding: 5px;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: red;
 }

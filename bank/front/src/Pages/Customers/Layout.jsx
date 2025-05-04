@@ -19,15 +19,18 @@ export default function Layout() {
     return (
         <div >
             <Nav />
-            <div className="card">
-                <h5 className="card-header">Naujo kliento pridejimas</h5>
-                <div className="card-body">
-                    <Create />
+            <div className="container ">
+                <div className="row">
+                    <div className="col-4 mt-4" >
+                        <Create />
+                    </div>
+                    <div className="col-8 mt-4">
+                        <List />
+                    </div>
                 </div>
             </div>
             <Delete />
-            <List />
-           {editCustomer && <Edit />}
+            {editCustomer && <Edit />}
         </div>
     )
 }

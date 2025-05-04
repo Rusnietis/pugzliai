@@ -23,7 +23,7 @@ export default function List() {
                                 </div>
                                 :
 
-                                <div className="card" style={{
+                                <div className="card mt-2" style={{
                                     opacity: customer.temp ? 0.5 : 1
                                 }}>
                                     <div className="card-header">
@@ -37,8 +37,8 @@ export default function List() {
                                                 <p>Saskaitoje yra: {customer.amount} Eur</p>
                                             </div>
                                             <div className="col-7">
-                                                {customer?.image && <img src={customer?.image} alt={customer?.name} className="img-fluid"/>}
-                                                {!customer?.image && <img src={SERVER_URL + '/images/broken-image.jpg'} alt="broken-image" className="img-fluid"/>}
+                                                {customer?.image && <img src={customer?.image} alt={customer?.name} className="img-fluids"/>}
+                                                {!customer?.image && <img src={SERVER_URL + '/images/broken-image.jpg'} alt="broken-image" className="img-fluids"/>}
 
                                             </div>
                                         </div>
