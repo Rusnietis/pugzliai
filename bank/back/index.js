@@ -99,36 +99,35 @@ app.get('/customers', (req, res) => {
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
-  const { name, surname, account, amount, image: imageBase64 } = req.body;
-
   let filename = null;
 
-  // Apdorojam nuotrauką (jei yra)
-  if (imageBase64) {
+  if (req.body.image) {
     let type;
-    let imageBuffer;
+    let image;
 
-    if (imageBase64.startsWith('data:image/png;base64,')) {
+    if (req.body.image.indexOf('data:image/png;base64,') === 0) {
       type = 'png';
-      imageBuffer = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
-    } else if (imageBase64.startsWith('data:image/jpeg;base64,')) {
+      image = Buffer.from(req.body.image.replace(/^data:image\/png;base64,/, ''), 'base64');
+    } else if (req.body.image.indexOf('data:image/jpeg;base64,') === 0) {
       type = 'jpg';
-      imageBuffer = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+      image = Buffer.from(req.body.image.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
     } else {
-      return res.status(400).json({ error: 'Netinkamas paveikslėlio formatas' });
+      res.status(500).send('Blogas paveikslėlio formatas');
+      return;
     }
 
     filename = md5(uuidv4()) + '.' + type;
-    fs.writeFileSync('public/images/' + filename, imageBuffer);
+    fs.writeFileSync('public/images/' + filename, image);
   }
 
+  const { name, surname, account, amount } = req.body;
   const amountNumber = parseFloat(amount) || 0;
 
   const customerSql = `
     INSERT INTO customers (name, surname, image)
     VALUES (?, ?, ?)
   `;
-  connection.query(customerSql, [name, surname,'images/' + filename], (err, customerResult) => {
+  connection.query(customerSql, [name, surname, filename ? 'images/' + filename : null], (err, customerResult) => {
     if (err) {
       console.error('Klaida įrašant klientą:', err);
       return res.status(500).json({ error: 'Nepavyko įrašyti kliento.' });
@@ -155,6 +154,7 @@ app.post('/customers', (req, res) => {
     });
   });
 });
+
 
 
 

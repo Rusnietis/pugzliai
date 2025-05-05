@@ -64,6 +64,7 @@ export default function useCustomers(dispatchCustomers) {
             dispatchCustomers(c.storeCustomerAsTemp({ ...storeCustomer, id: uuid }));
             axios.post(`${SERVER_URL}/customers`, { ...storeCustomer, id: uuid })
                 .then(res => {
+                    console.log(res.data)
                     setStoreCustomer(null);
                     dispatchCustomers(c.storeCustomerAsReal(res.data));
                 })
