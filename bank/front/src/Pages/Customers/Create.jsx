@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import generateInvoiceNumber from '../../Functions/generate'
 import useImage from '../../Hooks/useImage';
@@ -18,7 +18,8 @@ export default function Create() {
 
     const { setStoreCustomer } = useContext(Customers);
     // const { addMessage } = useContext(MessagesContext);
-    const { image, readImage } = useImage();
+    const { image, readImage, setImage } = useImage();
+    const imageInput = useRef()
 
 
 
@@ -33,6 +34,8 @@ export default function Create() {
 
         setStoreCustomer({ ...inputs, image });
         setInputs(defaultInputs);
+        imageInput.current.value = null;
+        setImage(null);
 
     };
 
@@ -56,7 +59,7 @@ export default function Create() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="image" className="form-label">Nuotrauka</label>
-                    <input type="file" className="form-control" id="image" onChange={readImage} />
+                    <input ref={imageInput} type="file" className="form-control" id="image" onChange={readImage} />
                 </div>
                 {
                     image &&

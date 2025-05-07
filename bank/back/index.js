@@ -155,24 +155,77 @@ app.post('/customers', (req, res) => {
   });
 });
 
-
-
-
 app.delete('/customers/:id', (req, res) => {
-  const customerId = req.params.id;
-  const sql = 'DELETE FROM customers WHERE id = ?';
-  connection.query(sql, [customerId], (err, result) => {
+  const customer_Id = req.params.id;
+  console.log('Gaunamas ID trynimui:', customer_Id);
+
+  const sqlSelect = 'SELECT image FROM customers WHERE id = ?';
+  connection.query(sqlSelect, [customer_Id], (err, results) => {
     if (err) {
-      console.error('DB klaida:', err);
-      return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+      console.error('Klaida tikrinant paveikslėlį:', err);
+      return res.status(500).json({ error: 'Nepavyko patikrinti kliento' });
     }
-    if (result.affectedRows === 0) {
+
+    if (results.length === 0) {
       return res.status(404).json({ error: 'Klientas nerastas' });
     }
 
-    res.json({ success: true, id: +customerId });
+    // Ištrinam paveikslėlį jei yra
+    const imagePath = results[0].image;
+    if (imagePath) {
+      try {
+        fs.unlinkSync('public/' + imagePath);
+      } catch (e) {
+        console.warn('Nepavyko ištrinti paveikslėlio:', e.message);
+      }
+    }
+
+    // Tada trinam klientą
+    const sqlDelete = 'DELETE FROM customers WHERE id = ?';
+    connection.query(sqlDelete, [customer_Id], (err2, result) => {
+      if (err2) {
+        console.error('DB klaida:', err2);
+        return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Klientas nerastas' });
+      }
+
+      res.json({ success: true, id: +customer_Id });
+    });
   });
 });
+
+
+
+// app.delete('/customers/:id', (req, res) => {
+//   console.log('Gaunamas ID trynimui:', req.params.id);
+//   let sql = 'SELECT image FROM customers WHERE id = ?';
+//   connection.query(sql, [req.params.id], (err, results) => {
+//     if (err) {
+//       res.status
+//     } else {
+//       if (results[0].image) {
+//         fs.unlinkSync('public/' + results[0].image)
+//       }
+//     }
+//   });
+
+//   const customerId = req.params.id;
+//   sql = 'DELETE FROM customers WHERE id = ?';
+//   connection.query(sql, [customerId], (err, result) => {
+//     if (err) {
+//       console.error('DB klaida:', err);
+//       return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: 'Klientas nerastas' });
+//     }
+
+//     res.json({ success: true, id: +customerId });
+//   });
+// });
 
 // app.put('/fruits/:id', (req, res) => {
 

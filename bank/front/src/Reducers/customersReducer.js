@@ -29,28 +29,28 @@ export default function customersReducer(state, action) {
             newState = newState.filter(customer => customer.id !== action.payload.id);
             break;
         case constants.DELETE_CUSTOMER:
-            customer = newState.find(customer => customer.id === action.payload.id);
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 customer.deleted = true;
             }
             break;
         case constants.DELETE_CUSTOMER_REAL:
-            newState = newState.filter(customer => customer.id !== action.payload.id);
+            newState = newState.filter(customer => customer.customer_id !== action.payload.id);
             break;
         case constants.DELETE_CUSTOMER_UNDO:
 
-            customer = newState.find(customer => customer.id === action.payload.id);
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 delete customer.deleted;
             }
             break;
         case constants.UPDATE_CUSTOMER:
-            customer = newState.find(customer => customer.id === action.payload.id);
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 for (let key in action.payload) {
                     customer[key] = action.payload[key];
                 }
-                // customer.id = action.payload.customer.id;
+                // customer.customer_id = action.payload.customer.customer_id;
                 // customer.name = action.payload.customer.name;
                 // customer.surname = action.payload.customer.surname;
                 // customer.nickname = action.payload.customer.nickname;
@@ -59,7 +59,7 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.UPDATE_CUSTOMER_REAL:
-            customer = newState.find(customer => customer.id === action.payload.id);
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 delete customer.temp;
                 delete customer.old;
@@ -67,7 +67,7 @@ export default function customersReducer(state, action) {
             break;
         case constants.UPDATE_CUSTOMER_UNDO:
             //console.log('UNDO', action.payload)
-            customer = newState.find(customer => customer.id === action.payload.id);
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 for (let key in action.payload.old) {
                     customer[key] = action.payload.old[key];

@@ -115,6 +115,7 @@ export default function useCustomers(dispatchCustomers) {
         if (null !== destroyCustomer) {
             console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
             dispatchCustomers(c.deleteCustomerAsTemp(destroyCustomer));
+            console.log('Deleting customer with ID:', destroyCustomer.customer_id);
             axios.delete(`${SERVER_URL}/customers/${destroyCustomer.customer_id}`)
                 .then(res => {
                     setDestroyCustomer(null);

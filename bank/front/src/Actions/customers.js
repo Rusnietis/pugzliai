@@ -1,5 +1,6 @@
 import * as  constants from '../Constants/customers';
 // action objektas - ka mes norim padaryti
+//funkcijos kurios pagamina action objektus
 export function getCustomers(customers) {
 
     return {
