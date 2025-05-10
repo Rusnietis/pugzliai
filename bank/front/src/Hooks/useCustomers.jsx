@@ -93,23 +93,28 @@ export default function useCustomers(dispatchCustomers) {
     //     }
     // }, [storeCustomer, dispatchCustomers, addMessage]);
 
-    // useEffect(_ => {
-    //     if (null !== updateCustomer) {
-    //         dispatchCustomers(a.updateCustomerAsTemp(updateCustomer));
-    //         axios.put(`${SERVER_URL}/customers/${updateCustomer.id}`, updateCustomer, { withCredentials: true })
-    //             .then(res => {
-    //                 setUpdateCustomer(null);
-    //                 dispatchCustomers(a.updateCustomerAsReal(res.data));
-    //                 addMessage(res.data.message);
-    //             })
-    //             .catch(err => {
-    //                 setUpdateCustomer(null);
-    //                 dispatchCustomers(a.updateCustomerAsUndo(updateCustomer));
-    //                 err?.response?.data?.message && addMessage(err.response.data.message);
-    //             });
+    useEffect(_ => {
+        if (null !== updateCustomer) {
+            dispatchCustomers(c.updateCustomerAsTemp(updateCustomer));
+            console.log('Koks ID eina:', updateCustomer?.id);
+            const toServer = {...updateCustomer}
+            if (updateCustomer.image === updateCustomer.old.image) {
+              toServer.image = null;
+            }
+            axios.put(`${SERVER_URL}/customers/${updateCustomer.customer_id}`, updateCustomer)
+                .then(res => {
+                    setUpdateCustomer(null);
+                    dispatchCustomers(c.updateCustomerAsReal(res.data));
+                   ;
+                })
+                .catch(err => {
+                    setUpdateCustomer(null);
+                    dispatchCustomers(c.updateCustomerAsUndo(updateCustomer));
+                   
+                });
 
-    //     }
-    // }, [updateCustomer, dispatchCustomers, addMessage])
+        }
+    }, [updateCustomer, dispatchCustomers])
 
     useEffect(() => {
         if (null !== destroyCustomer) {

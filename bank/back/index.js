@@ -21,6 +21,55 @@ app.use(bodyParser.json());
 
 connection.connect();
 
+// files
+
+const writeImage = imageBase64 => {
+  if (!imageBase64) {
+    return null
+  };
+  let type;
+  let image;
+  if (imageBase64.indexOf('data:image/png;base64,') === 0) {
+    type = 'png';
+    image = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
+  } else if (imageBase64.indexOf('data:image/jpeg;base64,') === 0) {
+    type = 'jpg';
+    image = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+  } else {
+    res.status(500).send('Blogas paveikslėlio formatas');
+    return;
+  }
+  const filename = md5(uuidv4()) + '.' + type;
+  fs.writeFileSync('public/images/' + filename, image);
+  return filename
+}
+
+const deleteImage = (customer_Id, res) => {
+  console.log('Gaunamas ID trynimui:', customer_Id);
+  const sqlSelect = 'SELECT image FROM customers WHERE id = ?';
+  connection.query(sqlSelect, [customer_Id], (err, results) => {
+    if (err) {
+      console.error('Klaida tikrinant paveikslėlį:', err);
+      return res.status(500).json({ error: 'Nepavyko patikrinti kliento' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Klientas nerastas' });
+    }
+
+    // Ištrinam paveikslėlį jei yra
+    const imagePath = results[0].image;
+    if (imagePath) {
+      try {
+        fs.unlinkSync('public/' + imagePath);
+      } catch (e) {
+        console.warn('Nepavyko ištrinti paveikslėlio:', e.message);
+      }
+    }
+  });
+};
+
+
 // const checkUserIsLogged = (user, res) => {
 //   if (user) {
 //     return true;
@@ -99,26 +148,8 @@ app.get('/customers', (req, res) => {
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
-  let filename = null;
 
-  if (req.body.image) {
-    let type;
-    let image;
-
-    if (req.body.image.indexOf('data:image/png;base64,') === 0) {
-      type = 'png';
-      image = Buffer.from(req.body.image.replace(/^data:image\/png;base64,/, ''), 'base64');
-    } else if (req.body.image.indexOf('data:image/jpeg;base64,') === 0) {
-      type = 'jpg';
-      image = Buffer.from(req.body.image.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
-    } else {
-      res.status(500).send('Blogas paveikslėlio formatas');
-      return;
-    }
-
-    filename = md5(uuidv4()) + '.' + type;
-    fs.writeFileSync('public/images/' + filename, image);
-  }
+  const filename = writeImage(req.body.image);
 
   const { name, surname, account, amount } = req.body;
   const amountNumber = parseFloat(amount) || 0;
@@ -155,47 +186,59 @@ app.post('/customers', (req, res) => {
   });
 });
 
-app.delete('/customers/:id', (req, res) => {
-  const customer_Id = req.params.id;
-  console.log('Gaunamas ID trynimui:', customer_Id);
+app.put('/customers/:id', (req, res) => {
+console.log('Gavau ID:', req.params.id);
+  if (req.body.del) {
+    deleteImage(req.params.id, res);
+  }
+  const filename = writeImage(req.body.image);
+  const { name, surname, customer_id } = req.body;
+  console.log('kas ateina', req.body)
+  let sql;
+  let params;
+if (req.body.del || filename !== null) {
+    sql = 'UPDATE customers SET name = ?, surname = ?, image = ? WHERE id = ?';
+    params = [name, surname, filename !== null ? ('images/' + filename) : null, req.params.id];
+  } else {
+    sql = 'UPDATE customers SET name = ?, surname = ? WHERE id = ?';
+    params = [name, surname, req.params.id];
+  }
 
-  const sqlSelect = 'SELECT image FROM customers WHERE id = ?';
-  connection.query(sqlSelect, [customer_Id], (err, results) => {
+  connection.query(sql, params, (err) => {
     if (err) {
-      console.error('Klaida tikrinant paveikslėlį:', err);
-      return res.status(500).json({ error: 'Nepavyko patikrinti kliento' });
+      res.status(500);
+    } else {
+      res.json({ success: true, id: +req.params.id })
+    }
+  })
+
+
+
+
+
+})
+
+
+app.delete('/customers/:id', (req, res) => {
+
+  deleteImage(req.params.id);
+
+  // Tada trinam klientą
+  const sqlDelete = 'DELETE FROM customers WHERE id = ?';
+  connection.query(sqlDelete, [customer_Id], (err2, result) => {
+    if (err2) {
+      console.error('DB klaida:', err2);
+      return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
     }
 
-    if (results.length === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Klientas nerastas' });
     }
 
-    // Ištrinam paveikslėlį jei yra
-    const imagePath = results[0].image;
-    if (imagePath) {
-      try {
-        fs.unlinkSync('public/' + imagePath);
-      } catch (e) {
-        console.warn('Nepavyko ištrinti paveikslėlio:', e.message);
-      }
-    }
-
-    // Tada trinam klientą
-    const sqlDelete = 'DELETE FROM customers WHERE id = ?';
-    connection.query(sqlDelete, [customer_Id], (err2, result) => {
-      if (err2) {
-        console.error('DB klaida:', err2);
-        return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
-      }
-
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Klientas nerastas' });
-      }
-
-      res.json({ success: true, id: +customer_Id });
-    });
+    res.json({ success: true, id: +customer_Id });
   });
 });
+
 
 
 
