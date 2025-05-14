@@ -8,8 +8,23 @@ export default function List() {
 
     console.log(customers)
 
+    const handleToggleBlock = (customer) => {
+        const updated = {
+            ...customer,
+            is_blocked: customer.is_blocked ? 0 : 1,
+            old: { ...customer }  // pridedi originalą rollback'ui
+        };
+        setEditCustomer(updated);
+    };
+
+
     return (
         <>
+            {/* <div className="card mt-2" >
+                <div className="card-header">
+                    <div className="list"><h3>Klientų sąrašas</h3></div>
+                </div> */}
+
             {
                 customers.map(customer => (
 
@@ -37,8 +52,8 @@ export default function List() {
                                                 <p>Saskaitoje yra: {customer.amount} Eur</p>
                                             </div>
                                             <div className="col-7">
-                                                {customer?.image && <img src={customer?.image} alt={customer?.name} className="img-fluids"/>}
-                                                {!customer?.image && <img src={SERVER_URL + '/images/broken-image.jpg'} alt="broken-image" className="img-fluids"/>}
+                                                {customer?.image && <img src={customer?.image} alt={customer?.name} className="img-fluids" />}
+                                                {!customer?.image && <img src={SERVER_URL + '/images/broken-image.jpg'} alt="broken-image" className="img-fluids" />}
 
                                             </div>
                                         </div>
@@ -61,6 +76,15 @@ export default function List() {
                                             Edit
                                         </button>
 
+                                        <button className="button-18"
+                                            onClick={_=>handleToggleBlock(customer)}
+                                            style={{
+                                                backgroundColor: customer.is_blocked ? 'yellow' : 'green',
+                                                color: 'white'
+                                            }}
+                                        >
+                                            {customer.is_blocked ? 'Atblokuoti' : 'Blokuoti'}
+                                        </button>
                                     </div>
                                 </div>
                         }
@@ -68,6 +92,7 @@ export default function List() {
                     </div>
                 ))
             }
+            {/* </div> */}
         </>
     )
-}
+}  

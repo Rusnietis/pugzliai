@@ -24,7 +24,7 @@ export default function Layout() {
                     <div className="col-4 mt-4" >
                         <Create />
                     </div>
-                    <div className="col-8 mt-4">
+                    <div className="col-7 mt-4">
                         <List />
                     </div>
                 </div>

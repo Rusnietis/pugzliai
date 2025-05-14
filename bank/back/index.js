@@ -130,6 +130,7 @@ app.get('/customers', (req, res) => {
       customers.name,
       customers.surname,
       customers.image,
+      customers.is_blocked,
       accounts.id AS account_id,
       accounts.account,
       accounts.amount
