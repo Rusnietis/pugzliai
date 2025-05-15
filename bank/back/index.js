@@ -36,36 +36,38 @@ const writeImage = imageBase64 => {
     type = 'jpg';
     image = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
   } else {
-    res.status(500).send('Blogas paveikslėlio formatas');
-    return;
+    return null;
   }
   const filename = md5(uuidv4()) + '.' + type;
   fs.writeFileSync('public/images/' + filename, image);
   return filename
 }
 
-const deleteImage = (customer_Id, res) => {
-  console.log('Gaunamas ID trynimui:', customer_Id);
-  const sqlSelect = 'SELECT image FROM customers WHERE id = ?';
-  connection.query(sqlSelect, [customer_Id], (err, results) => {
-    if (err) {
-      console.error('Klaida tikrinant paveikslėlį:', err);
-      return res.status(500).json({ error: 'Nepavyko patikrinti kliento' });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Klientas nerastas' });
-    }
-
-    // Ištrinam paveikslėlį jei yra
-    const imagePath = results[0].image;
-    if (imagePath) {
-      try {
-        fs.unlinkSync('public/' + imagePath);
-      } catch (e) {
-        console.warn('Nepavyko ištrinti paveikslėlio:', e.message);
+const deleteImage = (customer_Id) => {
+  return new Promise((resolve, reject) => {
+    const sqlSelect = 'SELECT image FROM customers WHERE id = ?';
+    connection.query(sqlSelect, [customer_Id], (err, results) => {
+      if (err) {
+        console.error('Klaida tikrinant paveikslėlį:', err);
+        return reject('DB klaida');
       }
-    }
+
+      if (results.length === 0) {
+        return reject('Klientas nerastas');
+      }
+
+      const imagePath = results[0].image;
+      if (imagePath) {
+        try {
+          fs.unlinkSync('public/' + imagePath);
+        } catch (e) {
+          console.warn('Nepavyko ištrinti paveikslėlio:', e.message);
+          // Nesustabdom proceso, nes paveikslėlis gali būti jau trintas
+        }
+      }
+
+      resolve();
+    });
   });
 };
 
@@ -153,11 +155,13 @@ app.post('/customers', (req, res) => {
   const filename = writeImage(req.body.image);
 
   const { name, surname, account, amount } = req.body;
+
+
   const amountNumber = parseFloat(amount) || 0;
 
   const customerSql = `
-    INSERT INTO customers (name, surname, image)
-    VALUES (?, ?, ?)
+    INSERT INTO customers (name, surname, image, is_blocked)
+    VALUES (?, ?, ?, 0)
   `;
   connection.query(customerSql, [name, surname, filename ? 'images/' + filename : null], (err, customerResult) => {
     if (err) {
@@ -188,56 +192,55 @@ app.post('/customers', (req, res) => {
 });
 
 app.put('/customers/:id', (req, res) => {
-console.log('Gavau ID:', req.params.id);
+  //console.log('Gavau ID:', req.body);
   if (req.body.del) {
     deleteImage(req.params.id, res);
   }
   const filename = writeImage(req.body.image);
-  const { name, surname, customer_id } = req.body;
-  console.log('kas ateina', req.body)
+  const { name, surname, customer_id, is_blocked } = req.body;
+  //console.log('kas ateina', req.body)
   let sql;
   let params;
-if (req.body.del || filename !== null) {
-    sql = 'UPDATE customers SET name = ?, surname = ?, image = ? WHERE id = ?';
-    params = [name, surname, filename !== null ? ('images/' + filename) : null, req.params.id];
+  if (req.body.del || filename !== null) {
+    sql = 'UPDATE customers SET name = ?, surname = ?, is_blocked = ?, image = ? WHERE id = ?';
+    params = [name, surname, is_blocked, filename !== null ? ('images/' + filename) : null, req.params.id];
   } else {
-    sql = 'UPDATE customers SET name = ?, surname = ? WHERE id = ?';
-    params = [name, surname, req.params.id];
+    sql = 'UPDATE customers SET name = ?, surname = ?, is_blocked = ?  WHERE id = ?';
+    params = [name, surname, is_blocked, req.params.id];
   }
 
   connection.query(sql, params, (err) => {
     if (err) {
-      res.status(500);
+      console.error(err);
+      res.status(500).json({ error: 'DB update error' });
     } else {
       res.json({ success: true, id: +req.params.id })
     }
   })
 
-
-
-
-
 })
 
 
-app.delete('/customers/:id', (req, res) => {
+app.delete('/customers/:id', async (req, res) => {
+  const customerId = req.params.id;
+  try {
+    await deleteImage(customerId); // Laukiam paveikslėlio trynimo
+    const sqlDelete = 'DELETE FROM customers WHERE id = ?';
+    connection.query(sqlDelete, [customerId], (err2, result) => {
+      if (err2) {
+        console.error('DB klaida:', err2);
+        return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+      }
 
-  deleteImage(req.params.id);
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Klientas nerastas' });
+      }
 
-  // Tada trinam klientą
-  const sqlDelete = 'DELETE FROM customers WHERE id = ?';
-  connection.query(sqlDelete, [customer_Id], (err2, result) => {
-    if (err2) {
-      console.error('DB klaida:', err2);
-      return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Klientas nerastas' });
-    }
-
-    res.json({ success: true, id: +customer_Id });
-  });
+      res.json({ success: true, id: +customerId });
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 });
 
 

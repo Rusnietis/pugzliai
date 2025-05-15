@@ -251,3 +251,13 @@ span.sep {
   border-radius: 5px;
   background-color: red;
 }
+
+.money {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid salmon;
+  border-radius: 10px;
+  background-color:#cfe9f7;
+  padding: 10px;
+  width: 310px;
+}

@@ -4,7 +4,7 @@ import { Customers } from '../../Contexts/Customers';
 export default function Delete() {
 
     const { deleteCustomer, setDeleteCustomer, setDestroyCustomer } = useContext(Customers)
-    console.log(deleteCustomer)
+    //console.log(deleteCustomer)
 
     const submit = _ => {
         console.log('DELETE SUBMIT:', deleteCustomer);

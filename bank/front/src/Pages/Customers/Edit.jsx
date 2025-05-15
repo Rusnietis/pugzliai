@@ -32,11 +32,11 @@ export default function Edit() {
         if (image && image !== editCustomer.image) {
             setDeleteImage(true);
         }
-    }, [image])
+    }, [image, editCustomer])
 
-    const handlerChange = e => {
-        setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
-    }
+    // const handlerChange = e => {
+    //     setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
+    // }
 
     const submit = _ => {
 
@@ -81,7 +81,7 @@ export default function Edit() {
                         <div className="mb-3">
                             <label className="form-label">
                                 <span>Nuotrauka</span>
-                                <h6 style={{cursor: 'pointer', marginLeft: '10px', display: image ? 'inline-block' : 'none'}} onClick={_ => {
+                                <h6 style={{ cursor: 'pointer', marginLeft: '10px', display: image ? 'inline-block' : 'none' }} onClick={_ => {
                                     setDeleteImage(true);
                                     setImage(null);
                                     imageInput.current.value = null;

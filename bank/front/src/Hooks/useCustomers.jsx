@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/customers';
 // import { MessagesContext } from '../Contexts/Messages';
-import { Router } from '../Contexts/Router';
+//import { Router } from '../Contexts/Router';
 
 //import { Auth } from '../Contexts/Auth';
 
@@ -23,7 +23,7 @@ export default function useCustomers(dispatchCustomers) {
 
         axios.get(`${SERVER_URL}/customers`)
             .then(res => {
-                console.log(res.data)
+                //console.log(res.data)
                 dispatchCustomers(c.getCustomers(res.data));
             })
             .catch(err => {

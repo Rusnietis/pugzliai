@@ -13,7 +13,7 @@ export const CustomersProvider = ({ children }) => {
     const [deleteCustomer, setDeleteCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
 
-    console.log(deleteCustomer)
+    //console.log(deleteCustomer)
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
     const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers); //dispatchCustomers
