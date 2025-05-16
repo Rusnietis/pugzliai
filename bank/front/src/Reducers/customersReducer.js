@@ -45,6 +45,7 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.UPDATE_CUSTOMER:
+            console.log('update', action.payload)
             customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
                 for (let key in action.payload) {

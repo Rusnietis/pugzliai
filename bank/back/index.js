@@ -191,13 +191,14 @@ app.post('/customers', (req, res) => {
   });
 });
 
+// Kliento atnaujinimas
 app.put('/customers/:id', (req, res) => {
-  //console.log('Gavau ID:', req.body);
+  console.log('Gavau ID:', req.body);
   if (req.body.del) {
     deleteImage(req.params.id, res);
   }
   const filename = writeImage(req.body.image);
-  const { name, surname, customer_id, is_blocked } = req.body;
+  const { name, surname, customer_id, is_blocked, account, amount } = req.body;
   //console.log('kas ateina', req.body)
   let sql;
   let params;

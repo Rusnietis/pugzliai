@@ -96,7 +96,7 @@ export default function useCustomers(dispatchCustomers) {
     useEffect(_ => {
         if (null !== updateCustomer) {
             dispatchCustomers(c.updateCustomerAsTemp(updateCustomer));
-            console.log('Koks ID eina:', updateCustomer?.id);
+            console.log('Koks ID eina:', updateCustomer?.customer_id);
             const toServer = {...updateCustomer}
             if (updateCustomer.image === updateCustomer.old.image) {
               toServer.image = null;
