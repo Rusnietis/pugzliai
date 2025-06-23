@@ -151,11 +151,8 @@ app.get('/customers', (req, res) => {
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
-
   const filename = writeImage(req.body.image);
-
   const { name, surname, account, amount } = req.body;
-
 
   const amountNumber = parseFloat(amount) || 0;
 
@@ -198,7 +195,7 @@ app.put('/customers/:id', (req, res) => {
     deleteImage(req.params.id, res);
   }
   const filename = writeImage(req.body.image);
-  const { name, surname, customer_id, is_blocked, account, amount } = req.body;
+  const { name, surname, customer_id, is_blocked } = req.body;
   //console.log('kas ateina', req.body)
   let sql;
   let params;
@@ -219,6 +216,25 @@ app.put('/customers/:id', (req, res) => {
     }
   })
 
+})
+
+app.put('/accounts/:id', (req, res) => {
+  console.log('atėjo į /accounts/:id');
+  console.log('id', req.body)
+  const { account, amount, customer_id } = req.body;
+
+  const sql = 'UPDATE accounts SET account = ?, amount = ?, customer_id = ? WHERE id = ?';
+  connection.query(sql, [account, amount, customer_id, req.params.id], (err) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json({
+        success: true,
+        id: +req.params.id,
+        // message: { type: 'success', text: 'Nice! Book updated' }
+      });
+    }
+  });
 })
 
 

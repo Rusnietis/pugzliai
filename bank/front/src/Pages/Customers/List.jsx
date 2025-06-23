@@ -61,7 +61,7 @@ export default function List() {
                 customers.map(customer => (
 
                     <div key={customer.customer_id}>
-
+                      
                         {
                             customer.deleted
                                 ?
@@ -98,7 +98,6 @@ export default function List() {
                                                         value={amounts[customer.customer_id] || ''}
                                                         onChange={(e) => handleAmountChange(e, customer.customer_id)} className="form-control" id="amount" style={{ width: '100px' }} />
                                                     <button
-
                                                         type="button"
                                                         disabled={customer.temp || customer.is_blocked}
                                                         className="button-18 green"
