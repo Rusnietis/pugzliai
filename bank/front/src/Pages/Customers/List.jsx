@@ -52,11 +52,7 @@ export default function List() {
 
     return (
         <>
-            {/* <div className="card mt-2" >
-                <div className="card-header">
-                    <div className="list"><h3>Klientų sąrašas</h3></div>
-                </div> */}
-
+{console.log(customers)}
             {
                 customers.map(customer => (
 

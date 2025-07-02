@@ -239,12 +239,14 @@ span.sep {
     transform: rotate(360deg);
   }
 }
+
 .img-fluids {
   width: 270px;
   height: 200px;
   border: 1px solid brown;
   border-radius: 5px;
 }
+
 .atention {
   padding: 5px;
   border: 1px solid red;
@@ -257,7 +259,19 @@ span.sep {
   justify-content: space-between;
   border: 1px solid salmon;
   border-radius: 10px;
-  background-color:#cfe9f7;
+  background-color: #cfe9f7;
   padding: 10px;
   width: 310px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  width: 1200px;
+  height: 34vw;
+  margin: 20px;
+  background-color: crimson;
+  border-radius: 10px;
+  //background: url('/pinigai.jpg') no-repeat center center;
+  background-size: cover;
 }

@@ -5,24 +5,25 @@ import useImage from '../../Hooks/useImage';
 //import * as v from '../../Validators/textInputs';
 // import { MessagesContext } from '../../Contexts/Messages';
 
-const defaultInputs = {
-    customer: {
-        name: '',
-        surname: '',
-        image: null
-    },
-    account: {
-        account: generateInvoiceNumber(),
-        amount: '0'
-    }
-}
-
 // const defaultInputs = {
-//     name: '',
-//     surname: '',
-//     account: generateInvoiceNumber(),
-//     amount: '0'
+//     customer: {
+//         name: '',
+//         surname: '',
+//         image: null
+//     },
+//     account: {
+//         account: generateInvoiceNumber(),
+//         amount: '0'
+//     }
 // }
+
+const defaultInputs = {
+    name: '',
+    surname: '',
+    image: null,
+    account: generateInvoiceNumber(),
+    amount: '0'
+}
 
 export default function Create() {
 
@@ -33,59 +34,61 @@ export default function Create() {
     const { image, readImage, setImage } = useImage();
     const imageInput = useRef()
 
-    const handlerChange = e => {
-        const { id, value } = e.target;
-
-        if (id === 'name' || id === 'surname') {
-            setInputs(prev => ({
-                ...prev,
-                customer: {
-                    ...prev.customer,
-                    [id]: value
-                }
-            }));
-        }
-    };
-
-
     // const handlerChange = e => {
-    //     setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
-    // }
+    //     const { id, value } = e.target;
 
-    // const create = _ => {
-
-    //     setStoreCustomer({ ...inputs, image });
-    //     setInputs(defaultInputs);
-    //     imageInput.current.value = null;
-    //     setImage(null);
-
+    //     if (id === 'name' || id === 'surname') {
+    //         setInputs(prev => ({
+    //             ...prev,
+    //             customer: {
+    //                 ...prev.customer,
+    //                 [id]: value
+    //             }
+    //         }));
+    //     }
     // };
 
-    const create = () => {
-        // const customerData = {
-        //     name: inputs.customer.name,
-        //     surname: inputs.customer.surname,
-        //     image: image || null
-        // };
 
-        // const accountData = {
-        //     account: inputs.account.account,
-        //     amount: inputs.account.amount
-        // };
+    const handlerChange = e => {
+        setInputs(prev => ({ ...prev, [e.target.id]: e.target.value })); // 
+    }
 
-        const nestedData = {
-            name: inputs.customer.name,
-            surname: inputs.customer.surname,
-            image: image || null,
-            account: inputs.account.account,
-            amount: inputs.account.amount
-        };
+    const create = _ => {
 
-        setStoreCustomer(nestedData);
-        setInputs('');
+        setStoreCustomer({ ...inputs, image });
+        setInputs(defaultInputs);
         imageInput.current.value = null;
         setImage(null);
+
     };
+
+    // const create = () => {
+
+    //     console.log('inputs', inputs)
+    //     // const customerData = {
+    //     //     name: inputs.customer.name,
+    //     //     surname: inputs.customer.surname,
+    //     //     image: image || null
+    //     // };
+
+    //     // const accountData = {
+    //     //     account: inputs.account.account,
+    //     //     amount: inputs.account.amount
+    //     // };
+
+    //     // const nestedData = {
+    //     //     name: inputs.customer.name,
+    //     //     surname: inputs.customer.surname,
+    //     //     image: image || null,
+    //     //     account: inputs.account.account,
+    //     //     amount: inputs.account.amount
+    //     // };
+
+    //     // setStoreCustomer(nestedData);
+    //     setInputs(defaultInputs);
+    //     // imageInput.current.value = null;
+    //     // setImage(null);
+    // };
 
     //console.log(setStoreCustomer)
 
