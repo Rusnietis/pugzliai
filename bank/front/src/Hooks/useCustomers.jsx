@@ -10,7 +10,7 @@ import * as c from '../Actions/customers';
 
 
 //patikrinta
-export default function useCustomers(dispatchCustomers) {
+export default function useCustomers(dispatchCustomers, editCussotemer) {
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
@@ -96,7 +96,7 @@ export default function useCustomers(dispatchCustomers) {
 
     useEffect(_ => {
         if (null !== updateCustomer) {
-            dispatchCustomers(c.updateCustomerAsTemp(updateCustomer));
+            dispatchCustomers(c.updateCustomerAsTemp(updateCustomer, editCussotemer));
             console.log('Koks ID eina:', updateCustomer?.customer_id);
             const toServer = {...updateCustomer}
             if (updateCustomer.image === updateCustomer.old.image) {

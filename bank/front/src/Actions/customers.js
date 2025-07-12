@@ -52,10 +52,10 @@ export function deleteCustomerAsUndo(customer) {
     }
 }
 
-export function updateCustomerAsTemp(customer) {
+export function updateCustomerAsTemp(customer, oldcustomer) {
     return {
         type: constants.UPDATE_CUSTOMER,
-        payload: customer
+        payload: {customer, oldcustomer}
     }
 }
     

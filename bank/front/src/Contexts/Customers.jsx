@@ -16,8 +16,7 @@ export const CustomersProvider = ({ children }) => {
     //console.log(deleteCustomer)
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers); //dispatchCustomers
-
+    const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers, editCustomer); //dispatchCustomers
     return (
         <Customers.Provider value={{
             customers,
