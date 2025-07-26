@@ -48,8 +48,8 @@ export default function customersReducer(state, action) {
             console.log('update', action.payload)
             customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
-                for (let key in action.payload.customer) {
-                    customer[key] = action.payload.customer[key];
+                for (let key in action.payload) {
+                    customer[key] = action.payload[key];
                 }
                 // customer.customer_id = action.payload.customer.customer_id;
                 // customer.name = action.payload.customer.name;
