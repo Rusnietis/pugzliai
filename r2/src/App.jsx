@@ -29,7 +29,7 @@ export default function App() {
         'cloudy': 'Debesuota',
         'overcast': 'Apsiniaukę',
         'light-rain': 'Nedidelis lietus',
-        'moderate-rain': 'Vidutinis lietus',
+        'rain': 'Vidutinis lietus',
         'heavy-rain': 'Smarkus lietus',
         'sleet': 'Šlapdriba',
         'snow': 'Sniegas',
@@ -92,17 +92,28 @@ export default function App() {
                 const now = new Date();
                 const forecasts = res.data.forecastTimestamps;
 
+                const index = forecasts.findIndex(f => new Date(f.forecastTimeUtc) >= now);
+                const upcomingForecasts = forecasts.slice(index, index + 5); // 5 valandos: dabartinė + 4
+
+
+                const creationDate = new Date(res.data.forecastCreationTimeUtc);
+                const weekday = creationDate.toLocaleDateString('lt-LT', { weekday: 'long' });
+                const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
+
                 const closestForecast = forecasts.reduce((prev, curr) => {
                     const prevDiff = Math.abs(new Date(prev.forecastTimeUtc) - now);
                     const currDiff = Math.abs(new Date(curr.forecastTimeUtc) - now);
                     return currDiff < prevDiff ? curr : prev;
+
                 });
 
                 setWeatherData({
                     location: res.data.place.name,
                     temperature: closestForecast.airTemperature,
                     condition: closestForecast.conditionCode,
-                    forecastTime: closestForecast.forecastTimeUtc
+                    forecastTime: closestForecast.forecastTimeUtc,
+                    weekday: capitalizedWeekday,
+                    upcoming: upcomingForecasts
                 });
             })
             .catch(err => {
@@ -110,51 +121,100 @@ export default function App() {
             });
     }, []);
 
+   return (
+  <div className="container" style={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '30px',
+    minHeight: '100vh',
+    backgroundColor: 'rgba(209, 18, 18, 0.8)'
+  }}>
+    <h1 className="text-center text-white mb-4">Orų prognozė</h1>
 
-    return (
-        <div className="container" style={{
+    <div style={{
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      border: '2px solid rgba(255, 255, 255, 0.3)',
+      borderRadius: '15px',
+      color: 'white',
+      padding: '20px',
+      width: '100%',
+      maxWidth: '500px',
+      textAlign: 'center',
+      backdropFilter: 'blur(5px)'
+    }}>
+      {weatherData ? (
+        <>
+          {/* Dabartinė prognozė */}
+          <h2>{weatherData.location}</h2>
+          <p style={{ fontSize: '18px' }}>{weatherData.weekday}</p>
+          <img
+            src={`/icons/${weatherData.upcoming[0].conditionCode || 'na'}.png`}
+            onError={(e) => { e.target.src = '/icons/na.png'; }}
+            alt={weatherData.upcoming[0].conditionCode}
+            style={{ width: '64px', height: '64px', margin: '10px auto' }}
+          />
+          <p style={{ fontSize: '20px' }}>
+            <b>{weatherData.upcoming[0].airTemperature}°C</b>
+          </p>
+          <p style={{ fontSize: '18px' }}>
+            {conditionTextLt[weatherData.upcoming[0].conditionCode] || 'Nežinoma'}
+          </p>
+          <p style={{ fontSize: '14px' }}>
+            {new Date(weatherData.upcoming[0].forecastTimeUtc).toLocaleString('lt-LT')}
+          </p>
+
+          {/* Kitos 4 valandos */}
+          <hr style={{ borderColor: 'white', margin: '20px 0' }} />
+          <h4>Kitos 4 valandos</h4>
+          <div style={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            backgroundColor: 'rgba(28, 49, 241, 0.8)'
-        }}>
-            <h1 className="text-center">Orų prognozė</h1>
-            <div className="row" style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                //backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                height: '350px',
-                width: '250px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+            justifyContent: 'space-around',
+            gap: '10px',
+            marginTop: '15px',
+            flexWrap: 'wrap'
+          }}>
+            {weatherData.upcoming.slice(1).map((forecast, index) => (
+              <div key={index} style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                borderRadius: '10px',
+                padding: '10px',
+                width: '100px',
+                textAlign: 'center'
+              }}>
+                <p style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '5px' }}>
+                  {new Date(forecast.forecastTimeUtc).toLocaleTimeString('lt-LT', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
+                <img
+                  src={`/icons/${forecast.conditionCode || 'na'}.png`}
+                  onError={(e) => { e.target.src = '/icons/na.png'; }}
+                  alt={forecast.conditionCode}
+                  style={{ width: '32px', height: '32px' }}
+                />
+                <p style={{ fontSize: '14px', margin: '4px 0' }}>
+                  {forecast.airTemperature}°C
+                </p>
+                <p style={{ fontSize: '12px' }}>
+                  {conditionTextLt[forecast.conditionCode] || forecast.conditionCode}
+                </p>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p>Loading weather data...</p>
+      )}
+    </div>
+  </div>
+);
 
-            }}>
-                <div className="col-12 text-center">
-                    {weatherData ? (
-                        <div className="weather-info">
-                            <h2>{weatherData.location}</h2>
-                            <img
-                                src={`/icons/${weatherData.condition || 'na'}.png`}
-                                onError={(e) => { e.target.src = '/icons/na.png'; }}
-                                alt={weatherData.condition}
-                                style={{ width: '64px', height: '64px', margin: '10px auto' }}
-                            />
-                            <p style={{ fontSize: '20px' }}>Temperatūra:<b> {weatherData.temperature}°C</b></p>
-                            <p style={{ fontSize: '18px' }}>Oro sąlygos:<b> {conditionTextLt[weatherData.condition] || 'Nežinoma'}</b></p>
-                            <p style={{ fontSize: '16px' }}>Prognozės laikas: <b>{new Date(weatherData.forecastTime).toLocaleString()}</b></p>
-                        </div>
-                    ) : (
-                        <p>Loading weather data...</p>
-                    )}
-                </div>
-            </div>
-        </div >
 
-    );
+
 }
 
 
