@@ -265,14 +265,24 @@ span.sep {
 }
 
 .header {
-  height: 500px;
-  margin: 20px;
+
+  // width: 100%;
+  // max-width: 1200px;
+  // height: 600px;
+  // margin: 30px auto;
+  // background: url('/pinigai2.jpg') no-repeat center;
+  // background-size: cover;
+  // position: relative;
+
+  height: 34vw;
+  margin: 30px 20px;
   border-radius: 10px;
   background-color: #009970;
-//background: url('/pinigai.jpg') no-repeat;
+  //background: url('/pinigai.jpg') no-repeat;
   background-size: contain;
   position: relative;
   border: 2px solid red; // testui
+
 }
 
 .header_contents {
@@ -292,6 +302,7 @@ span.sep {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -300,15 +311,15 @@ span.sep {
 
 .header_contents h2 {
   font-weight: 500;
-  color: white;
+  color: black;
   font-size: max(4.5vw, 22px);
 }
 
 .header_contents p {
   background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px); 
-  padding: 10px;  
+  backdrop-filter: blur(10px);
+  padding: 10px;
   border-radius: 10px;
-  color: white;
+  color: black;
   font-size: 1.5vw;
 }
