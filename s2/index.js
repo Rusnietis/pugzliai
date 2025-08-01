@@ -24,5 +24,5 @@ app.get('/weather', async  (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Zverys klauso ${port} porto.`);
+  console.log(`Orų prognozė klauso ${port} porto.`);
 });
