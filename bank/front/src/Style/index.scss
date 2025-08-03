@@ -274,13 +274,13 @@ span.sep {
   // background-size: cover;
   // position: relative;
 
-  height: 34vw;
+  height: 600px;
   margin: 30px 20px;
   border-radius: 10px;
   background-color: #009970;
   //background: url('/pinigai.jpg') no-repeat;
-  background-size: contain;
-  position: relative;
+  // background-size: contain;
+  // position: relative;
   border: 2px solid red; // testui
 
 }
@@ -311,7 +311,7 @@ span.sep {
 
 .header_contents h2 {
   font-weight: 500;
-  color: black;
+  color: white;
   font-size: max(4.5vw, 22px);
 }
 
@@ -320,6 +320,6 @@ span.sep {
   backdrop-filter: blur(10px);
   padding: 10px;
   border-radius: 10px;
-  color: black;
+  color: white;
   font-size: 1.5vw;
 }

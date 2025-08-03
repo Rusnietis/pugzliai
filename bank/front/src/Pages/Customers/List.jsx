@@ -49,15 +49,18 @@ export default function List() {
         setAmounts(prev => ({ ...prev, [customer.customer_id]: '' }));
     };
 
+    if (!customers || customers.length === 0) {
+        return <h3 className='mt-5' style={{display: 'flex', justifyContent: 'center', color: 'red'}}> Klientu nerasta/ serverio klaida</h3>;
+    }
 
     return (
         <>
-{console.log(customers)}
+            {console.log(customers)}
             {
                 customers.map(customer => (
 
                     <div key={customer.customer_id}>
-                      
+
                         {
                             customer.deleted
                                 ?
