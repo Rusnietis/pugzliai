@@ -34,7 +34,7 @@ export default function App() {
     'sleet': 'Šlapdriba',
     'snow': 'Sniegas',
     'fog': 'Rūkas',
-    'thunder': 'Perkūnija',
+    'heavy-rain-with-thunderstorms': 'Perkūnija',
     'partly-cloudy': 'Mažai debesuota',
     'scattered-clouds': 'Debesuota su pragiedruliais',
     'hail': 'Kruša',
