@@ -1,5 +1,12 @@
 import * as c from '../Constants/counterConstants';
 
+//fukcijos skirtos kurti action objektams
+
+// export function add1() {
+//     return {
+//         type: c.ADD_1   // < --- tai yra action type, kuris nurodo kokia veiksma atlikti
+//     }
+// }
 
 export function add1() {
     return {
