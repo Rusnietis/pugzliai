@@ -16,9 +16,9 @@ export default function App() {
     const add = _ => {
         const value = parseInt(input1);
         if (isNaN(value)) {
-            dispatchCounter(a.error('Please enter a number'));
+            dispatchCounter(a.error('Please enter a number')); 
         } else {
-            dispatchCounter(a.add(value));
+            dispatchCounter(a.add(value)); // dispatchCounter <--- tai yra funkcija, kuri siunčia action objektą į reduserį
         }
         setInput1('');
     }
