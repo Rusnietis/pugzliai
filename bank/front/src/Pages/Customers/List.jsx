@@ -8,7 +8,7 @@ export default function List() {
 
     const { customers, setDeleteCustomer, setEditCustomer, setUpdateCustomer } = useContext(Customers);
 
-    //console.log(customers)
+    console.log(customers)
 
     const handleAmountChange = (e, customerId) => {
         setAmounts(prev => ({ ...prev, [customerId]: e.target.value }));

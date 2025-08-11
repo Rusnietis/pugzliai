@@ -19,7 +19,7 @@ export default function Layout() {
     return (
         <div >
             <Nav />
-            <div className="container ">
+           <div className="container ">
                 <div className="row">
                     <div className="col-4 mt-4" >
                         <Create />
@@ -28,7 +28,7 @@ export default function Layout() {
                         <List />
                     </div>
                 </div>
-            </div>
+</div>
             <Delete />
             {editCustomer && <Edit />}
         </div>

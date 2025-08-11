@@ -10,3 +10,6 @@ export const DELETE_CUSTOMER_UNDO = 'DELETE_CUSTOMER_UNDO';
 export const UPDATE_CUSTOMER = 'UPDATE_CUSTOMER';
 export const UPDATE_CUSTOMER_REAL = 'UPDATE_CUSTOMER_REAL';
 export const UPDATE_CUSTOMER_UNDO = 'UPDATE_CUSTOMER_UNDO';
+// Pinigu pridėjimas ir atėmimas
+export const ADD_MONEY = 'ADD_MONEY';
+export const REMOVE_MONEY = 'REMOVE_MONEY';

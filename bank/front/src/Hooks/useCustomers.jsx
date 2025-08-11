@@ -115,7 +115,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer) {
                 });
 
         }
-    }, [updateCustomer, dispatchCustomers])
+    }, [updateCustomer, dispatchCustomers, editCussotemer])
 
     useEffect(() => {
         if (null !== destroyCustomer) {
