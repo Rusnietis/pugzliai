@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Banko kliento pridėjimas</title>
+<style>
+:root {
+  --bg: #0b1020;
+  --muted: #8da2c0;
+  --text: #e6ecf8;
+  --accent: #7c9cff;
+  --ring: 0 0 0 8px rgba(124, 156, 255, .15);
+  --radius: 20px;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(80vw 80vh at 20% 10%, rgba(124,156,255,.08), transparent 60%),
+    radial-gradient(60vw 60vh at 80% 90%, rgba(116,227,199,.08), transparent 60%),
+    var(--bg);
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+}
+.card {
+  width: min(500px, 92vw);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)) padding-box,
+              linear-gradient(135deg, rgba(124,156,255,.5), rgba(116,227,199,.5)) border-box;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(2,8,20,.5);
+}
+.card__media {
+  position: relative;
+  height: 180px;
+  background-image: url('https://images.unsplash.com/photo-1605902711622-cfb43c44367f?q=80&w=1600&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+}
+.chip {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.card__content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: linear-gradient(180deg, rgba(12,18,38,.9), rgba(12,18,38,.75));
+}
+.card__content h1 {
+  font-size: 20px;
+  margin: 0 0 8px 0;
+}
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form__group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.form__group input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 14px;
+}
+.form__group input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124,156,255,0.3);
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.btn {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  background: #1b2447;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+  cursor: pointer;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(124,156,255,.25);
+}
+.btn--primary {
+  background: linear-gradient(180deg, var(--accent), #5575ff);
+  color: #0b1020;
+}
+</style>
+</head>
+<body>
+<form class="card" role="form" aria-label="Pridėti banko klientą">
+  <div class="card__media">
+    <span class="chip">Naujas klientas</span>
+  </div>
+  <div class="card__content">
+    <h1>Pridėti banko klientą</h1>
+    <div class="form__group">
+      <label>Vardas</label>
+      <input type="text" name="firstName" placeholder="Įveskite vardą" required />
+    </div>
+    <div class="form__group">
+      <label>Pavardė</label>
+      <input type="text" name="lastName" placeholder="Įveskite pavardę" required />
+    </div>
+    <div class="form__group">
+      <label>Banko sąskaitos nr.</label>
+      <input type="text" name="accountNumber" placeholder="LTxx xxxx xxxx xxxx xxxx" required />
+    </div>
+    <div class="form__group">
+      <label>Suma (€)</label>
+      <input type="number" name="amount" step="0.01" placeholder="0.00" required />
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn--primary">Pridėti klientą</button>
+      <button type="reset" class="btn">Išvalyti</button>
+    </div>
+  </div>
+</form>
+</body>
+</html>

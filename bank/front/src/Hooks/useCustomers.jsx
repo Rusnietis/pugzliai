@@ -24,7 +24,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer) {
         axios.get(`${SERVER_URL}/customers`)
             .then(res => {
                 //console.log(res.data)
-                dispatchCustomers(c.getCustomers(res.data));
+                dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
             })
             .catch(err => {
                 console.log(err)
