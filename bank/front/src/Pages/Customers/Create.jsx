@@ -93,40 +93,67 @@ export default function Create() {
     //console.log(setStoreCustomer)
 
     return (
-        <div className="card mt-2 ">
-            <div className="card-header">
-                <h3>Sukurti klienta</h3>
-            </div>
-            <div className="card-body">
+        <div className="card mt-2">
+      <div className="card-header">
+        <h3>Sukurti klientą</h3>
+      </div>
 
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Vardas</label>
-                    <input type="text" className="form-control" value={inputs.name} id="name" onChange={handlerChange} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="surname" className="form-label">Pavardė</label>
-                    <input type="text" className="form-control" value={inputs.surname} id="surname" onChange={handlerChange} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="image" className="form-label">Nuotrauka</label>
-                    <input ref={imageInput} type="file" className="form-control" id="image" onChange={readImage} />
-                </div>
-                {
-                    image &&
-                    <div className="mb-3">
-                        <img src={image} alt={inputs.name} className="img-fluids" />
-                    </div>
-                }
-                <div className="mb-3">
-                    <p className="atention"><b>Pastaba. Kliento sąskaitos numeris ir pradinė suma sugeneruojama automatiškai!</b></p>
-                </div>
-            </div>
-            <div className="card-footer">
-                <button className="button-18" onClick={create}>Pridėti klienta</button>
-            </div >
+      <div className="card-body">
+        <div className="form-group">
+          <label htmlFor="name">Vardas</label>
+          <input
+            type="text"
+            id="name"
+            value={inputs.name}
+            onChange={handlerChange}
+          />
         </div>
 
+        <div className="form-group">
+          <label htmlFor="surname">Pavardė</label>
+          <input
+            type="text"
+            id="surname"
+            value={inputs.surname}
+            onChange={handlerChange}
+          />
+        </div>
 
+        <div className="form-group">
+          <label htmlFor="image">Nuotrauka</label>
+          <input
+            ref={imageInput}
+            type="file"
+            id="image"
+            onChange={readImage}
+          />
+        </div>
 
-    )
+        {image && (
+          <div className="form-group">
+            <img src={image} alt={inputs.name} className="preview" />
+          </div>
+        )}
+
+        <div className="form-group">
+          <p className="attention">
+            <b>
+              Pastaba. Kliento sąskaitos numeris ir pradinė suma sugeneruojama
+              automatiškai!
+            </b>
+          </p>
+        </div>
+      </div>
+
+      <div className="card-footer">
+        <button className="button-18 blue" onClick={create}>
+          Pridėti klientą
+        </button>
+      </div>
+    </div>
+  );
 }
+
+
+
+    

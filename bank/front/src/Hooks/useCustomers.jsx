@@ -10,7 +10,7 @@ import * as c from '../Actions/customers';
 
 
 //patikrinta
-export default function useCustomers(dispatchCustomers, editCussotemer) {
+export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount) {
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
@@ -98,24 +98,43 @@ export default function useCustomers(dispatchCustomers, editCussotemer) {
         if (null !== updateCustomer) {
             dispatchCustomers(c.updateCustomerAsTemp(updateCustomer, editCussotemer));
             console.log('Koks ID eina:', updateCustomer?.customer_id);
-            const toServer = {...updateCustomer}
+            const toServer = { ...updateCustomer }
             if (updateCustomer.image === updateCustomer.old.image) {
-              toServer.image = null;
+                toServer.image = null;
             }
             axios.put(`${SERVER_URL}/customers/${updateCustomer.customer_id}`, updateCustomer)
                 .then(res => {
                     setUpdateCustomer(null);
                     dispatchCustomers(c.updateCustomerAsReal(res.data));
-                   ;
+
                 })
                 .catch(err => {
                     setUpdateCustomer(null);
                     dispatchCustomers(c.updateCustomerAsUndo(updateCustomer));
-                   
+
                 });
 
         }
     }, [updateCustomer, dispatchCustomers, editCussotemer])
+
+ useEffect(_ => {
+    if (null !== updateAmount) {
+        console.log('🧾 updateAmount:', updateAmount); 
+        dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
+        axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
+            .then(res => {
+                setUpdateAmount(null);   // 👈 čia
+                dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
+               
+            })
+            .catch(err => {
+                setUpdateAmount(null);   // 👈 čia
+                dispatchCustomers(c.updateCustomerAmountAsUndo(updateAmount, updateAmount.customer_id));
+            });
+
+    }
+}, [updateAmount])
+
 
     useEffect(() => {
         if (null !== destroyCustomer) {

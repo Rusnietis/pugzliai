@@ -218,6 +218,35 @@ app.put('/customers/:id', (req, res) => {
 
 })
 
+app.patch('/customers/:id/amount', (req, res) => {
+  const { change } = req.body;
+  console.log('atėjo į patch /customers/:id/amount', req.params.id, change);
+
+  const sql = 'UPDATE accounts SET amount = amount + ? WHERE customer_id = ?';
+  connection.query(sql, [change, req.params.id], (err) => {
+    if (err) {
+      console.error('Klaida atnaujinant sąskaitos sumą:', err);
+      return res.status(500).json({ error: 'Nepavyko atnaujinti sąskaitos sumos.' });
+    }
+
+    // Paimam atnaujintą klientą iš DB
+    const getSql = `
+      SELECT c.*, a.amount, a.account
+      FROM customers c
+      JOIN accounts a ON c.customer_id = a.customer_id
+      WHERE c.customer_id = ?
+    `;
+    connection.query(getSql, [req.params.id], (err, results) => {
+      if (err) {
+        console.error('Klaida gaunant klientą:', err);
+        return res.status(500).json({ error: 'Nepavyko gauti atnaujinto kliento.' });
+      }
+
+      res.json(results[0]); // 👈 grąžinam visą klientą su nauja amount reikšme
+    });
+  });
+});
+
 app.put('/accounts/:id', (req, res) => {
   console.log('atėjo į /accounts/:id');
   console.log('id', req.body)

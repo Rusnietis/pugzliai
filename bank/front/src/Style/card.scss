@@ -1,0 +1,153 @@
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-top: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+ 
+
+
+  .card-header {
+    padding: 1rem 1.5rem;
+    background: #1ba1a1;
+    border-bottom: 1px solid #e5e7eb;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+
+      label {
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 0.6rem;
+        font-size: 1rem;
+        outline: none;
+        transition: border 0.2s ease;
+
+        &:focus {
+          border-color: #4f46e5;
+          box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+      }
+
+      .preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+      }
+    }
+
+    .attention {
+      font-size: 0.9rem;
+      color: #b91c1c;
+    }
+  }
+
+  .card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #4338ca;
+      }
+    }
+  }
+
+  .alert {
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-weight: 500;
+
+    &.alert-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+  }
+}
+
+.customer-card {
+  .blocked-msg {
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .customer-info {
+    display: flex;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+
+    .info-left {
+      flex: 1;
+
+      h4 {
+        margin: 0 0 0.5rem 0;
+      }
+
+      .money {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+
+        input {
+          width: 120px;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          padding: 0.5rem;
+        }
+      }
+    }
+
+    .info-right {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+
+      .preview {
+        max-width: 200px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+    }
+  }
+}

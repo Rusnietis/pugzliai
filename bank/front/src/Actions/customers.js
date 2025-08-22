@@ -74,3 +74,23 @@ export function updateCustomerAsUndo(customer) {
         payload: customer
     }
 }
+
+export function updateCustomerAmountAsTemp(customer, oldcustomer) {
+    return {
+        type: constants.UPDATE_CUSTOMER_AMOUNT,
+        payload: {customer, oldcustomer}
+    }
+}
+
+export function updateCustomerAmountAsReal(response) {
+    return {
+        type: constants.UPDATE_CUSTOMER_AMOUNT_REAL,
+        payload: response
+    }
+}
+export function updateCustomerAmountAsUndo(customer) {
+    return {
+        type: constants.UPDATE_CUSTOMER_AMOUNT_UNDO,
+        payload: customer
+    }
+}

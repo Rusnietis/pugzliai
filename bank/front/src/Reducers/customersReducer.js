@@ -78,6 +78,29 @@ export default function customersReducer(state, action) {
                 delete customer.old;
             }
             break;
+        case constants.UPDATE_CUSTOMER_AMOUNT:
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
+            if (customer) {
+                customer.amount = action.payload.amount;
+                customer.temp = true;
+                customer.old = action.payload.oldcustomer;
+            }
+            break;
+        case constants.UPDATE_CUSTOMER_AMOUNT_REAL:
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
+            if (customer) {
+                delete customer.temp;
+                delete customer.old;
+            }
+            break;
+        case constants.UPDATE_CUSTOMER_AMOUNT_UNDO:
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
+            if (customer) {
+                customer.amount = action.payload.oldcustomer.amount;
+                delete customer.temp;
+                delete customer.old;
+            }
+            break;
         default:
     }
 

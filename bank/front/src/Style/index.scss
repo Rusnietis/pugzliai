@@ -128,18 +128,18 @@ a.navbar-brand {
   }
 }
 
-.card {
-  width: 100%;
-  margin: 20px;
-  border-color: coral;
-  border-radius: 10px;
-}
+// .card {
+//   width: 100%;
+//   margin: 20px;
+//   border-color: coral;
+//   border-radius: 10px;
+// }
 
-.card-header {
+// .card-header {
 
-  background-color: coral;
-  color: #fff;
-}
+//   background-color: coral;
+//   color: #fff;
+// }
 
 
 .img-fliud {
@@ -324,30 +324,30 @@ span.sep {
   font-size: 1.5vw;
 }
 
-.container {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  margin: 20px;
-  max-width: 1400px;
+// .container {
+//   display: flex;
+//   gap: 20px;
+//   justify-content: space-between;
+//   margin: 20px;
+//   max-width: 1400px;
 
 
-  .card {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: space-between;
+//   .card {
+//     display: flex;
+//     flex-wrap: wrap;
+//     flex-direction: column;
+//     justify-content: space-between;
 
 
-    .col-5 {
-      display: flex;
-      flex-direction: column;
-    }
+//     .col-5 {
+//       display: flex;
+//       flex-direction: column;
+//     }
 
-    .col-7 {
-      display: flex;
-      justify-content: end;
-    }
+//     .col-7 {
+//       display: flex;
+//       justify-content: end;
+//     }
 
-  }
-}
+//   }
+// }

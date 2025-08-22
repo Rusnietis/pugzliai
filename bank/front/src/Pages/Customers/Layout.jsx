@@ -9,28 +9,29 @@ import Edit from './Edit';
 
 
 export default function Layout() {
+  const { editCustomer, customers } = useContext(Customers);
 
-    const { editCustomer, customers } = useContext(Customers)
-
-    if (null === customers) {
-        return < div className="loader"><div></div></div>
-    }
-
+  if (customers === null) {
     return (
-        <div >
-            <Nav />
-           <div className="container ">
-                <div className="row">
-                    <div className="col-4 mt-4" >
-                        <Create />
-                    </div>
-                    <div className="col-8 mt-4">
-                        <List />
-                    </div>
-                </div>
-</div>
-            <Delete />
-            {editCustomer && <Edit />}
-        </div>
-    )
+      <div className="loader">
+        <div></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="layout">
+      <Nav />
+      <main className="content">
+        <section className="create-panel">
+          <Create />
+        </section>
+        <section className="list-panel">
+          <List />
+        </section>
+      </main>
+      <Delete />
+      {editCustomer && <Edit />}
+    </div>
+  );
 }
