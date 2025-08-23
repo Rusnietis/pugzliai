@@ -117,30 +117,29 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         }
     }, [updateCustomer, dispatchCustomers, editCussotemer])
 
- useEffect(_ => {
-    if (null !== updateAmount) {
-        console.log('🧾 updateAmount:', updateAmount); 
-        dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
-        axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
-            .then(res => {
-                setUpdateAmount(null);   // 👈 čia
-                dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
-               
-            })
-            .catch(err => {
-                setUpdateAmount(null);   // 👈 čia
-                dispatchCustomers(c.updateCustomerAmountAsUndo(updateAmount, updateAmount.customer_id));
-            });
+    useEffect(_ => {
+        if (null !== updateAmount) {
+            // console.log('🧾 updateAmount:', updateAmount); 
+            dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
+            axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
+                .then(res => {
+                    //console.log('✅ PATCH response:', res.data);
+                    setUpdateAmount(null);   // 👈 čia
+                    dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
+                })
+                .catch(err => {
+                    setUpdateAmount(null);   // 👈 čia
+                    dispatchCustomers(c.updateCustomerAmountAsUndo(updateAmount, updateAmount.customer_id));
+                });
 
-    }
-}, [updateAmount])
-
+        }
+    }, [updateAmount, dispatchCustomers, setUpdateAmount])
 
     useEffect(() => {
         if (null !== destroyCustomer) {
-            console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
+            //console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
             dispatchCustomers(c.deleteCustomerAsTemp(destroyCustomer));
-            console.log('Deleting customer with ID:', destroyCustomer.customer_id);
+            //console.log('Deleting customer with ID:', destroyCustomer.customer_id);
             axios.delete(`${SERVER_URL}/customers/${destroyCustomer.customer_id}`)
                 .then(res => {
                     setDestroyCustomer(null);
@@ -169,25 +168,6 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     //             })
     //     }
     // }, [destroyCustomer, dispatchCustomers, addMessage]);
-
-    // useEffect(_ => {
-    //     if (null !== updateCustomer) {
-    //         axios.put(`${SERVER_URL}/fruits/${updateCustomer.id}`, updateCustomer)
-    //             .then(res => {
-    //                 setUpdateCustomer(null);
-    //                 console.log(res.data)
-    //                 setCustomers(f => f.map(fruit => fruit.id === res.data.id ? {...fruit, temp: false} : fruit));
-    //             })
-    //             .catch(err => {
-    //                console.log(err);
-    //             });
-    //     }
-    // }, [updateCustomer]);
-
-
-
-
-
 
     return {
 

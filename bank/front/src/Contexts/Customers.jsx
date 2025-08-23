@@ -5,9 +5,7 @@ import customersReducer from '../Reducers/customersReducer';
 export const Customers = createContext();
 
 export const CustomersProvider = ({ children }) => {
-
     //console.log(children)
-
     // pagrindinis kur laikome visus klientus yra reduceris
     const [customers, dispatchCustomers] = useReducer(customersReducer, []);
     const [deleteCustomer, setDeleteCustomer] = useState(null);
@@ -36,7 +34,7 @@ export const CustomersProvider = ({ children }) => {
             setUpdateAmount
 
         }}>
-            {console.log('Context: updateAmount', updateAmount)}  
+            {/* {console.log('Context: updateAmount', updateAmount)}   */}
             {children}
         </Customers.Provider>
     );

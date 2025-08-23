@@ -14,7 +14,11 @@ const connection = mysql.createConnection({
 const app = express();
 const port = 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',     // 👈 leidžiam frontendui
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']     // 👈 leidžiam JSON ir kitus custom headerius
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -222,6 +226,7 @@ app.patch('/customers/:id/amount', (req, res) => {
   const { change } = req.body;
   console.log('atėjo į patch /customers/:id/amount', req.params.id, change);
 
+  // atnaujinam accounts lentelę
   const sql = 'UPDATE accounts SET amount = amount + ? WHERE customer_id = ?';
   connection.query(sql, [change, req.params.id], (err) => {
     if (err) {
@@ -229,12 +234,12 @@ app.patch('/customers/:id/amount', (req, res) => {
       return res.status(500).json({ error: 'Nepavyko atnaujinti sąskaitos sumos.' });
     }
 
-    // Paimam atnaujintą klientą iš DB
+    // paimam atnaujintą klientą + account info
     const getSql = `
-      SELECT c.*, a.amount, a.account
+      SELECT c.id AS customer_id, c.name, a.amount, a.account
       FROM customers c
-      JOIN accounts a ON c.customer_id = a.customer_id
-      WHERE c.customer_id = ?
+      JOIN accounts a ON c.id = a.customer_id
+      WHERE c.id = ?                          
     `;
     connection.query(getSql, [req.params.id], (err, results) => {
       if (err) {
@@ -242,10 +247,11 @@ app.patch('/customers/:id/amount', (req, res) => {
         return res.status(500).json({ error: 'Nepavyko gauti atnaujinto kliento.' });
       }
 
-      res.json(results[0]); // 👈 grąžinam visą klientą su nauja amount reikšme
+      res.json(results[0]); // grąžinam klientą su nauja amount reikšme
     });
   });
 });
+
 
 app.put('/accounts/:id', (req, res) => {
   console.log('atėjo į /accounts/:id');

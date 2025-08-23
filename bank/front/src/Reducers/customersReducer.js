@@ -87,12 +87,12 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.UPDATE_CUSTOMER_AMOUNT_REAL:
-            customer = newState.find(customer => customer.customer_id === action.payload.id);
-            if (customer) {
-                delete customer.temp;
-                delete customer.old;
-            }
-            break;
+            return newState.map(customer =>
+                customer.customer_id === action.payload.customer_id
+                    ? { ...customer, ...action.payload, temp: undefined, old: undefined }
+                    : customer
+            );
+
         case constants.UPDATE_CUSTOMER_AMOUNT_UNDO:
             customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {

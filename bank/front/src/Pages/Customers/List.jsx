@@ -6,7 +6,7 @@ export default function List() {
 
   const [amounts, setAmounts] = useState({});
 
-  const { customers, setDeleteCustomer, setEditCustomer, setUpdateCustomer, setUpdateAmount, updateAmount } = useContext(Customers);
+  const { customers, setDeleteCustomer, setEditCustomer, setUpdateCustomer, setUpdateAmount } = useContext(Customers);
 
   //console.log(customers)
 
@@ -22,7 +22,6 @@ export default function List() {
 
   const handleChange = e => {
     const { id, value } = e.target;
-
     setAmounts(prev => ({
       ...prev,
       [id]: value === '' ? '' : Number(value)
@@ -31,13 +30,28 @@ export default function List() {
 
   const addMoney = (customer) => {
     const amount = amounts[customer.customer_id] || 0;
-    console.log('List: siunčiam į context', customer.customer_id, amount); // 👈 čia
+    //console.log('List: siunčiam į context', customer.customer_id, amount); // 👈 čia
     setUpdateAmount({
       customer_id: customer.customer_id,
       change: amount,
       old: { ...customer }
     });
+    //istrinam input
+    setAmounts('')
   };
+
+  // atimti pinigus
+  const subtractMoney = (customer) => {
+    const amount = amounts[customer.customer_id] || 0;
+    console.log('List: siunčiam į context', customer.customer_id, -amount); // 👈 čia
+    setUpdateAmount({
+      customer_id: customer.customer_id,
+      change: -amount,
+      old: { ...customer }
+    });
+    //istrinam input
+    setAmounts('')
+  }
 
   return (
     <>
@@ -85,8 +99,6 @@ export default function List() {
                         placeholder="Suma €"
                         value={amounts[customer.customer_id] || ''}
                         onChange={handleChange}
-
-
                       />
                       <button
                         type="button"
@@ -100,6 +112,7 @@ export default function List() {
                         type="button"
                         disabled={customer.temp || customer.is_blocked}
                         className="button-18 orange"
+                        onClick={() => subtractMoney(customer)}
                       >
                         Atimti
                       </button>
