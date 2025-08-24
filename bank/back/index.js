@@ -122,36 +122,55 @@ app.get('/', (req, res) => {
 
 // app.use(doAuth);
 // //paemimas is serverio
+// app.get('/customers', (req, res) => {
+//   const sql = `
+//     SELECT c.id AS customer_id, c.name, c.surname, c.image, c.is_blocked, a.amount, a.account
+//     FROM customers c
+//     JOIN accounts a ON c.id = a.customer_id
+//   `;
+//   connection.query(sql, (err, results) => {
+//     if (err) {
+//       console.error('Klaida gaunant klientus:', err);
+//       return res.status(500).json({ error: 'Nepavyko gauti klientų.' });
+//     }
+
+//     const fixedResults = results.map(c => {
+//       if (results[0]?.image && results[0].image.startsWith('http')) {
+//         results[0].image = results[0].image.replace(/^https?:\/\/[^/]+\//, '');
+//       }
+//       return c;
+//     });
+
+//     res.json(fixedResults);
+//   });
+// });
+
 app.get('/customers', (req, res) => {
-
-  //console.log('Jo ateinam', req.user.name)
-
-  // if (!checkUserIsLogged(req.user, res)) {
-  //   return;
-  // }
-
   const sql = `
-  SELECT 
-      customers.id AS customer_id,
-      customers.name,
-      customers.surname,
-      customers.image,
-      customers.is_blocked,
-      accounts.id AS account_id,
-      accounts.account,
-      accounts.amount
-    FROM customers
-    JOIN accounts ON customers.id = accounts.customer_id;
+SELECT 
+    c.id AS customer_id,
+    c.name,
+    c.surname,
+    IFNULL(c.image,'') AS image,
+    c.is_blocked,
+    IFNULL(a.account,'') AS account,
+    IFNULL(a.amount,0) AS amount
+  FROM customers c
+  LEFT JOIN accounts a ON c.id = a.customer_id
   `;
+
   connection.query(sql, (err, results) => {
     if (err) {
-      res.status(500);
-    } else {
-      res.json(results);
-      console.log(results)
+      console.error('Klaida gaunant klientus:', err);
+      return res.status(500).json({ error: 'Nepavyko gauti klientų.' });
     }
+
+    res.json(results);
   });
 });
+
+
+
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
@@ -222,6 +241,7 @@ app.put('/customers/:id', (req, res) => {
 
 })
 
+// pinigu pridejimas ir atemimas
 app.patch('/customers/:id/amount', (req, res) => {
   const { change } = req.body;
   console.log('atėjo į patch /customers/:id/amount', req.params.id, change);
@@ -252,25 +272,36 @@ app.patch('/customers/:id/amount', (req, res) => {
   });
 });
 
-
-app.put('/accounts/:id', (req, res) => {
-  console.log('atėjo į /accounts/:id');
-  console.log('id', req.body)
-  const { account, amount, customer_id } = req.body;
-
-  const sql = 'UPDATE accounts SET account = ?, amount = ?, customer_id = ? WHERE id = ?';
-  connection.query(sql, [account, amount, customer_id, req.params.id], (err) => {
+app.patch('/customers/:id/is_blocked', (req, res) => {
+  const { is_blocked } = req.body;
+  const sql = 'UPDATE customers SET is_blocked = ? WHERE id = ?';
+  connection.query(sql, [is_blocked, req.params.id], (err) => {
     if (err) {
-      res.status(500).send(err);
-    } else {
-      res.json({
-        success: true,
-        id: +req.params.id,
-        // message: { type: 'success', text: 'Nice! Book updated' }
-      });
+      console.error('Klaida atnaujinant kliento blokavimo būseną:', err);
+      return res.status(500).json({ error: 'Nepavyko atnaujinti kliento blokavimo būsenos.' });
     }
+
+    const getSql = `
+      SELECT c.id AS customer_id, c.name, c.surname, c.image, c.is_blocked, a.amount, a.account
+      FROM customers c
+      JOIN accounts a ON c.id = a.customer_id
+      WHERE c.id = ?                          
+    `;
+    connection.query(getSql, [req.params.id], (err, results) => {
+      if (err) {
+        console.error('Klaida gaunant klientą:', err);
+        return res.status(500).json({ error: 'Nepavyko gauti atnaujinto kliento.' });
+      }
+
+      // 👇 čia užtikrinam, kad `image` visada būtų tik relative path
+      if (results[0]?.image && results[0].image.startsWith('http')) {
+        results[0].image = results[0].image.replace(/^https?:\/\/[^/]+\//, '');
+      }
+
+      res.json(results[0]);
+    });
   });
-})
+});
 
 
 app.delete('/customers/:id', async (req, res) => {

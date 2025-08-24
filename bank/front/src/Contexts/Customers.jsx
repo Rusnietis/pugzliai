@@ -11,11 +11,12 @@ export const CustomersProvider = ({ children }) => {
     const [deleteCustomer, setDeleteCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
     const [updateAmount, setUpdateAmount] = useState(null);
+    const [isBlocked, setIsBlocked] = useState(null)
 
     //console.log(deleteCustomer)
 
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers, editCustomer, updateAmount, setUpdateAmount); // <-- useCustomers yra hookas, kuris valdo klientu duomenis ir kreipiasi i serveri
+    const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers, editCustomer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked); // <-- useCustomers yra hookas, kuris valdo klientu duomenis ir kreipiasi i serveri
     return (
         <Customers.Provider value={{
             customers,
@@ -31,7 +32,9 @@ export const CustomersProvider = ({ children }) => {
             editCustomer,
             setEditCustomer,
             updateAmount,
-            setUpdateAmount
+            setUpdateAmount,
+            isBlocked, 
+            setIsBlocked
 
         }}>
             {/* {console.log('Context: updateAmount', updateAmount)}   */}

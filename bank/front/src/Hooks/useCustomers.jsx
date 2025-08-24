@@ -10,7 +10,7 @@ import * as c from '../Actions/customers';
 
 
 //patikrinta
-export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount) {
+export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked) {
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
@@ -23,8 +23,10 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
         axios.get(`${SERVER_URL}/customers`)
             .then(res => {
-                //console.log(res.data)
+                //console.log('Initial customers:', res.data);
+
                 dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
+                console.log('After reducer:', res.data.image);
             })
             .catch(err => {
                 console.log(err)
@@ -123,9 +125,11 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
             dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
             axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
                 .then(res => {
+                    
                     //console.log('✅ PATCH response:', res.data);
                     setUpdateAmount(null);   // 👈 čia
                     dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
+                    console.log('After reducer:', res.data.image);
                 })
                 .catch(err => {
                     setUpdateAmount(null);   // 👈 čia
@@ -134,6 +138,24 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
         }
     }, [updateAmount, dispatchCustomers, setUpdateAmount])
+
+    useEffect(_ => {
+        if (null !== isBlocked) {
+            // console.log('🧾 isBlocked:', isBlocked); 
+            dispatchCustomers(c.updateCustomerBlockAsTemp(isBlocked, isBlocked.customer_id));
+            axios.patch(`${SERVER_URL}/customers/${isBlocked.customer_id}/is_blocked`, { is_blocked: isBlocked.is_blocked })
+                .then(res => {
+                    console.log('BLOCK RESPONSE:', res.data)
+                    setIsBlocked(null);   // 👈 čia
+                    dispatchCustomers(c.updateCustomerBlockAsReal(res.data));
+                })
+                .catch(err => {
+                    setIsBlocked(null);   // 👈 čia
+                    dispatchCustomers(c.updateCustomerBlockAsUndo(isBlocked, isBlocked.customer_id));
+                });
+
+        }
+    })
 
     useEffect(() => {
         if (null !== destroyCustomer) {

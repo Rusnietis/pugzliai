@@ -101,6 +101,36 @@ export default function customersReducer(state, action) {
                 delete customer.old;
             }
             break;
+        case constants.UPDATE_CUSTOMER_BLOCK:
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
+            if (customer) {
+                customer.is_blocked = action.payload.is_blocked;
+                customer.temp = true;
+                customer.old = action.payload.oldcustomer;
+            }
+            break;
+        case constants.UPDATE_CUSTOMER_BLOCK_REAL:
+            return newState.map(customer =>
+                customer.customer_id === action.payload.customer_id
+                    ? {
+                        ...customer,
+                        ...action.payload,
+                        image: action.payload.image ?? customer.image, // 👈 jeigu nėra, paliekam seną
+                        temp: undefined,
+                        old: undefined
+                    }
+                    : customer
+
+            );
+
+        case constants.UPDATE_CUSTOMER_BLOCK_UNDO:
+            customer = newState.find(customer => customer.customer_id === action.payload.id);
+            if (customer) {
+                customer.is_blocked = action.payload.oldcustomer.is_blocked;
+                delete customer.temp;
+                delete customer.old;
+            }
+            break;
         default:
     }
 
