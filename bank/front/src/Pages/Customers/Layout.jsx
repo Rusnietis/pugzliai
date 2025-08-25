@@ -6,6 +6,7 @@ import { Customers } from '../../Contexts/Customers';
 import Create from './Create';
 import List from './List';
 import Edit from './Edit';
+import Header from './Header';
 
 
 export default function Layout() {
@@ -23,6 +24,11 @@ export default function Layout() {
     <div className="layout">
       <Nav />
       <main className="content">
+
+        <section className="header-panel">
+          <Header />
+        </section>
+
         <section className="create-panel">
           <Create />
         </section>

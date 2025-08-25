@@ -10,7 +10,7 @@ import * as c from '../Actions/customers';
 
 
 //patikrinta
-export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked) {
+export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked, taxes, setTaxes) {
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
@@ -156,6 +156,25 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
         }
     })
+
+    // mokeciai
+    useEffect(_ => {
+        if (taxes === null) return; // jei nieko nėra, nekeliam veiksmo
+        console.log('Atejo mokesciai:', taxes)
+        
+        axios.patch(`${SERVER_URL}/customers/taxes`, taxes)
+      .then(res => {
+        // dispatchiname action į reducerį, kad frontendas atsinaujintų
+        dispatchCustomers(c.applyTaxesAction(res.data.change));
+        // reset signal
+        setTaxes(null);
+      })
+      .catch(err => {
+        console.error('Nepavyko pritaikyti mokesčių:', err);
+        setTaxes(null); // vis tiek resetinam, kad nebūtų begalinio ciklo
+      });
+
+    },[dispatchCustomers, taxes, setTaxes])
 
     useEffect(() => {
         if (null !== destroyCustomer) {
