@@ -116,8 +116,8 @@ export function updateCustomerBlockAsUndo(customer) {
 }
 
 export function applyTaxesAction(customers) {
-    return ({
+    return {
         type: constants.APPLY_TAXES,
         payload: customers
-    })
+    };
 }

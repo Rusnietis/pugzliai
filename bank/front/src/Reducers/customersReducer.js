@@ -132,10 +132,10 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.APPLY_TAXES:
-            newState = action.payload.map(customer => {
-                customer.image = customer.image ? SERVER_URL + '/' + customer.image : null;
-                return customer;
-            })
+            newState = action.payload.map(customer => ({
+                ...customer,
+                image: customer.image ? SERVER_URL + '/' + customer.image : null
+            }));
             break;
         default:
     }

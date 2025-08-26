@@ -162,7 +162,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         if (taxes === null) return; // jei nieko nėra, nekeliam veiksmo
         console.log('Atejo mokesciai:', taxes)
         
-        axios.patch(`${SERVER_URL}/customers/taxes`, taxes)
+        axios.patch(`${SERVER_URL}/customers/taxes`, taxes) // <-- siunciam mokescius i serveri
       .then(res => {
         // dispatchiname action į reducerį, kad frontendas atsinaujintų
         dispatchCustomers(c.applyTaxesAction(res.data));
