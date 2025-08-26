@@ -132,18 +132,11 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.APPLY_TAXES:
-            const tax = action.payload;
-            newState = newState.map(customer => {
-                if (!customer.is_blocked && !customer.deleted && customer.amount > tax) {
-                    return {
-                        ...customer,
-                        amount: customer.amount + action.payload
-                    }
-                }
+            newState = action.payload.map(customer => {
+                customer.image = customer.image ? SERVER_URL + '/' + customer.image : null;
                 return customer;
-            });
+            })
             break;
-
         default:
     }
 

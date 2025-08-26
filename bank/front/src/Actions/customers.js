@@ -115,9 +115,9 @@ export function updateCustomerBlockAsUndo(customer) {
     }
 }
 
-export function applyTaxesAction(change) {
+export function applyTaxesAction(customers) {
     return ({
         type: constants.APPLY_TAXES,
-        payload: change
+        payload: customers
     })
 }

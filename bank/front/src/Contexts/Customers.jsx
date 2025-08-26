@@ -8,19 +8,32 @@ export const CustomersProvider = ({ children }) => {
     //console.log(children)
     // pagrindinis kur laikome visus klientus yra reduceris
     const [customers, dispatchCustomers] = useReducer(customersReducer, []);
-    console.log('dispatchCustomers:', dispatchCustomers);
 
     const [deleteCustomer, setDeleteCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
     const [updateAmount, setUpdateAmount] = useState(null);
     const [isBlocked, setIsBlocked] = useState(null);
     const [taxes, setTaxes] = useState(null);
-
-
     //console.log(deleteCustomer)
-
+    
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeCustomer, setStoreCustomer, updateCustomer, setUpdateCustomer, destroyCustomer, setDestroyCustomer } = useCustomers(dispatchCustomers, editCustomer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked, taxes, setTaxes); // <-- useCustomers yra hookas, kuris valdo klientu duomenis ir kreipiasi i serveri
+    const {
+         storeCustomer, setStoreCustomer,
+          updateCustomer, setUpdateCustomer, 
+          destroyCustomer, setDestroyCustomer 
+        } 
+        = useCustomers(
+            dispatchCustomers, 
+            editCustomer, 
+            updateAmount, 
+            setUpdateAmount, 
+            isBlocked, 
+            setIsBlocked, 
+            taxes, setTaxes
+        ); // <-- useCustomers yra hookas, kuris valdo klientu duomenis ir kreipiasi i serveri
+   
+   
+   
     return (
         <Customers.Provider value={{
             customers,

@@ -26,7 +26,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 //console.log('Initial customers:', res.data);
 
                 dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
-                console.log('After reducer:', res.data.image);
+                //console.log('After reducer:', res.data.image);
             })
             .catch(err => {
                 console.log(err)
@@ -165,7 +165,8 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         axios.patch(`${SERVER_URL}/customers/taxes`, taxes)
       .then(res => {
         // dispatchiname action į reducerį, kad frontendas atsinaujintų
-        dispatchCustomers(c.applyTaxesAction(res.data.change));
+        dispatchCustomers(c.applyTaxesAction(res.data));
+        console.log('mokesciai nuskaityti:', res.data)
         // reset signal
         setTaxes(null);
       })
