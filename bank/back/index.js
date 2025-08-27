@@ -145,6 +145,53 @@ app.get('/', (req, res) => {
 //   });
 // });
 
+//statistika
+app.get('/home-stats', (req, res) => {
+  const sql = `
+  SELECT 'customers' AS name, COUNT(*) AS count, SUM(image IS NULL) AS image, SUM(is_blocked = 0) AS is_blocked
+  FROM customers
+  UNION ALL
+  SELECT 'accounts', SUM(amount), SUM(taxes), AVG(amount)
+  FROM accounts
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('Klaida gaunant statistiką:', err);
+      return res.status(500).json({ error: 'Nepavyko gauti statistikos.' });
+    }
+
+    // const stats = {};
+    // results.forEach(row => {
+    //   stats[row.type] = row.count || 0;
+    // });
+
+    res.json(results);
+  });
+})
+
+app.get('/customer-stats', (req, res) => {
+  const sql = `
+  SELECT 'customers' AS name, COUNT(*) AS count, SUM(image IS NULL) AS image, SUM(is_blocked = 0) AS is_blocked
+  FROM customers
+  UNION ALL
+  SELECT 'accounts', SUM(amount), SUM(taxes), AVG(amount)
+  FROM accounts
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('Klaida gaunant statistiką:', err);
+      return res.status(500).json({ error: 'Nepavyko gauti statistikos.' });
+    }
+
+    // const stats = {};
+    // results.forEach(row => {
+    //   stats[row.type] = row.count || 0;
+    // });
+
+    res.json(results);
+  });
+})
+
 app.get('/customers', (req, res) => {
   const sql = `
 SELECT 
