@@ -2,8 +2,10 @@ import { useContext, useState } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import { SERVER_URL } from '../../Constants/main';
 
-export default function List() {
+export default function List({data}) {
   const [amounts, setAmounts] = useState({});
+
+ 
 
   const {
     customers,
@@ -12,6 +14,8 @@ export default function List() {
     setUpdateAmount,
     setIsBlocked
   } = useContext(Customers);
+
+  console.log(customers)
 
   // Blokavimas / atblokavimas
   const handleToggleBlock = (customer) => {

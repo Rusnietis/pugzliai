@@ -121,3 +121,11 @@ export function applyTaxesAction(customers) {
         payload: customers
     };
 }
+
+export function filterCustomersAction(filterBy) {
+    return {
+        type: constants.FILTER_CUSTOMERS,
+        payload: filterBy
+    };
+}
+

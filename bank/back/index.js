@@ -145,6 +145,19 @@ app.get('/', (req, res) => {
 //   });
 // });
 
+//sort 
+
+// app.get('/list-customers', (req, res) => {
+//   const sql = 'SELECT * FROM customers';
+//   connection.query(sql, (err, results) => {
+//     if (err) {
+//       res.status(500).send('err');
+//     } else {
+//       res.json(results);
+//     }
+//   })
+// })
+
 //statistika
 app.get('/home-stats', (req, res) => {
   const sql = `
@@ -192,29 +205,64 @@ app.get('/customer-stats', (req, res) => {
   });
 })
 
+// server.js arba customers.js
 app.get('/customers', (req, res) => {
-  const sql = `
-SELECT 
-    c.id AS customer_id,
-    c.name,
-    c.surname,
-    IFNULL(c.image,'') AS image,
-    c.is_blocked,
-    IFNULL(a.account,'') AS account,
-    IFNULL(a.amount,0) AS amount
-  FROM customers c
-  LEFT JOIN accounts a ON c.id = a.customer_id
+  const { isBlocked, amountType, sort } = req.query;
+
+  let sql = `
+    SELECT 
+      c.id AS customer_id,
+      c.name,
+      c.surname,
+      IFNULL(c.image,'') AS image,
+      c.is_blocked,
+      IFNULL(a.account,'') AS account,
+      IFNULL(a.amount,0) AS amount
+    FROM customers c
+    LEFT JOIN accounts a ON c.id = a.customer_id
   `;
 
-  connection.query(sql, (err, results) => {
-    if (err) {
-      console.error('Klaida gaunant klientus:', err);
-      return res.status(500).json({ error: 'Nepavyko gauti klientų.' });
-    }
+  const params = [];
+  const conditions = [];
 
+  // --- Filtravimas pagal blokavimą ---
+  if (isBlocked !== undefined) {
+    conditions.push("c.is_blocked = ?");
+    params.push(Number(isBlocked));
+  }
+
+  // --- Filtravimas pagal sąskaitos tipą ---
+  if (amountType) {
+    if (amountType === "positive") conditions.push("a.amount > 0");
+    if (amountType === "negative") conditions.push("a.amount < 0");
+    if (amountType === "zero") conditions.push("a.amount = 0");
+  }
+
+  // --- WHERE dalis ---
+  if (conditions.length > 0) {
+    sql += " WHERE " + conditions.join(" AND ");
+  }
+
+  // --- Sortavimas ---
+  if (sort) {
+    const validFields = ["surname", "amount"];
+    if (validFields.includes(sort)) {
+      sql += ` ORDER BY ${sort === "surname" ? "c.surname" : "a.amount"} ASC`;
+      // Jei norisi DESC, galime perduoti papildomą parametą order
+    }
+  }
+
+  // --- Užklausa į DB ---
+  connection.query(sql, params, (err, results) => {
+    if (err) {
+      console.error("Klaida gaunant klientus:", err);
+      return res.status(500).json({ error: "Nepavyko gauti klientų." });
+    }
     res.json(results);
   });
 });
+
+
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {

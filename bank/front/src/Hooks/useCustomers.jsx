@@ -10,28 +10,46 @@ import * as c from '../Actions/customers';
 
 
 //patikrinta
-export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked, taxes, setTaxes) {
+export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked, taxes, setTaxes, filters, sort) {
+
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
     const [destroyCustomer, setDestroyCustomer] = useState(null);
+
     // const { setUser } = useContext(Auth);
     // const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
-    useEffect(_ => {
+    // useEffect(_ => {
 
-        axios.get(`${SERVER_URL}/customers`)
-            .then(res => {
-                //console.log('Initial customers:', res.data);
+    //     let url = `${SERVER_URL}/customers`;
+    //     if (filters.isBlocked !== null) {
+    //         url += `?isBlocked=${filters.isBlocked ? 1 : 0}`;
+    //     }
+    //     axios.get(url)
+    //         .then(res => {
+    //             console.log('Initial customers:', res.data);
 
-                dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
-                //console.log('After reducer:', res.data.image);
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }, [dispatchCustomers]);
+    //             dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
+    //             //console.log('After reducer:', res.data.image);
+    //         })
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // }, [dispatchCustomers, filters]);
+
+    useEffect(() => {
+        const params = {};
+
+        if (filters.isBlocked !== null) params.isBlocked = filters.isBlocked ? 1 : 0;
+        if (filters.amountType) params.amountType = filters.amountType;
+        if (sort && sort !== "none") params.sort = sort;
+
+        axios.get(`${SERVER_URL}/customers`, { params })
+            .then(res => dispatchCustomers(c.getCustomers(res.data)))
+            .catch(err => console.log(err));
+    }, [filters, sort]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
 
 
 
@@ -125,7 +143,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
             dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
             axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
                 .then(res => {
-                    
+
                     //console.log('✅ PATCH response:', res.data);
                     setUpdateAmount(null);   // 👈 čia
                     dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
@@ -161,21 +179,21 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     useEffect(_ => {
         if (taxes === null) return; // jei nieko nėra, nekeliam veiksmo
         console.log('Atejo mokesciai:', taxes)
-        
-        axios.patch(`${SERVER_URL}/customers/taxes`, taxes) // <-- siunciam mokescius i serveri
-      .then(res => {
-        // dispatchiname action į reducerį, kad frontendas atsinaujintų
-        dispatchCustomers(c.applyTaxesAction(res.data));
-        console.log('mokesciai nuskaityti:', res.data)
-        // reset signal
-        setTaxes(null);
-      })
-      .catch(err => {
-        console.error('Nepavyko pritaikyti mokesčių:', err);
-        setTaxes(null); // vis tiek resetinam, kad nebūtų begalinio ciklo
-      });
 
-    },[dispatchCustomers, taxes, setTaxes])
+        axios.patch(`${SERVER_URL}/customers/taxes`, taxes) // <-- siunciam mokescius i serveri
+            .then(res => {
+                // dispatchiname action į reducerį, kad frontendas atsinaujintų
+                dispatchCustomers(c.applyTaxesAction(res.data));
+                console.log('mokesciai nuskaityti:', res.data)
+                // reset signal
+                setTaxes(null);
+            })
+            .catch(err => {
+                console.error('Nepavyko pritaikyti mokesčių:', err);
+                setTaxes(null); // vis tiek resetinam, kad nebūtų begalinio ciklo
+            });
+
+    }, [dispatchCustomers, taxes, setTaxes])
 
     useEffect(() => {
         if (null !== destroyCustomer) {

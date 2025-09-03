@@ -1,0 +1,27 @@
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;           /* tarpas tarp label ir select */
+  margin-bottom: 20px; /* tarpas po filtro prieš sąrašą */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.filter label {
+  font-weight: bold;
+}
+
+.filter select {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0,123,255,0.5);
+}

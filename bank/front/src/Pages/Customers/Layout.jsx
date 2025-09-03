@@ -7,10 +7,15 @@ import Create from './Create';
 import List from './List';
 import Edit from './Edit';
 import Header from './Header';
+//import useGet from '../../Hooks/useGet';
 
 
 export default function Layout() {
   const { editCustomer, customers } = useContext(Customers);
+
+  //const { data, loading } = useGet('/list-customers')
+
+  //console.log(data)
 
   if (customers === null) {
     return (
@@ -33,7 +38,7 @@ export default function Layout() {
           <Create />
         </section>
         <section className="list-panel">
-          <List />
+          <List  />
         </section>
       </main>
       <Delete />

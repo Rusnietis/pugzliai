@@ -9,7 +9,7 @@ import CustomerIndex from '../Pages/Customers/Index.jsx';
 import HomeIndex from '../Pages/Home/Index.jsx';
 // import Login from '../Pages/Auth/Login.jsx'
 // import { MessagesProvider } from './Messages.jsx';
-// import PageUps from '../Pages/PageUps.jsx';
+import PageUps from '../Pages/PageUps.jsx';
 
 export const Router = createContext();
 
@@ -29,7 +29,7 @@ export const RouterProvider = () => {
         return hash;
     });
 
-    //const [errorPageType, setErrorPageType] = useState(null);
+    const [errorPageType, setErrorPageType] = useState(null);
 
     useEffect(_ => {
         const handleHashChange = _ => {
@@ -67,8 +67,8 @@ export const RouterProvider = () => {
     ];
 
     // const errorPages = [
-    //     { type: 503, component: <Page503 /> },
-    //     { type: 401, component: <Page401 /> },
+    //     // { type: 503, component: <Page503 /> },
+    //     // { type: 401, component: <Page401 /> },
     //     { type: 'ups', component: <PageUps /> }
     // ]
 
@@ -78,7 +78,7 @@ export const RouterProvider = () => {
     //setErrorPageType
     return (
         <Router.Provider value={{ params, route }}>
-            {routeComponent}
+            { routeComponent}
         </Router.Provider>
     )
 }

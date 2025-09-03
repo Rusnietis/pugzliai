@@ -9,11 +9,11 @@ export default function customersReducer(state, action) {
     //console.log(newState)
     switch (action.type) {
         case constants.GET_CUSTOMERS_FROM_SERVER:
-            newState = action.payload.map(customer => {
-                customer.image = customer.image ? SERVER_URL + '/' + customer.image : null;
-                return customer;
-            })
-            break;
+            return action.payload.map(c => ({
+                ...c,
+                image: c.image ? SERVER_URL + '/' + c.image : null
+            }));
+
         case constants.CREATE_CUSTOMER:
             newState.unshift({ ...action.payload, temp: true });
             break;
@@ -137,6 +137,11 @@ export default function customersReducer(state, action) {
                 image: customer.image ? SERVER_URL + '/' + customer.image : null
             }));
             break;
+        case constants.FILTER_CUSTOMERS:
+            return {
+                ...state,
+                filters: { ...state.filters, ...action.payload },
+            };
         default:
     }
 
