@@ -121,42 +121,6 @@ app.get('/', (req, res) => {
 // };
 
 // app.use(doAuth);
-// //paemimas is serverio
-// app.get('/customers', (req, res) => {
-//   const sql = `
-//     SELECT c.id AS customer_id, c.name, c.surname, c.image, c.is_blocked, a.amount, a.account
-//     FROM customers c
-//     JOIN accounts a ON c.id = a.customer_id
-//   `;
-//   connection.query(sql, (err, results) => {
-//     if (err) {
-//       console.error('Klaida gaunant klientus:', err);
-//       return res.status(500).json({ error: 'Nepavyko gauti klientų.' });
-//     }
-
-//     const fixedResults = results.map(c => {
-//       if (results[0]?.image && results[0].image.startsWith('http')) {
-//         results[0].image = results[0].image.replace(/^https?:\/\/[^/]+\//, '');
-//       }
-//       return c;
-//     });
-
-//     res.json(fixedResults);
-//   });
-// });
-
-//sort 
-
-// app.get('/list-customers', (req, res) => {
-//   const sql = 'SELECT * FROM customers';
-//   connection.query(sql, (err, results) => {
-//     if (err) {
-//       res.status(500).send('err');
-//     } else {
-//       res.json(results);
-//     }
-//   })
-// })
 
 //statistika
 app.get('/home-stats', (req, res) => {
@@ -205,7 +169,7 @@ app.get('/customer-stats', (req, res) => {
   });
 })
 
-// server.js arba customers.js
+//paemimas is serverio
 app.get('/customers', (req, res) => {
   const { isBlocked, amountType, sort } = req.query;
 
@@ -261,8 +225,6 @@ app.get('/customers', (req, res) => {
     res.json(results);
   });
 });
-
-
 
 // // irasinejimas i duomenu baze
 app.post('/customers', (req, res) => {
@@ -364,6 +326,7 @@ app.patch('/customers/:id/amount', (req, res) => {
   });
 });
 
+//kliento blokavimas
 app.patch('/customers/:id/is_blocked', (req, res) => {
   const { is_blocked } = req.body;
   const sql = 'UPDATE customers SET is_blocked = ? WHERE id = ?';

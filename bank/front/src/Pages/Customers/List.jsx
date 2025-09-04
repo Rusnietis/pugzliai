@@ -2,10 +2,8 @@ import { useContext, useState } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import { SERVER_URL } from '../../Constants/main';
 
-export default function List({data}) {
+export default function List() {
   const [amounts, setAmounts] = useState({});
-
- 
 
   const {
     customers,

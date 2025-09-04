@@ -8,10 +8,8 @@ import * as c from '../Actions/customers';
 
 //import { Auth } from '../Contexts/Auth';
 
-
 //patikrinta
 export default function useCustomers(dispatchCustomers, editCussotemer, updateAmount, setUpdateAmount, isBlocked, setIsBlocked, taxes, setTaxes, filters, sort) {
-
 
     const [storeCustomer, setStoreCustomer] = useState(null);
     const [updateCustomer, setUpdateCustomer] = useState(null);
@@ -20,24 +18,6 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     // const { setUser } = useContext(Auth);
     // const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
-
-    // useEffect(_ => {
-
-    //     let url = `${SERVER_URL}/customers`;
-    //     if (filters.isBlocked !== null) {
-    //         url += `?isBlocked=${filters.isBlocked ? 1 : 0}`;
-    //     }
-    //     axios.get(url)
-    //         .then(res => {
-    //             console.log('Initial customers:', res.data);
-
-    //             dispatchCustomers(c.getCustomers(res.data));// <-- cia dispatch veiksmas, kuris gauna iš serverio klientus
-    //             //console.log('After reducer:', res.data.image);
-    //         })
-    //         .catch(err => {
-    //             console.log(err)
-    //         })
-    // }, [dispatchCustomers, filters]);
 
     useEffect(() => {
         const params = {};
@@ -50,33 +30,6 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
             .then(res => dispatchCustomers(c.getCustomers(res.data)))
             .catch(err => console.log(err));
     }, [filters, sort]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
-
-
-
-
-    // useEffect(_ => {
-
-    //     axios.get(`${SERVER_URL}/customers`, { withCredentials: true })
-    //         .then(res => {
-    //             //console.log(res.data)
-    //             dispatchCustomers(a.getCustomers(res.data));
-    //         })
-    //         .catch(err => {
-    //             if (err?.response?.status === 401) {
-    //                 if (err.response.data.type === 'login') {
-    //                     window.localStorage.removeItem('user');
-    //                     window.localStorage.removeItem('role');
-    //                     window.localStorage.removeItem('id');
-    //                     setUser(null);
-    //                     window.location.href = '#login';
-    //                 } else {
-    //                     setErrorPageType(401)
-    //                 }
-    //             } else {
-    //                 setErrorPageType(503)
-    //             }
-    //         })
-    // }, [dispatchCustomers, setErrorPageType, setUser]);
 
     useEffect(_ => {
         if (null !== storeCustomer) {
@@ -95,24 +48,6 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 });
         }
     }, [storeCustomer, dispatchCustomers]);
-
-    // useEffect(_ => {
-    //     if (null !== storeCustomer) {
-    //         const uuid = uuidv4();
-    //         dispatchCustomers(a.storeCustomerAsTemp({ ...storeCustomer, id: uuid }));
-    //         axios.post(`${SERVER_URL}/customers`, { ...storeCustomer, id: uuid }, { withCredentials: true })
-    //             .then(res => {
-    //                 setStoreCustomer(null);
-    //                 dispatchCustomers(a.storeCustomerAsReal(res.data));
-    //                 addMessage(res.data.message);
-    //             })
-    //             .catch(err => {
-    //                 dispatchCustomers(a.storeCustomerAsUndo({ ...storeCustomer, id: uuid }));
-    //                 setStoreCustomer(null);
-    //                 err?.response?.data?.message && addMessage(err.response.data.message);
-    //             });
-    //     }
-    // }, [storeCustomer, dispatchCustomers, addMessage]);
 
     useEffect(_ => {
         if (null !== updateCustomer) {
@@ -211,23 +146,6 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 });
         }
     }, [destroyCustomer, dispatchCustomers]);
-
-    // useEffect(_ => {
-    //     if (null !== destroyCustomer) {
-    //         dispatchCustomers(a.deleteCustomerAsTemp(destroyCustomer));
-    //         axios.delete(`${SERVER_URL}/customers/${destroyCustomer.id}`, { withCredentials: true })
-    //             .then(res => {
-    //                 setDestroyCustomer(null);
-    //                 dispatchCustomers(a.deleteCustomerAsReal(res.data));
-    //                 addMessage(res.data.message);
-    //             })
-    //             .catch(err => {
-    //                 dispatchCustomers(a.deleteCustomerAsUndo(destroyCustomer));
-    //                 setDestroyCustomer(null);
-    //                 err?.response?.data?.message && addMessage(err.response.data.message);
-    //             })
-    //     }
-    // }, [destroyCustomer, dispatchCustomers, addMessage]);
 
     return {
 

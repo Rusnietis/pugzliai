@@ -1,5 +1,4 @@
 import Nav from '../../Components/Nav';
-// import Create from './Create';
 import Delete from './Delete';
 import { useContext } from 'react';
 import { Customers } from '../../Contexts/Customers';
@@ -7,15 +6,10 @@ import Create from './Create';
 import List from './List';
 import Edit from './Edit';
 import Header from './Header';
-//import useGet from '../../Hooks/useGet';
 
 
 export default function Layout() {
   const { editCustomer, customers } = useContext(Customers);
-
-  //const { data, loading } = useGet('/list-customers')
-
-  //console.log(data)
 
   if (customers === null) {
     return (
