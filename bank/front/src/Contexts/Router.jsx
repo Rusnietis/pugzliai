@@ -8,8 +8,8 @@ import CustomerIndex from '../Pages/Customers/Index.jsx';
 // import HeroIndex from '../Pages/Heroes/Index.jsx';
 import HomeIndex from '../Pages/Home/Index.jsx';
 // import Login from '../Pages/Auth/Login.jsx'
-// import { MessagesProvider } from './Messages.jsx';
 import PageUps from '../Pages/PageUps.jsx';
+import { MessagesProvider } from './Messages.jsx';
 
 export const Router = createContext();
 
@@ -78,7 +78,9 @@ export const RouterProvider = () => {
     //setErrorPageType
     return (
         <Router.Provider value={{ params, route }}>
+            <MessagesProvider>
             { routeComponent}
+            </MessagesProvider>
         </Router.Provider>
     )
 }

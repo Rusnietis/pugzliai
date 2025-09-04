@@ -11,8 +11,10 @@ export default function customersReducer(state, action) {
         case constants.GET_CUSTOMERS_FROM_SERVER:
             return action.payload.map(c => ({
                 ...c,
+                amount: typeof c.amount === 'number' ? c.amount : 0, // užpildom undefined
                 image: c.image ? SERVER_URL + '/' + c.image : null
             }));
+
 
         case constants.CREATE_CUSTOMER:
             newState.unshift({ ...action.payload, temp: true });
@@ -78,29 +80,44 @@ export default function customersReducer(state, action) {
                 delete customer.old;
             }
             break;
+
         case constants.UPDATE_CUSTOMER_AMOUNT:
-            customer = newState.find(customer => customer.customer_id === action.payload.id);
-            if (customer) {
-                customer.amount = action.payload.amount;
-                customer.temp = true;
-                customer.old = action.payload.oldcustomer;
-            }
-            break;
+            return state.map(customer =>
+                customer.customer_id === action.payload.id
+                    ? {
+                        ...customer,
+                        amount: action.payload.amount,
+                        temp: true,
+                        old: action.payload.oldcustomer
+                    }
+                    : customer
+            );
+
         case constants.UPDATE_CUSTOMER_AMOUNT_REAL:
-            return newState.map(customer =>
+            return state.map(customer =>
                 customer.customer_id === action.payload.customer_id
-                    ? { ...customer, ...action.payload, temp: undefined, old: undefined }
+                    ? {
+                        ...customer,
+                        ...action.payload,
+                        temp: undefined,
+                        old: undefined
+                    }
                     : customer
             );
 
         case constants.UPDATE_CUSTOMER_AMOUNT_UNDO:
-            customer = newState.find(customer => customer.customer_id === action.payload.id);
-            if (customer) {
-                customer.amount = action.payload.oldcustomer.amount;
-                delete customer.temp;
-                delete customer.old;
-            }
-            break;
+            return state.map(customer =>
+                customer.customer_id === action.payload.id
+                    ? {
+                        ...customer,
+                        amount: action.payload.oldcustomer.amount,
+                        temp: undefined,
+                        old: undefined
+                    }
+                    : customer
+            );
+
+
         case constants.UPDATE_CUSTOMER_BLOCK:
             customer = newState.find(customer => customer.customer_id === action.payload.id);
             if (customer) {
@@ -132,9 +149,11 @@ export default function customersReducer(state, action) {
             }
             break;
         case constants.APPLY_TAXES:
-            newState = action.payload.map(customer => ({
+            return newState.map(customer => ({
                 ...customer,
-                image: customer.image ? SERVER_URL + '/' + customer.image : null
+                amount: (customer.amount || 0) - 5,   // nuskaityti 5 €
+                // paliekame image nepakitusį
+                image: customer.image || null
             }));
             break;
         case constants.FILTER_CUSTOMERS:

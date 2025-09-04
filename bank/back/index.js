@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const fs = require('fs');
 const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
+const { type } = require('os');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -259,7 +260,8 @@ app.post('/customers', (req, res) => {
         success: true,
         account_id: accountResult.insertId,
         uuid: req.body.id,
-        image: filename ? `/images/${filename}` : null
+        image: filename ? `/images/${filename}` : null,
+        message: { type: 'success', text: 'Klientas sėkmingai įrašytas' }
       });
     });
   });
@@ -289,7 +291,11 @@ app.put('/customers/:id', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'DB update error' });
     } else {
-      res.json({ success: true, id: +req.params.id })
+      res.json({ 
+        success: true, 
+        id: +req.params.id,
+
+       })
     }
   })
 
@@ -321,7 +327,10 @@ app.patch('/customers/:id/amount', (req, res) => {
         return res.status(500).json({ error: 'Nepavyko gauti atnaujinto kliento.' });
       }
 
-      res.json(results[0]); // grąžinam klientą su nauja amount reikšme
+      res.json({
+        result: results[0],
+        message: { type: 'success', text: 'Sąskaitos likutis sėkmingai atnaujintas'}
+      }); // grąžinam klientą su nauja amount reikšme
     });
   });
 });
@@ -385,7 +394,10 @@ app.patch('/customers/taxes', (req, res) => {
         console.error('Nepavyko gauti klientų:', err2);
         return res.status(500).json({ error: 'Nepavyko gauti klientų' });
       }
-      res.json(results);
+      res.json({
+        results, 
+        message: { type: 'success', text: 'Mokesčiai sėkmingai nuskaičiuoti'}
+      });
     });
   });
 });
@@ -399,13 +411,18 @@ app.delete('/customers/:id', async (req, res) => {
       if (err2) {
         console.error('DB klaida:', err2);
         return res.status(500).json({ error: 'Nepavyko ištrinti kliento' });
+
       }
 
       if (result.affectedRows === 0) {
         return res.status(404).json({ error: 'Klientas nerastas' });
       }
 
-      res.json({ success: true, id: +customerId });
+      res.json({
+        success: true,
+        id: +customerId,
+        message: { type: 'success', text: 'Klientas sėkmingai ištrintas' }
+      });
     });
   } catch (err) {
     return res.status(500).json({ error: err });

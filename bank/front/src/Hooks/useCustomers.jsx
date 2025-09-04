@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/customers';
-// import { MessagesContext } from '../Contexts/Messages';
+import { MessagesContext } from '../Contexts/Messages';
 //import { Router } from '../Contexts/Router';
 
 //import { Auth } from '../Contexts/Auth';
@@ -16,7 +16,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     const [destroyCustomer, setDestroyCustomer] = useState(null);
 
     // const { setUser } = useContext(Auth);
-    // const { addMessage } = useContext(MessagesContext);
+     const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         axios.get(`${SERVER_URL}/customers`, { params })
             .then(res => dispatchCustomers(c.getCustomers(res.data)))
             .catch(err => console.log(err));
-    }, [filters, sort]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
+    }, [filters, sort,dispatchCustomers]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
 
     useEffect(_ => {
         if (null !== storeCustomer) {
@@ -41,13 +41,14 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                     console.log(res.data)
                     setStoreCustomer(null);
                     dispatchCustomers(c.storeCustomerAsReal(res.data));
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     dispatchCustomers(c.storeCustomerAsUndo({ ...storeCustomer, id: uuid }));
                     setStoreCustomer(null);
                 });
         }
-    }, [storeCustomer, dispatchCustomers]);
+    }, [storeCustomer, dispatchCustomers, addMessage]);
 
     useEffect(_ => {
         if (null !== updateCustomer) {
@@ -82,7 +83,8 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                     //console.log('✅ PATCH response:', res.data);
                     setUpdateAmount(null);   // 👈 čia
                     dispatchCustomers(c.updateCustomerAmountAsReal(res.data));
-                    console.log('After reducer:', res.data.image);
+                    console.log('After reducer:', res.data);
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     setUpdateAmount(null);   // 👈 čia
@@ -117,11 +119,12 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
         axios.patch(`${SERVER_URL}/customers/taxes`, taxes) // <-- siunciam mokescius i serveri
             .then(res => {
+                setTaxes(null);
                 // dispatchiname action į reducerį, kad frontendas atsinaujintų
                 dispatchCustomers(c.applyTaxesAction(res.data));
                 console.log('mokesciai nuskaityti:', res.data)
                 // reset signal
-                setTaxes(null);
+                addMessage(res.data.message);
             })
             .catch(err => {
                 console.error('Nepavyko pritaikyti mokesčių:', err);
@@ -139,6 +142,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 .then(res => {
                     setDestroyCustomer(null);
                     dispatchCustomers(c.deleteCustomerAsReal(res.data));
+                    addMessage(res.data.message);
                 })
                 .catch(err => {
                     dispatchCustomers(c.deleteCustomerAsUndo(destroyCustomer));

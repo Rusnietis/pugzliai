@@ -78,16 +78,21 @@ export function updateCustomerAsUndo(customer) {
 export function updateCustomerAmountAsTemp(customer, oldcustomer) {
     return {
         type: constants.UPDATE_CUSTOMER_AMOUNT,
-        payload: {customer, oldcustomer}
+        payload: {
+            id: customer.customer_id,
+            amount: customer.amount, // čia jau turėtų būti teisinga
+            oldcustomer
+        }
     }
 }
 
 export function updateCustomerAmountAsReal(response) {
     return {
         type: constants.UPDATE_CUSTOMER_AMOUNT_REAL,
-        payload: response
+        payload: response.result  // tik result perduodam reducer’iui
     }
 }
+
 export function updateCustomerAmountAsUndo(customer) {
     return {
         type: constants.UPDATE_CUSTOMER_AMOUNT_UNDO,
@@ -128,4 +133,3 @@ export function filterCustomersAction(filterBy) {
         payload: filterBy
     };
 }
-

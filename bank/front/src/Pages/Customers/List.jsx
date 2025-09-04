@@ -55,6 +55,9 @@ export default function List() {
     setAmounts(prev => ({ ...prev, [customer.customer_id]: '' }));
   };
 
+
+  const safeCustomers = Array.isArray(customers) ? customers : [];
+
   return (
     <>
       {customers.map((customer) => (
