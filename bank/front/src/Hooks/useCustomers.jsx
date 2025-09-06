@@ -75,7 +75,12 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
     useEffect(_ => {
         if (null !== updateAmount) {
-            // console.log('🧾 updateAmount:', updateAmount); 
+        // console.log('🧾 updateAmount:', updateAmount);
+            if (updateAmount.change < 0) {
+                addMessage({text: 'Negalima nuskaityti pinigu, jusu saskaitoje nepakanka pinigu', type: 'danger'})
+                setUpdateAmount(null);
+                return;
+            }
             dispatchCustomers(c.updateCustomerAmountAsTemp(updateAmount, updateAmount.customer_id));
             axios.patch(`${SERVER_URL}/customers/${updateAmount.customer_id}/amount`, updateAmount)
                 .then(res => {
@@ -135,10 +140,10 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
     useEffect(() => {
         if (null !== destroyCustomer) {
-           // console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
+            // console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
             if (destroyCustomer.amount !== 0) {
                 //console.log("⚠️ Negalima trinti – yra pinigų:", destroyCustomer.amount)
-                addMessage({text: 'Negalima ištrinti sąskaitos, joje dar yra pinigų', type: 'danger'});
+                addMessage({ text: 'Negalima ištrinti sąskaitos, joje dar yra pinigų', type: 'danger' });
                 setDestroyCustomer(null);
                 return; // išeinam ir nedarom axios.delete
             }

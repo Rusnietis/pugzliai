@@ -16,7 +16,7 @@ export default function List() {
     setIsBlocked
   } = useContext(Customers);
 
-  console.log(customers)
+  //console.log(customers)
 
   // Blokavimas / atblokavimas
   const handleToggleBlock = (customer) => {
@@ -73,6 +73,7 @@ export default function List() {
   // Atimti pinigus
   const subtractMoney = (customer) => {
     const amount = amounts[customer.customer_id] || 0;
+   
     setUpdateAmount({
       customer_id: customer.customer_id,
       change: -amount,
