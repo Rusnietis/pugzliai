@@ -2,8 +2,11 @@ import { useContext, useState } from 'react';
 import { Customers } from '../../Contexts/Customers';
 import { SERVER_URL } from '../../Constants/main';
 
+
 export default function List() {
   const [amounts, setAmounts] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
 
   const {
     customers,
@@ -36,12 +39,35 @@ export default function List() {
   // Pridėti pinigus
   const addMoney = (customer) => {
     const amount = amounts[customer.customer_id] || 0;
+
+    if (amount > 1000) {
+      // jeigu daugiau nei 1000, išsaugom veiksmą ir rodome modalą
+      setPendingAction({ customer, amount });
+      setShowModal(true);
+      return;
+    }
+
+    // normalus veikimas
     setUpdateAmount({
       customer_id: customer.customer_id,
       change: amount,
       old: { ...customer }
     });
     setAmounts(prev => ({ ...prev, [customer.customer_id]: '' }));
+  };
+
+  // Patvirtinti modalą
+  const handleConfirm = () => {
+    if (pendingAction) {
+      setUpdateAmount({
+        customer_id: pendingAction.customer.customer_id,
+        change: pendingAction.amount,
+        old: { ...pendingAction.customer }
+      });
+      setAmounts(prev => ({ ...prev, [pendingAction.customer.customer_id]: '' }));
+    }
+    setShowModal(false);
+    setPendingAction(null);
   };
 
   // Atimti pinigus
@@ -118,6 +144,50 @@ export default function List() {
                         Atimti
                       </button>
                     </div>
+                    <div
+                      className={`modal fade ${showModal ? 'show' : ''}`}
+                      style={{ display: showModal ? 'block' : 'none'}}
+                      tabIndex="-1"
+                      role="dialog"
+                    >
+                      <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title">Patvirtinimas</h5>
+                            <button
+                              type="button" className="btn-close" aria-label="Close"
+                              onClick={() => setShowModal(false)}
+                            >
+                            </button>
+                          </div>
+                          <div className="modal-body">
+                            <p>
+                              Įvedėte sumą <strong>{pendingAction?.amount}</strong> klientui{' '}
+                              <strong>{pendingAction?.customer.name}</strong>, kuri viršija 1000.
+                              Ar tikrai norite tęsti?
+                            </p>
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={handleConfirm}
+                            >
+                              Patvirtinti
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowModal(false)}
+                            >
+                              Atšaukti
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
 
                   <div className="info-right">
