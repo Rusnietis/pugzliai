@@ -11,7 +11,7 @@ export const HomeProvider = ({ children }) => {
     // const {setErrorPageType} = useContext(Router)
 
     useEffect(_ => {
-        axios.get(`${SERVER_URL}/home-stats`)
+        axios.get(`${SERVER_URL}/home-stats`, {withCredentials: true})
             .then(res => {
                 //console.log(res.data);
                 setHome(res.data ?? []);

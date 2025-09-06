@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const mysql = require('mysql');
 const fs = require('fs');
 const md5 = require('md5');
@@ -17,9 +18,11 @@ const port = 3001;
 
 app.use(cors({
   origin: 'http://localhost:3000',     // 👈 leidžiam frontendui
-  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']     // 👈 leidžiam JSON ir kitus custom headerius
+  credentials: true,
+  // methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  // allowedHeaders: ['Content-Type']     // 👈 leidžiam JSON ir kitus custom headerius
 }));
+app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -125,6 +128,9 @@ app.get('/', (req, res) => {
 
 //statistika
 app.get('/home-stats', (req, res) => {
+
+  res.cookie('KlientoCookis', '***Valio***')
+
   const sql = `
   SELECT 'customers' AS name, COUNT(*) AS count, SUM(image IS NULL) AS image, SUM(is_blocked = 0) AS is_blocked
   FROM customers
