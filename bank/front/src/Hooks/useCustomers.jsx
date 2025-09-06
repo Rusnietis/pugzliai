@@ -16,7 +16,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     const [destroyCustomer, setDestroyCustomer] = useState(null);
 
     // const { setUser } = useContext(Auth);
-     const { addMessage } = useContext(MessagesContext);
+    const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         axios.get(`${SERVER_URL}/customers`, { params })
             .then(res => dispatchCustomers(c.getCustomers(res.data)))
             .catch(err => console.log(err));
-    }, [filters, sort,dispatchCustomers]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
+    }, [filters, sort, dispatchCustomers]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
 
     useEffect(_ => {
         if (null !== storeCustomer) {
@@ -92,7 +92,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 });
 
         }
-    }, [updateAmount, dispatchCustomers, setUpdateAmount])
+    }, [updateAmount, dispatchCustomers, setUpdateAmount, addMessage])
 
     useEffect(_ => {
         if (null !== isBlocked) {
@@ -131,11 +131,17 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                 setTaxes(null); // vis tiek resetinam, kad nebūtų begalinio ciklo
             });
 
-    }, [dispatchCustomers, taxes, setTaxes])
+    }, [dispatchCustomers, taxes, setTaxes, addMessage])
 
     useEffect(() => {
         if (null !== destroyCustomer) {
-            //console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
+           // console.log('🧾 destroyCustomer:', destroyCustomer); // DEBUG
+            if (destroyCustomer.amount !== 0) {
+                //console.log("⚠️ Negalima trinti – yra pinigų:", destroyCustomer.amount)
+                addMessage({text: 'Negalima ištrinti sąskaitos, joje dar yra pinigų', type: 'danger'});
+                setDestroyCustomer(null);
+                return; // išeinam ir nedarom axios.delete
+            }
             dispatchCustomers(c.deleteCustomerAsTemp(destroyCustomer));
             //console.log('Deleting customer with ID:', destroyCustomer.customer_id);
             axios.delete(`${SERVER_URL}/customers/${destroyCustomer.customer_id}`)
@@ -149,7 +155,7 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
                     setDestroyCustomer(null);
                 });
         }
-    }, [destroyCustomer, dispatchCustomers]);
+    }, [destroyCustomer, dispatchCustomers, addMessage]);
 
     return {
 

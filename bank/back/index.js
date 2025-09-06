@@ -291,11 +291,11 @@ app.put('/customers/:id', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'DB update error' });
     } else {
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         id: +req.params.id,
 
-       })
+      })
     }
   })
 
@@ -329,7 +329,7 @@ app.patch('/customers/:id/amount', (req, res) => {
 
       res.json({
         result: results[0],
-        message: { type: 'success', text: 'Sąskaitos likutis sėkmingai atnaujintas'}
+        message: { type: 'success', text: 'Sąskaitos likutis sėkmingai atnaujintas' }
       }); // grąžinam klientą su nauja amount reikšme
     });
   });
@@ -395,8 +395,8 @@ app.patch('/customers/taxes', (req, res) => {
         return res.status(500).json({ error: 'Nepavyko gauti klientų' });
       }
       res.json({
-        results, 
-        message: { type: 'success', text: 'Mokesčiai sėkmingai nuskaičiuoti'}
+        results,
+        message: { type: 'success', text: 'Mokesčiai sėkmingai nuskaičiuoti' }
       });
     });
   });
@@ -404,6 +404,9 @@ app.patch('/customers/taxes', (req, res) => {
 
 app.delete('/customers/:id', async (req, res) => {
   const customerId = req.params.id;
+  if (customerId.amount !== 0) {
+    return res.status(400).json({ message: { type: 'danger', text: "Negalima ištrinti sąskaitos, joje dar yra pinigų" } });
+  }
   try {
     await deleteImage(customerId); // Laukiam paveikslėlio trynimo
     const sqlDelete = 'DELETE FROM customers WHERE id = ?';
