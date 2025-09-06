@@ -120,14 +120,14 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
     // mokeciai
     useEffect(_ => {
         if (taxes === null) return; // jei nieko nėra, nekeliam veiksmo
-        console.log('Atejo mokesciai:', taxes)
+        //console.log('Atejo mokesciai:', taxes)
 
         axios.patch(`${SERVER_URL}/customers/taxes`, taxes) // <-- siunciam mokescius i serveri
             .then(res => {
                 setTaxes(null);
                 // dispatchiname action į reducerį, kad frontendas atsinaujintų
                 dispatchCustomers(c.applyTaxesAction(res.data));
-                console.log('mokesciai nuskaityti:', res.data)
+                //console.log('mokesciai nuskaityti:', res.data)
                 // reset signal
                 addMessage(res.data.message);
             })

@@ -9,7 +9,7 @@ export const Customers = createContext();
 export const CustomersProvider = ({ children }) => {
     // pagrindinis kur laikome visus klientus yra reduceris
     const [customers, dispatchCustomers] = useReducer(customersReducer, []);
-console.log('customers from context:', customers);
+    //console.log('customers from context:', customers);
     // CRUD ir papildomi state'ai
     const [deleteCustomer, setDeleteCustomer] = useState(null);
     const [editCustomer, setEditCustomer] = useState(null);
@@ -83,7 +83,7 @@ console.log('customers from context:', customers);
                 setStats,
                 filters, // 🔹 įdedam filtrus
                 setFilters,
-                sort, 
+                sort,
                 setSort
             }}
         >

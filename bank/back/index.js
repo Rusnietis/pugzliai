@@ -269,7 +269,7 @@ app.post('/customers', (req, res) => {
 
 // Kliento atnaujinimas
 app.put('/customers/:id', (req, res) => {
-  console.log('Gavau ID:', req.body);
+  //console.log('Gavau ID:', req.body);
   if (req.body.del) {
     deleteImage(req.params.id, res);
   }
@@ -304,7 +304,7 @@ app.put('/customers/:id', (req, res) => {
 // pinigu pridejimas ir atemimas
 app.patch('/customers/:id/amount', (req, res) => {
   const { change } = req.body;
-  console.log('atėjo į patch /customers/:id/amount', req.params.id, change);
+  //console.log('atėjo į patch /customers/:id/amount', req.params.id, change);
 
   // atnaujinam accounts lentelę
   const sql = 'UPDATE accounts SET amount = amount + ? WHERE customer_id = ?';

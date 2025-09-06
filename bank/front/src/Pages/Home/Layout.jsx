@@ -8,7 +8,7 @@ export default function Layout() {
 
     const { home } = useContext(Home)
 
-    console.log(home);
+    //console.log(home);
 
     if (!home) return (< div className="loader"><div></div></div>)
 

@@ -13,7 +13,7 @@ export const HomeProvider = ({ children }) => {
     useEffect(_ => {
         axios.get(`${SERVER_URL}/home-stats`)
             .then(res => {
-                console.log(res.data);
+                //console.log(res.data);
                 setHome(res.data ?? []);
             })
             .catch(err => {
