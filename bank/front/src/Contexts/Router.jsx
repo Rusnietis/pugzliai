@@ -7,7 +7,7 @@ import CustomerIndex from '../Pages/Customers/Index.jsx';
 // import BookIndex from '../Pages/Books/Index.jsx';
 // import HeroIndex from '../Pages/Heroes/Index.jsx';
 import HomeIndex from '../Pages/Home/Index.jsx';
-// import Login from '../Pages/Auth/Login.jsx'
+import Login from '../Pages/Auth/Login.jsx'
 import PageUps from '../Pages/PageUps.jsx';
 import { MessagesProvider } from './Messages.jsx';
 
@@ -62,8 +62,8 @@ export const RouterProvider = () => {
     const routes = [
 
         { path: '#customers', component: <CustomerIndex /> },
-        { path: '#home', component: <HomeIndex /> }
-
+        { path: '#home', component: <HomeIndex /> },
+        { path: '#login', component: <Login /> }
     ];
 
     // const errorPages = [
@@ -79,7 +79,7 @@ export const RouterProvider = () => {
     return (
         <Router.Provider value={{ params, route }}>
             <MessagesProvider>
-            { routeComponent}
+                {routeComponent}
             </MessagesProvider>
         </Router.Provider>
     )
