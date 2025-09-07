@@ -80,6 +80,8 @@ const deleteImage = (customer_Id) => {
 };
 
 
+
+
 // const checkUserIsLogged = (user, res) => {
 //   if (user) {
 //     return true;
@@ -89,6 +91,100 @@ const deleteImage = (customer_Id) => {
 
 // }
 
+const checkUserIsAuthorized = (user, res, roles) => {
+  if (user && roles.includes(user.role)) {
+    return true;
+  } else if (user && roles.includes('self:' + user.id)) {
+    return true;
+  } else if (user) {
+    res.status(401).json({
+      message: 'Not authorized',
+      type: 'role'
+    });
+  } else {
+    res.status(401).json({
+      message: 'Not logged in',
+      type: 'login'
+    });
+  }
+}
+
+const doAuth = (req, res, next) => {
+  const token = req.cookies.bankSession || '';
+
+  if (token === '') {
+    return next();
+  }
+
+  const sql = `
+    SELECT name, id, role
+    FROM users
+    WHERE session = ?
+  `;
+  connection.query(sql, [token], (err, results) => {
+    if (err) {
+      res.status(500).json({message: { type: 'danger', text: 'Server error On Auth' } });
+    } else {
+      if (results.length > 0) {
+        const user = results[0];
+        req.user = user;
+      }
+    }
+    return next();
+  });
+};
+
+app.use(doAuth);
+
+//login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const sql = 'SELECT * FROM users WHERE name = ? AND password = ?';
+  connection.query(sql, [username, md5(password)], (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      if (results.length > 0) {
+        const token = md5(uuidv4());
+        const sql = 'UPDATE users SET session = ? WHERE id = ?'
+        connection.query(sql, [token, results[0].id], (err) => {
+          if (err) {
+            res.status(500).json({ message: 'Server error On Login' });
+          } else {
+            res.cookie('bankSession', token, { maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true });
+            res.json({
+              success: true,
+              name: results[0].name,
+              role: results[0].role,
+              id: results[0].id,
+              message: { type: 'success', text: 'Jus sekmingai prisijungete' }
+
+            });
+          }
+        });
+      } else {
+        res.status(401).json({ message: 'Invalid name or password' });
+      }
+    }
+  });
+});
+
+//logout 
+
+app.post('/logout', (req, res) => {
+  console('logout',res.data)
+  const token = req.cookies.bankSession || '';
+  const sql = 'UPDATE users SET session = NULL WHERE session = ?';
+  connection.query(sql, [token], (err) => {
+    if (err) {
+      res.status(500).json({ message: { type: 'danger', text: 'Server error On Logout' } });
+    } else {
+      res.clearCookie('bankSession');
+      res.json({ message: { type: 'success', text: 'Goodbye!' } });
+    }
+  });
+})
+
 // router  
 
 app.get('/', (req, res) => {
@@ -96,40 +192,15 @@ app.get('/', (req, res) => {
   res.send('Labas Meškėnai!');
 });
 
-// const doAuth = (req, res, next) => {
-
-//   const token = req.query.token || req.body.token || '';
-
-//   if (token === '') {
-//     return next();
-//   }
-
-//   const sql = `
-//     SELECT users.name, users.id, users.role
-//     FROM sessions
-//     LEFT JOIN users ON sessions.user_id = users.id
-//     WHERE sessions.id = ? AND sessions.time > ?
-//   `;
-//   const time = Date.now() - 1000 * 60 * 60 * 24;
-//   connection.query(sql, [token, time], (err, results) => {
-//     if (err) {
-//       res.status(500);
-//     } else {
-//       if (results.length > 0) {
-//         const user = results[0];
-//         req.user = user;
-//       }
-//     }
-//     return next();
-//   });
-// };
-
-// app.use(doAuth);
 
 //statistika
 app.get('/home-stats', (req, res) => {
 
-  res.cookie('KlientoCookis', '***Valio***')
+  //res.cookie('KlientoCookis', '***Valio***')
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+    return;
+  }
 
   const sql = `
   SELECT 'customers' AS name, COUNT(*) AS count, SUM(image IS NULL) AS image, SUM(is_blocked = 0) AS is_blocked

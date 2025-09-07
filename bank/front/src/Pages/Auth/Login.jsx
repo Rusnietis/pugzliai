@@ -8,7 +8,7 @@ export default function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [setInputs, response] = useLogin();
+    const {setInputs} = useLogin();
     const { user } = useContext(Auth);
 
 
@@ -27,22 +27,25 @@ export default function Login() {
     if (!user) {
         return (
             <div className="login-page">
-                {console.log(response)}
-                <div className="box">
-
-                    <div className="response">
-                        {
-                            response && !response.ok && <span>{response.message}</span>
-                        }
-                    </div>
-                    <form className="form">
+                <div className="card">
+                    <div className="card-header">
                         <h1>Login</h1>
-                        <label>Username</label>
-                        <input type="text" name="name" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} />
-                        <label>Password</label>
-                        <input type="password" name="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
-                        <button type="button" onClick={go}>GO</button>
-                    </form>
+                    </div>
+                    <div className="card-body">
+                        <form className="form">
+                            <div className="mb-3">
+                                <label htmlFor="name" className="form-label">Username</label>
+                                <input type="text" className="form-control" name="name" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="password" className="form-label">Password</label>
+                                <input type="password" className="form-control" name="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <button type="button" className="button-18 blue" onClick={go}>GO</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </div>

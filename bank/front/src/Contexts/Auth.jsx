@@ -5,43 +5,41 @@ export const Auth = createContext();
 
 export const AuthProvider = ({ children }) => {
 
+
     const [user, setUser] = useState(_ => {
-        const token = window.localStorage.getItem('token');
+        // const token = window.localStorage.getItem('token');
         const user = window.localStorage.getItem('user');
-        // const role = window.localStorage.getItem('role');
-        // const id = window.localStorage.getItem('id');
-        return token ? {
-            token,
-            user
-            // role,
-            // id
+        const role = window.localStorage.getItem('role');
+        const id = window.localStorage.getItem('id');
+        return user ? {
+            // token,
+            user,
+            role,
+            id
         } : null;
     });
 
+    const [doLogout, setDoLogout] = useState(false);
+
     const logout = _ => {
-        window.localStorage.removeItem('token');
-        window.localStorage.removeItem('user');
-        // window.localStorage.removeItem('role');
-        // window.localStorage.removeItem('id');
-        setUser(null);
-        window.location.href = '#login';
+        setDoLogout(true)
     }
 
-    const login = (token, user, role, id) => {
-        window.localStorage.setItem('token', token);
+    const login = (user, role, id) => {
+        // window.localStorage.setItem('token', token);
         window.localStorage.setItem('user', user);
-        // window.localStorage.setItem('role', role);
-        // window.localStorage.setItem('id', id);
+        window.localStorage.setItem('role', role);
+        window.localStorage.setItem('id', id);
         setUser({
-            token,
-            user
-            // role,
-            // id
+            // token,
+            user,
+            role,
+            id
         });
     }
 
     return (
-        <Auth.Provider value={{ user, setUser, logout, login }}>
+        <Auth.Provider value={{ user, setUser, logout, login, doLogout, setDoLogout}}>
             {children}
         </Auth.Provider>
     );
