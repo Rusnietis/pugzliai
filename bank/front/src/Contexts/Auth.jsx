@@ -19,12 +19,6 @@ export const AuthProvider = ({ children }) => {
         } : null;
     });
 
-    const [doLogout, setDoLogout] = useState(false);
-
-    const logout = _ => {
-        setDoLogout(true)
-    }
-
     const login = (user, role, id) => {
         // window.localStorage.setItem('token', token);
         window.localStorage.setItem('user', user);
@@ -39,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <Auth.Provider value={{ user, setUser, logout, login, doLogout, setDoLogout}}>
+        <Auth.Provider value={{ user, setUser, login}}>
             {children}
         </Auth.Provider>
     );

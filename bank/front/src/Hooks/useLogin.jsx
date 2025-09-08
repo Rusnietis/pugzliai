@@ -7,12 +7,9 @@ import { MessagesContext } from '../Contexts/Messages';
 export default function useLogin() {
 
     const [inputs, setInputs] = useState(null);
-    const [response, setResponse] = useState(null);
+    // const [response, setResponse] = useState(null);
 
-    const { login, setUser, doLogout, setDoLogout } = useContext(Auth);
-
-    console.log('Kas ateina is contexto:', login)
-    
+    const { login, setUser } = useContext(Auth);
     const { addMessage } = useContext(MessagesContext)
 
     useEffect(_ => {
@@ -23,33 +20,23 @@ export default function useLogin() {
                     // window.localStorage.setItem('user', res.data.name);
                     login(res.data.name, res.data.role, res.data.id);
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`;
-                    addMessage(res.data.message)
-                   
+                    addMessage(res.data.message);
+
+
                 })
                 .catch(error => {
                     console.log(error);
                     if (!error.response) {
-                        setResponse({
-                            ok: false,
-                            status: 500,
-                            message: 'Server error'
-                        });
+                        addMessage({ type: 'danger', text: 'Server error' })
                     } else {
-                        setResponse({
-                            ok: false,
-                            status: error.response.status,
-                            message: error.response.data?.message || error.message
-                        });
+                        addMessage({ type: 'danger', text: error.response.data.message })
                     }
                 })
         }
     }, [inputs, addMessage, login]);
 
-    useEffect(_ => {
-        if(!doLogout){
-            return;
-        }
-        axios.post(`${SERVER_URL}/logout`, { withCredentials: true })
+    const logout = _ => {
+        axios.post(`${SERVER_URL}/logout`, {}, { withCredentials: true })
             .then(res => {
                 window.localStorage.removeItem('user');
                 window.localStorage.removeItem('role');
@@ -61,14 +48,14 @@ export default function useLogin() {
             .catch(error => {
                 console.log(error);
                 if (!error.response) {
-                    addMessage(response.data.message);
+                    addMessage({ type: 'danger', text: 'Server error' })
                 } else {
-                    addMessage(response.data.message);
+                    addMessage({ type: 'danger', text: error.response.data.message })
                 }
             })
-    },[doLogout, addMessage, setUser]);
+    };
 
 
-    return { setInputs };
+    return { setInputs, logout };
 
 }

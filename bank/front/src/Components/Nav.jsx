@@ -7,9 +7,9 @@ import useLogin from '../Hooks/useLogin';
 
 export default function Nav() {
 
-    const { user, logout } = useContext(Auth);
-    console.log('Ateina logout is context', logout)
-    
+    const { user } = useContext(Auth);
+    const { logout } = useLogin();
+
 
     return (
 
@@ -42,7 +42,7 @@ export default function Nav() {
                                 user && <span className="sep"> | </span>
                             }
                             {
-                                user && <i  className="login-button m-2"  onClick={logout}>Logout</i>
+                                user && <i className="login-button m-2" onClick={logout}>Logout</i>
                             }
                             {/* {
                                 !user && <a className="nav-link" href="#register">Register</a>

@@ -172,7 +172,6 @@ app.post('/login', (req, res) => {
 //logout 
 
 app.post('/logout', (req, res) => {
-  console('logout',res.data)
   const token = req.cookies.bankSession || '';
   const sql = 'UPDATE users SET session = NULL WHERE session = ?';
   connection.query(sql, [token], (err) => {
