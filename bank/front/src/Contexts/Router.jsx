@@ -31,6 +31,8 @@ export const RouterProvider = () => {
 
     const [errorPageType, setErrorPageType] = useState(null);
 
+    console.log(errorPageType)
+
     useEffect(_ => {
         const handleHashChange = _ => {
             const hash = window.location.hash.split('/');
@@ -75,6 +77,7 @@ export const RouterProvider = () => {
     // routeComponent - kintamasis, kuriame bus komponentas, kurį reikia rodyti
     const routeComponent = routes.find(r => r.path === route)?.component || <Page404 />;
     const errorComponent = errorPages.find(r => r.type === errorPageType)?.component || null;
+    
     //setErrorPageType
     return (
         <Router.Provider value={{ params, route, setErrorPageType }}>

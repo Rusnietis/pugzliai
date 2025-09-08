@@ -250,6 +250,10 @@ app.get('/customer-stats', (req, res) => {
 app.get('/customers', (req, res) => {
   const { isBlocked, amountType, sort } = req.query;
 
+  if (!checkUserIsAuthorized(req.user, res, ['admin','user', 'animal'])) {
+    return;
+  }
+
   let sql = `
     SELECT 
       c.id AS customer_id,

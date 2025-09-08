@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/customers';
 import { MessagesContext } from '../Contexts/Messages';
-//import { Router } from '../Contexts/Router';
+import { Router } from '../Contexts/Router';
 
 //import { Auth } from '../Contexts/Auth';
 
@@ -17,7 +17,8 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
     // const { setUser } = useContext(Auth);
     const { addMessage } = useContext(MessagesContext);
-    // const { setErrorPageType } = useContext(Router);
+    const { setErrorPageType } = useContext(Router);
+
 
     useEffect(() => {
         const params = {};
@@ -26,10 +27,23 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
         if (filters.amountType) params.amountType = filters.amountType;
         if (sort && sort !== "none") params.sort = sort;
 
-        axios.get(`${SERVER_URL}/customers`, { params })
-            .then(res => dispatchCustomers(c.getCustomers(res.data)))
-            .catch(err => console.log(err));
-    }, [filters, sort, dispatchCustomers]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
+        axios.get(`${SERVER_URL}/customers`, { params, withCredentials: true }) // params
+            .then(res => {
+                dispatchCustomers(c.getCustomers(res.data));
+            })
+            .catch(err => {
+                if (err?.response?.status === 401) {
+                    if (err.response.data.type === 'login') {
+                        window.location.href = '#login';
+                    } else {
+                        setErrorPageType(401);
+                    }
+                } else {
+                    setErrorPageType(503)
+                }
+                console.log(err)
+            });
+    }, [filters, sort, dispatchCustomers, setErrorPageType]); // <-- labai svarbu, kad useEffect klausytųsi šių reikšmių
 
     useEffect(_ => {
         if (null !== storeCustomer) {
@@ -75,9 +89,9 @@ export default function useCustomers(dispatchCustomers, editCussotemer, updateAm
 
     useEffect(_ => {
         if (null !== updateAmount) {
-        // console.log('🧾 updateAmount:', updateAmount);
+            // console.log('🧾 updateAmount:', updateAmount);
             if (updateAmount.change < 0) {
-                addMessage({text: 'Negalima nuskaityti pinigu, jusu saskaitoje nepakanka pinigu', type: 'danger'})
+                addMessage({ text: 'Negalima nuskaityti pinigu, jusu saskaitoje nepakanka pinigu', type: 'danger' })
                 setUpdateAmount(null);
                 return;
             }
