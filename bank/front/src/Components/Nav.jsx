@@ -4,6 +4,7 @@ import Link from './Link'
 import { useContext } from 'react';
 import { Auth } from '../Contexts/Auth';
 import useLogin from '../Hooks/useLogin';
+import Gate from '../Pages/Auth/Gate';
 
 export default function Nav() {
 
@@ -24,7 +25,7 @@ export default function Nav() {
                         </li>
                         <li className="nav-item">
                             {/* <a className="nav-link" href="#customers">Klientai</a> */}
-                            <Link className="nav-link" href="#customers">Klientai</Link>
+                           <Gate roles="admin"><Link className="nav-link" href="#customers">Klientai</Link></Gate>
                         </li>
 
                     </ul>

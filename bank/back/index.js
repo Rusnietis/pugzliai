@@ -197,9 +197,9 @@ app.get('/home-stats', (req, res) => {
 
   //res.cookie('KlientoCookis', '***Valio***')
 
-  if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
-    return;
-  }
+  // if (!checkUserIsAuthorized(req.user, res, ['admin' ,'user', 'animal'])) {
+  //   return;
+  // }
 
   const sql = `
   SELECT 'customers' AS name, COUNT(*) AS count, SUM(image IS NULL) AS image, SUM(is_blocked = 0) AS is_blocked
