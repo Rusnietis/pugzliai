@@ -73,6 +73,7 @@ export const RouterProvider = () => {
         { type: 401, component: <Page401 /> },
         { type: 'ups', component: <PageUps /> }
     ]
+    
 
     // routeComponent - kintamasis, kuriame bus komponentas, kurį reikia rodyti
     const routeComponent = routes.find(r => r.path === route)?.component || <Page404 />;
