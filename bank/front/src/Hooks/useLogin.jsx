@@ -42,7 +42,7 @@ export default function useLogin() {
                 window.localStorage.removeItem('role');
                 window.localStorage.removeItem('id');
                 setUser(null);
-                window.location.href = '#home';//login
+                window.location.href = '#home';//<-- arba login puslapi
                 addMessage(res.data.message)
             })
             .catch(error => {
