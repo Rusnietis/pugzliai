@@ -4,8 +4,6 @@ import Home from './Pages/Home/Home.jsx';
 import History from './Pages/History/History.jsx';
 
 
-console.log("History component:", History);
-
 export default function App() {
 
   return (
@@ -13,6 +11,7 @@ export default function App() {
       <Nav/>
 
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/apie" element={<Home />} />
         <Route path="/istorijos" element={<History />} />
         
