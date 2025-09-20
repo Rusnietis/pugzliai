@@ -22,16 +22,14 @@ export default function Layout() {
   // }
 
   return (
-    <>
-      {/* <Nav /> */}
-      <div className="card" role="region" aria-labelledby="card-title">
-
+     <div className="page-container">
+      <div className="left-col">
         <Create />
-
-        <aside className="preview-col" aria-hidden="true">
-          <List />
-        </aside>
       </div>
-    </>
+      <div className="right-col">
+        <List />
+      </div>
+    </div>
   );
+
 }
