@@ -13,6 +13,26 @@ export default function CreateStory() {
 
       <form className="story-form" autoComplete="off">
         <label className="field">
+          <span>Vardas</span>
+          <input type="text" name="firstName" placeholder="Įveskite vardą" required />
+        </label>
+
+        <label className="field">
+          <span>Pavardė</span>
+          <input type="text" name="lastName" placeholder="Įveskite pavardę" required />
+        </label>
+
+        <label className="field">
+          <span>Sukūrimo data</span>
+          <input type="date" name="createdAt" required />
+        </label>
+
+        <label className="field">
+          <span>Istorijos pavadinimas</span>
+          <input type="text" name="title" placeholder="Įveskite pavadinimą" required />
+        </label>
+
+        <label className="field">
           <span>Istorijos / idėjos tekstas</span>
           <textarea name="story" placeholder="Parašykite čia..." required></textarea>
         </label>
@@ -52,3 +72,4 @@ export default function CreateStory() {
     </div>
   );
 }
+
