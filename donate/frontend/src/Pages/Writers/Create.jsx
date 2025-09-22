@@ -64,10 +64,6 @@ export default function CreateStory() {
           </button>
         </div>
 
-        <p className="hint">
-          Pastaba: šis pavyzdys naudoja tik HTML ir CSS — nuotraukos peržiūrą galima pridėti su nedideliu
-          JavaScript, jeigu reikia.
-        </p>
       </form>
     </div>
   );
