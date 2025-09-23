@@ -6,6 +6,7 @@ const mysql = require('mysql');
 const fs = require('fs');
 const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
+const { error } = require('console');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -113,9 +114,24 @@ connection.connect();
 
 // routs
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
   console.log('Buvo uzklausta /');
   res.send('Labas Bebrai')
+})
+
+app.get('/writers', (req, res) => {
+  const sql = 'SELECT * FROM writers';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json(results);
+    }
+  })
+})
+
+app.post('/writers', (req, res) => {
+  
 })
 
 

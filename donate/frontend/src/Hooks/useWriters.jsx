@@ -22,17 +22,29 @@ export default function useWriters(dispatchWriters) {
 
         axios.get(`${SERVER_URL}/writers`)
             .then(res => {
-                //console.log(res.data)
+                console.log(res.data)
                 dispatchWriters(a.getWriters(res.data));
             })
             .catch(err => {
                 console.log(err)
-                
+
             })
     }, []);
 
+    useEffect(_ => {
+if (null !== storeWriter) {
+        axios.post(`${SERVER_URL}/writers`, storeWriter)
+            .then(res => {
+                setStoreWriter(null)
+            })
+            .catch(err => {
+                setStoreWriter(null)
+            })
+        }
+    }, [storeWriter]);
 
-    
+
+
 
     return {
 

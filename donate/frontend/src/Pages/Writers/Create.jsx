@@ -1,7 +1,34 @@
-import React from "react";
+import { useContext, useState } from 'react';
 import "./StoryCard.scss";
+import { Writers } from '../../Contexts/Writers';
+
+const defaultInputs = {
+  name: '',
+  surname: '',
+  createdAt: '',
+  title: '',
+  story: '',
+  goal: '',
+
+}
 
 export default function CreateStory() {
+
+  const [inputs, setInputs] = useState(defaultInputs);
+
+  const {setStoreWriter} = useContext(Writers)
+
+  const handleChange = e => {
+    setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  }
+
+  const create = _ => {
+    setStoreWriter(inputs);
+    setInputs(defaultInputs);
+  }
+
+
+
   return (
     <div className="form-col">
       <div>
@@ -12,51 +39,54 @@ export default function CreateStory() {
       </div>
 
       <form className="story-form" autoComplete="off">
-        <label className="field">
-          <span>Vardas</span>
-          <input type="text" name="firstName" placeholder="Įveskite vardą" required />
-        </label>
+        <div className="field">
+          <label htmlFor="name" >Vardas</label>
+          <input type="text" id="name" value={inputs.name} onChange={handleChange} placeholder="Įveskite vardą" />
+        </div>
 
-        <label className="field">
-          <span>Pavardė</span>
-          <input type="text" name="lastName" placeholder="Įveskite pavardę" required />
-        </label>
+        <div className="field">
+          <label htmlFor="surname">Pavardė</label>
+          <input type="text" id="surname" value={inputs.surname} onChange={handleChange} placeholder="Įveskite pavardę"  />
+        </div>
 
-        <label className="field">
-          <span>Sukūrimo data</span>
-          <input type="date" name="createdAt" required />
-        </label>
+        <div className="field">
+          <label htmlFor="createdAt">Sukūrimo data</label>
+          <input type="date" id="createdAt" value={inputs.createdAt} onChange={handleChange} />
+        </div>
 
-        <label className="field">
-          <span>Istorijos pavadinimas</span>
-          <input type="text" name="title" placeholder="Įveskite pavadinimą" required />
-        </label>
+        <div className="field">
+          <label htmlFor="title">Istorijos pavadinimas</label>
+          <input type="text" id="title" value={inputs.title} onChange={handleChange} placeholder="Įveskite pavadinimą" />
+        </div>
 
-        <label className="field">
-          <span>Istorijos / idėjos tekstas</span>
-          <textarea name="story" placeholder="Parašykite čia..." required></textarea>
-        </label>
+        <div className="field">
+          <label htmlFor="story">Istorijos / idėjos tekstas</label>
+          <textarea id="story" value={inputs.story} onChange={handleChange} placeholder="Parašykite čia..."></textarea>
+        </div>
 
-        <label className="field">
-          <span>Nuotrauka</span>
+        <div className="field">
+          <label htmlFor="img">Nuotrauka</label>
           <input type="file" accept="image/*" />
-        </label>
+        </div>
 
-        <label className="field">
-          <span>Norima surinkti suma (EUR)</span>
+        <div className="field">
+          <label htmlFor="goal">Norima surinkti suma (EUR)</label>
           <input
             className="amount"
             type="number"
-            name="goal"
-            min="0"
-            step="1"
+            id="goal"
+            value={inputs.goal}
+            onChange={handleChange}
             placeholder="pvz. 1500"
-            required
+          
           />
-        </label>
+        </div>
 
         <div className="actions">
-          <button type="submit" className="btn primary">
+          <button type="button"
+            className="btn primary"
+            onClick={create}
+          >
             Patvirtinti
           </button>
           <button type="reset" className="btn secondary">
