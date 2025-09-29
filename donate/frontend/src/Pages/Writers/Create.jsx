@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
-import "./StoryCard.scss";
+import { useContext, useState, useRef } from 'react';
 import { Writers } from '../../Contexts/Writers';
+import useImage from '../../Hooks/useImage';
+import "./StoryCard.scss";
 
 const defaultInputs = {
   name: '',
@@ -16,14 +17,17 @@ export default function CreateStory() {
 
   const [inputs, setInputs] = useState(defaultInputs);
 
-  const {setStoreWriter} = useContext(Writers)
+  const { setStoreWriter } = useContext(Writers)
+
+  const { image, readImage, setImage } = useImage();
+  const imageInput = useRef()
 
   const handleChange = e => {
     setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
   const create = _ => {
-    setStoreWriter(inputs);
+    setStoreWriter({...inputs, image});
     setInputs(defaultInputs);
   }
 
@@ -46,7 +50,7 @@ export default function CreateStory() {
 
         <div className="field">
           <label htmlFor="surname">Pavardė</label>
-          <input type="text" id="surname" value={inputs.surname} onChange={handleChange} placeholder="Įveskite pavardę"  />
+          <input type="text" id="surname" value={inputs.surname} onChange={handleChange} placeholder="Įveskite pavardę" />
         </div>
 
         <div className="field">
@@ -65,9 +69,20 @@ export default function CreateStory() {
         </div>
 
         <div className="field">
-          <label htmlFor="img">Nuotrauka</label>
-          <input type="file" accept="image/*" />
+          <label htmlFor="image">Nuotrauka</label>
+          <input type="file"
+            ref={imageInput}
+            id="image"
+            onChange={readImage}
+          />
         </div>
+        {console.log(image)}
+        {
+          image &&
+          <div className="mb-3" >
+            <img src={image} alt={inputs.name} className="img-fluid" style={{ width: '350px' }} />
+          </div>
+        }
 
         <div className="field">
           <label htmlFor="goal">Norima surinkti suma (EUR)</label>
@@ -78,7 +93,7 @@ export default function CreateStory() {
             value={inputs.goal}
             onChange={handleChange}
             placeholder="pvz. 1500"
-          
+
           />
         </div>
 

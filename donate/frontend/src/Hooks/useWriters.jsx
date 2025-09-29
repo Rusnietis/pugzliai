@@ -32,14 +32,14 @@ export default function useWriters(dispatchWriters) {
     }, []);
 
     useEffect(_ => {
-if (null !== storeWriter) {
-        axios.post(`${SERVER_URL}/writers`, storeWriter)
-            .then(res => {
-                setStoreWriter(null)
-            })
-            .catch(err => {
-                setStoreWriter(null)
-            })
+        if (null !== storeWriter) {
+            axios.post(`${SERVER_URL}/writers`, storeWriter)
+                .then(res => { 
+                    setStoreWriter(null)
+                })
+                .catch(err => {
+                    setStoreWriter(null)
+                })
         }
     }, [storeWriter]);
 

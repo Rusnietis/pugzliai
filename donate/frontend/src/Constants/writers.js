@@ -1,8 +1,9 @@
 export const GET_WRITERS_FROM_SERVER = 'GET_WRITERS_FROM_SERVER';
-// export const CREATE_WRITER = 'CREATE_WRITER';
-// export const CREATE_WRITER_REAL = 'CREATE_WRITER_REAL';
+// writer create
+export const CREATE_WRITER = 'CREATE_WRITER';
+export const CREATE_WRITER_REAL = 'CREATE_WRITER_REAL';
 // // Serveris nepatvirtino sukurimo
-// export const CREATE_WRITER_UNDO = 'CREATE_WRITER_UNDO';
+export const CREATE_WRITER_UNDO = 'CREATE_WRITER_UNDO';
 // export const DELETE_WRITER = 'DELETE_WRITER';
 // export const DELETE_WRITER_REAL = 'DELETE_WRITER_REAL';
 // // Serveris nepatvirtino trinimo
