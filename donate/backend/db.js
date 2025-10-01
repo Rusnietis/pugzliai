@@ -16,25 +16,37 @@ connection.connect(function (err) {
 
 
 // Create users table
-const createStoriesTable = _ => {
-    const sql = `CREATE TABLE stories (
-         id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
-    short_description VARCHAR(500) DEFAULT NULL,
-    full_text LONGTEXT DEFAULT NULL,
-    goal_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-    collected_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('active','completed','paused','cancelled') NOT NULL DEFAULT 'active',
-    writer_id INT(11) UNSIGNED DEFAULT NULL,
-     PRIMARY KEY (id)
-
-    )`;
+const createWritersTable = _ => {
+    const sql = `CREATE TABLE IF NOT EXISTS writers (
+  id CHAR(36) PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  surname VARCHAR(100) NOT NULL,
+  created_at DATE NOT NULL
+)`;
     connection.query(sql, function (err) {
         if (err) throw err;
-        console.log('Users table created');
+        console.log('Writers table created');
     });
 };
+
+const createStoriesTable = _ => {
+    const sql = `CREATE TABLE IF NOT EXISTS stories (
+    id CHAR(36) PRIMARY KEY,
+  writer_id CHAR(36) NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  short_description VARCHAR(255),   -- 👈 čia trumpas aprašymas
+  story TEXT NOT NULL,
+  goal DECIMAL(10,2),
+  image TEXT,
+  FOREIGN KEY (writer_id) REFERENCES writers(id) ON DELETE CASCADE
+ 
+)`;
+    connection.query(sql, function (err) {
+        if (err) throw err;
+        console.log('Stories table created');
+    });
+};
+
 
 // // Create authors table
 // const createAuthorsTable = _ => {
@@ -209,7 +221,8 @@ const createStoriesTable = _ => {
 // dropAllTables();
 //createAllTables();
 // seedAllTables();
-createStoriesTable()
+createWritersTable();
+createStoriesTable();
 
 
 connection.end();

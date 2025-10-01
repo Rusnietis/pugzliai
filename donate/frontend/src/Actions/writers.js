@@ -23,7 +23,7 @@ export function storeWriterAsReal(response) {
     }
 }
 
-export function storeCustomerAsUndo(writer) {
+export function storeWriterAsUndo(writer) {
     return {
         type: constants.CREATE_WRITER_UNDO,
         payload: writer

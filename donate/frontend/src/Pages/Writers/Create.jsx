@@ -8,8 +8,9 @@ const defaultInputs = {
   surname: '',
   createdAt: '',
   title: '',
+  shortDescription: '',
   story: '',
-  goal: '',
+  goal: ''
 
 }
 
@@ -27,9 +28,13 @@ export default function CreateStory() {
   }
 
   const create = _ => {
-    setStoreWriter({...inputs, image});
+    console.log("KURIU SU INPUTS:", inputs);
+    setStoreWriter({ ...inputs, image });
     setInputs(defaultInputs);
+    imageInput.current.value = null;
+    setImage(null);
   }
+
 
 
 
@@ -62,7 +67,16 @@ export default function CreateStory() {
           <label htmlFor="title">Istorijos pavadinimas</label>
           <input type="text" id="title" value={inputs.title} onChange={handleChange} placeholder="Įveskite pavadinimą" />
         </div>
-
+        <div className="field">
+          <label htmlFor="shortDescription">Trumpas aprašymas</label>
+          <input
+            type="text"
+            id="shortDescription"              
+            value={inputs.shortDescription}
+            onChange={handleChange}
+            placeholder="Įveskite trumpą istorijos aprašymą"
+          />
+        </div>
         <div className="field">
           <label htmlFor="story">Istorijos / idėjos tekstas</label>
           <textarea id="story" value={inputs.story} onChange={handleChange} placeholder="Parašykite čia..."></textarea>
@@ -76,7 +90,7 @@ export default function CreateStory() {
             onChange={readImage}
           />
         </div>
-        {console.log(image)}
+        {/* {console.log(image)} */}
         {
           image &&
           <div className="mb-3" >

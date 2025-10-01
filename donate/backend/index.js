@@ -130,11 +130,45 @@ app.get('/writers', (req, res) => {
   })
 })
 
-app.post('/writers', (req, res) => {
-  
-})
+app.get("/stories", (req, res) => {
+  const sql = "SELECT * FROM stories";
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Klaida gaunant duomenis iš stories", error: err });
+    }
+
+    res.json(results);
+  });
+});
 
 
+app.post("/writers", (req, res) => {
+  const { name, surname, createdAt, title, shortDescription, story, image, goal } = req.body;
+  console.log('POST', req.body)
+  const writerId = uuidv4();
+  const storyId = uuidv4();
+
+  const sql1 = `INSERT INTO writers (id, name, surname, created_at) VALUES (?, ?, ?, ?)`;
+  connection.query(sql1, [writerId, name, surname, createdAt], (err1, results1) => {
+    if (err1) {
+      return res.status(500).json({ message: 'Klaida įrašant į writers lentelę', error: err1 });
+    }
+
+    const sql2 = `INSERT INTO stories (id, writer_id, title, short_description, story, goal, image)
+              VALUES (?, ?, ?, ?, ?, ?,?)`;
+    connection.query(sql2, [storyId, writerId, title, shortDescription, story, goal, image], (err2, results2) => {
+      if (err2) {
+        return res.status(500).json({ message: 'Klaida įrašant į stories lentelę', error: err2 });
+      }
+
+      const storyId = results2.insertId; // naujai sugeneruotas story id
+
+      res.json({ succsess: true, });
+    });
+
+  });
+});
 
 
 app.listen(port, () => {
