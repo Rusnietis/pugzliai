@@ -1,0 +1,2 @@
+export const GET_STORIES_FROM_SERVER = 'GET_STORIES_FROM_SERVER';
+export const ADD_STORY = 'ADD_STORY';

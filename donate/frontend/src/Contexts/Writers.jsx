@@ -1,4 +1,5 @@
-import { createContext, useReducer, useState } from 'react';
+import { createContext, useReducer, useState, useContext } from 'react';
+import { Stories } from './Stories';
 import useWriters from '../Hooks/useWriters';
 import writersReducer from '../Reducers/writersReducer';
 
@@ -12,15 +13,15 @@ export const WritersProvider = ({ children }) => {
     const [editWriter, setEditWriter] = useState(null);
 
     console.log('writers', writers)
-
+    const { dispatchStories } = useContext(Stories);
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeWriter, setStoreWriter, updateWriter, setUpdateWriter, destroyWriter, setDestroyWriter } = useWriters(dispatchWriters);
+    const { storeWriter, setStoreWriter, updateWriter, setUpdateWriter, destroyWriter, setDestroyWriter } = useWriters(dispatchWriters, dispatchStories);
 
 
 
     return (
         <Writers.Provider value={{
-             writers,
+            writers,
             dispatchWriters,
             storeWriter,
             setStoreWriter,
@@ -28,9 +29,9 @@ export const WritersProvider = ({ children }) => {
             setUpdateWriter,
             destroyWriter,
             setDestroyWriter,
-            deleteWriter, 
+            deleteWriter,
             setDeleteWriter,
-            editWriter, 
+            editWriter,
             setEditWriter
 
         }}>

@@ -3,12 +3,13 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/writers';
+import * as a from '../Actions/stories';
 //import { MessagesContext } from '../Contexts/Messages';
 
 
 
 //patikrinta
-export default function useWriters(dispatchWriters) {
+export default function useWriters(dispatchWriters, dispatchStories) {
 
     const [storeWriter, setStoreWriter] = useState(null);
     const [updateWriter, setUpdateWriter] = useState(null);
@@ -23,24 +24,12 @@ export default function useWriters(dispatchWriters) {
         axios.get(`${SERVER_URL}/writers`)
             .then(res => {
                 console.log(res.data)
-                dispatchWriters(a.getWriters(res.data));
+                dispatchWriters(c.getWriters(res.data));
             })
             .catch(err => {
                 console.log(err)
             })
-    }, []);
-
-     useEffect(_ => {
-
-        axios.get(`${SERVER_URL}/stories`)
-            .then(res => {
-                console.log(res.data)
-                //dispatchWriters(a.getWriters(res.data));
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }, []);
+    }, [destroyWriter]);
 
     useEffect(_ => {
         if (null !== storeWriter) {
@@ -52,6 +41,15 @@ export default function useWriters(dispatchWriters) {
                     console.log("POST OK:", res.data);
                     setStoreWriter(null)
                     dispatchWriters(c.storeWriterAsReal(res.data));
+                    dispatchStories(a.addStory({
+                        id: res.data.storyId,  // priklauso nuo to, ką backend grąžina
+                        writer_id: res.data.writerId,
+                        title: res.data.title,
+                        short_description: res.data.shortDescription,
+                        story: res.data.story,
+                        goal: res.data.goal,
+                        image: res.data.image
+                    }));
                 })
                 .catch(err => {
                     dispatchWriters(c.storeWriterAsUndo({ ...storeWriter, id: uuid }));
