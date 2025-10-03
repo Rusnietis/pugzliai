@@ -164,7 +164,19 @@ app.post("/writers", (req, res) => {
 
       const storyId = results2.insertId; // naujai sugeneruotas story id
 
-      res.json({ succsess: true, });
+      res.json({
+        succsess: true, 
+        writerId,
+        storyId: results2.insertId, // id iš stories lentelės
+        name,
+        surname,
+        createdAt,
+        title,
+        shortDescription,
+        story,
+        image,
+        goal
+      });
     });
 
   });

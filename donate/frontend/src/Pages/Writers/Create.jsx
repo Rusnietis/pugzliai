@@ -10,7 +10,8 @@ const defaultInputs = {
   title: '',
   shortDescription: '',
   story: '',
-  goal: ''
+  goal: '',
+  image:null
 
 }
 
