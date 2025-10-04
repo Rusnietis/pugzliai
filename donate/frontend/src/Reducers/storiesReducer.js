@@ -1,4 +1,5 @@
 import * as constants from '../Constants/stories';
+import { SERVER_URL } from '../Constants/main';
 // patikrinta
 // funkcija, kuri apdoroja autoriu lista is serverio
 export default function storiesReducer(state, action) {
@@ -8,7 +9,12 @@ export default function storiesReducer(state, action) {
 
     switch (action.type) {
         case constants.GET_STORIES_FROM_SERVER:
-            newState = action.payload;
+            newState = action.payload.map(story => {
+                return {
+                    ...story,
+                    image: story.image ? `${SERVER_URL}/${story.image}` : null
+                }
+            });
             break;
         case constants.ADD_STORY:
             return [...state, action.payload];

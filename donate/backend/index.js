@@ -32,27 +32,27 @@ app.use(bodyParser.json());
 
 connection.connect();
 
-// files
-// const writeImage = imageBase64 => {
-//   if (!imageBase64) {
-//     return null;
-//   }
-//   let type;
-//   let image;
-//   if (imageBase64.indexOf('data:image/png;base64,') === 0) {
-//     type = 'png';
-//     image = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
-//   } else if (imageBase64.indexOf('data:image/jpeg;base64,') === 0) {
-//     type = 'jpg';
-//     image = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
-//   } else {
-//     res.status(500).send('Bad image format');
-//     return;
-//   }
-//   const filename = md5(uuidv4()) + '.' + type;
-//   fs.writeFileSync('public/images/' + filename, image);
-//   return filename;
-// };
+//files
+const writeImage = imageBase64 => {
+  if (!imageBase64) {
+    return null;
+  }
+  let type;
+  let image;
+  if (imageBase64.indexOf('data:image/png;base64,') === 0) {
+    type = 'png';
+    image = Buffer.from(imageBase64.replace(/^data:image\/png;base64,/, ''), 'base64');
+  } else if (imageBase64.indexOf('data:image/jpeg;base64,') === 0) {
+    type = 'jpg';
+    image = Buffer.from(imageBase64.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+  } else {
+    res.status(500).send('Bad image format');
+    return;
+  }
+  const filename = md5(uuidv4()) + '.' + type;
+  fs.writeFileSync('public/images/' + filename, image);
+  return filename;
+};
 
 // const deleteImage = heroId => {
 //   let sql = 'SELECT image FROM heroes WHERE id = ?';
@@ -131,7 +131,11 @@ app.get('/writers', (req, res) => {
 })
 
 app.get("/stories", (req, res) => {
-  const sql = "SELECT * FROM stories";
+  const sql = `
+  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image
+  FROM stories s
+  LEFT JOIN writers w ON s.writer_id = w.id
+  `;
 
   connection.query(sql, (err, results) => {
     if (err) {
@@ -144,6 +148,8 @@ app.get("/stories", (req, res) => {
 
 
 app.post("/writers", (req, res) => {
+  const filename = writeImage(req.body.image);
+  console.log('filename', filename)
   const { name, surname, createdAt, title, shortDescription, story, image, goal } = req.body;
   console.log('POST', req.body)
   const writerId = uuidv4();
@@ -157,7 +163,7 @@ app.post("/writers", (req, res) => {
 
     const sql2 = `INSERT INTO stories (id, writer_id, title, short_description, story, goal, image)
               VALUES (?, ?, ?, ?, ?, ?,?)`;
-    connection.query(sql2, [storyId, writerId, title, shortDescription, story, goal, image], (err2, results2) => {
+    connection.query(sql2, [storyId, writerId, title, shortDescription, story, goal, filename ? 'images/' + filename : null], (err2, results2) => {
       if (err2) {
         return res.status(500).json({ message: 'Klaida įrašant į stories lentelę', error: err2 });
       }
@@ -174,7 +180,7 @@ app.post("/writers", (req, res) => {
         title,
         shortDescription,
         story,
-        image,
+        image: filename ? `/images/${filename}` : null,
         goal
       });
     });

@@ -1,8 +1,11 @@
 // HomePage.jsx
-import React from "react";
+
+//import StoriesPreview from "../../Components/StoriesPreview";
+
 
 
 export default function HomePage() {
+
   return (
     <div className="homepage">
       {/* Hero sekcija */}
@@ -50,19 +53,18 @@ export default function HomePage() {
         <h2>Istorijos</h2>
         <div className="story-grid">
           <div className="story-card">
-            <img src="https://ve.lt/sites/default/files/2018-09/photo_15_97629145.jpg" alt="Katės pagalba" />
-            <h3>Pagalba beglobiams gyvūnams</h3>
-            <p>Prisidėk prie prieglaudos, kuri rūpinasi šimtais kačių ir šunų kasmet.</p>
+            {/* <StoriesPreview/> */}
+
             <button>Paaukoti</button>
           </div>
           <div className="story-card">
-            <img  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTarnM-kHjaxxTo2VGhGT5wfnQMPzu9P7I3Nw&s" alt="Vaiko pagalba" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTarnM-kHjaxxTo2VGhGT5wfnQMPzu9P7I3Nw&s" alt="Vaiko pagalba" />
             <h3>Pagalba vaikams moksluose</h3>
             <p>Padėk vaikams įsigyti mokymosi priemonių ir gauti kokybišką išsilavinimą.</p>
             <button>Paaukoti</button>
           </div>
           <div className="story-card">
-            <img src="https://bilis.lt/assets/nuotraukos/_desktop_small/963144/photo-967632333.avif"  alt="Gamta" />
+            <img src="https://bilis.lt/assets/nuotraukos/_desktop_small/963144/photo-967632333.avif" alt="Gamta" />
             <h3>Miško atkūrimo iniciatyva</h3>
             <p>Sodinkime medžius kartu ir kurkime švaresnę bei žalesnę aplinką ateities kartoms.</p>
             <button>Paaukoti</button>

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Stories } from "../../Contexts/Stories";
+import { SERVER_URL } from "../../Constants/main";
 import "./StoryCard.scss";
 
 export default function StoryCard() {
@@ -16,7 +17,8 @@ export default function StoryCard() {
             <div className="preview-title"><h2 id="card-title">{story.title}</h2></div>
 
           <div className="preview-photo">
-            <img src={story.img} alt={story.title} />
+           { story?.image && <img src={story?.image} alt={story?.title} />}
+           { !story?.image && <img src={`${SERVER_URL}/images/no-image.jpg`} alt="no image" />}
           </div>
           <div>
             <div className="field">{story.story}</div>

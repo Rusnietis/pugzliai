@@ -11,7 +11,7 @@ const defaultInputs = {
   shortDescription: '',
   story: '',
   goal: '',
-  image:null
+  image: null
 
 }
 
@@ -72,7 +72,7 @@ export default function CreateStory() {
           <label htmlFor="shortDescription">Trumpas aprašymas</label>
           <input
             type="text"
-            id="shortDescription"              
+            id="shortDescription"
             value={inputs.shortDescription}
             onChange={handleChange}
             placeholder="Įveskite trumpą istorijos aprašymą"
@@ -85,7 +85,8 @@ export default function CreateStory() {
 
         <div className="field">
           <label htmlFor="image">Nuotrauka</label>
-          <input type="file"
+          <input
+            type="file"
             ref={imageInput}
             id="image"
             onChange={readImage}
@@ -98,6 +99,7 @@ export default function CreateStory() {
             <img src={image} alt={inputs.name} className="img-fluid" style={{ width: '350px' }} />
           </div>
         }
+        
 
         <div className="field">
           <label htmlFor="goal">Norima surinkti suma (EUR)</label>
