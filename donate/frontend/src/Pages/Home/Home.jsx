@@ -1,10 +1,22 @@
-// HomePage.jsx
+import { useContext } from "react";
+import { Stories } from "../../Contexts/Stories";
+import { Link } from "react-router-dom";
 
 //import StoriesPreview from "../../Components/StoriesPreview";
 
 
 
-export default function HomePage() {
+export default function Home() {
+
+  const { stories } = useContext(Stories);
+  console.log(stories)
+  // Jeigu dar neužkrautos istorijos
+  if (!stories) {
+    return <div className="loading">Kraunama...</div>;
+  }
+
+  // Rodyti tik 3 naujausias istorijas
+  const latestStories = stories.slice(0, 3);
 
   return (
     <div className="homepage">
@@ -52,22 +64,19 @@ export default function HomePage() {
       <section className="stories">
         <h2>Istorijos</h2>
         <div className="story-grid">
-          <div className="story-card">
-            {/* <StoriesPreview/> */}
-
-            <button>Paaukoti</button>
-          </div>
-          <div className="story-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTarnM-kHjaxxTo2VGhGT5wfnQMPzu9P7I3Nw&s" alt="Vaiko pagalba" />
-            <h3>Pagalba vaikams moksluose</h3>
-            <p>Padėk vaikams įsigyti mokymosi priemonių ir gauti kokybišką išsilavinimą.</p>
-            <button>Paaukoti</button>
-          </div>
-          <div className="story-card">
-            <img src="https://bilis.lt/assets/nuotraukos/_desktop_small/963144/photo-967632333.avif" alt="Gamta" />
-            <h3>Miško atkūrimo iniciatyva</h3>
-            <p>Sodinkime medžius kartu ir kurkime švaresnę bei žalesnę aplinką ateities kartoms.</p>
-            <button>Paaukoti</button>
+          <div className="stories-grid">
+            {latestStories.map((story) => (
+              <div className="story-card" key={story.id}>
+                <img src={story.image} alt={story.title} className="story-image" />
+                <div className="story-info">
+                  <h3>{story.title}</h3>
+                  <p className="short-description">{story.short_description}</p>
+                  <Link to="/istorijos" className="btn secondary">
+                    Skaityti daugiau
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -79,4 +88,3 @@ export default function HomePage() {
     </div>
   );
 }
-
