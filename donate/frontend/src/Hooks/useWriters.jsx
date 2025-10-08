@@ -48,7 +48,8 @@ export default function useWriters(dispatchWriters, dispatchStories) {
                         short_description: res.data.shortDescription,
                         story: res.data.story,
                         goal: res.data.goal,
-                        image: res.data.image
+                        image: res.data.image,
+                        status: res.data.status
                     }));
                 })
                 .catch(err => {

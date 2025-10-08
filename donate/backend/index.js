@@ -132,7 +132,7 @@ app.get('/writers', (req, res) => {
 
 app.get("/stories", (req, res) => {
   const sql = `
-  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image
+  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status
   FROM stories s
   LEFT JOIN writers w ON s.writer_id = w.id
   `;

@@ -17,12 +17,20 @@ export default function Nav() {
             Apie
           </NavLink>
         </li>
-        <li>
+         <li>
           <NavLink 
             to="/istorijos" 
             className={({ isActive }) => isActive ? 'active' : ''}
           >
             Istorijos
+          </NavLink>
+        </li>
+        <li>
+          <NavLink 
+            to="/mano istorijos" 
+            className={({ isActive }) => isActive ? 'active' : ''}
+          >
+            Mano istorijos
           </NavLink>
         </li>
         <li>

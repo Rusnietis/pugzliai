@@ -11,7 +11,8 @@ const defaultInputs = {
   shortDescription: '',
   story: '',
   goal: '',
-  image: null
+  image: null,
+  status: 'pending'
 
 }
 
