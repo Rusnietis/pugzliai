@@ -2,6 +2,22 @@
 @use "./navbar.scss";
 @use "./home.scss";
 
+
+// :root {
+//   --bg: #f5f7fb;
+//   --card: #ffffff;
+//   --accent: #6c63ff;
+//   --accent-hover: #574bdb;
+//   --text: #1f2937;
+//   --muted: #6b7280;
+//   --border: #e5e7eb;
+//   --success: #2e7d32;
+//   --success-light: #c8e6c9;
+//   --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+//   --radius: 16px;
+//   --padding: 2rem;
+// }
+
 * {
   padding: 0;
   margin: 0;
@@ -9,18 +25,29 @@
   font-family: Outfit;
 }
 
-body {
-  min-height: 100vh;
- 
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
 
 .app{
   width: 80%;
   margin: auto;
 }
 
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+h2 {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

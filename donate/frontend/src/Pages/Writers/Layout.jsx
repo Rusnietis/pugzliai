@@ -1,13 +1,9 @@
 import Nav from '../../Components/Nav';
 import Create from './Create';
-// import Delete from './Delete';
-// import { useContext } from 'react';
-// import { Customers } from '../../Contexts/Customers';
-// import Create from './Create';
 import List from './List';
-import './StoryCard.scss';
-// import Edit from './Edit';
-// import Header from './Header';
+import '../../Style/StoryCard.scss';
+
+
 
 
 export default function Layout() {

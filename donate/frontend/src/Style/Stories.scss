@@ -1,0 +1,307 @@
+/* =========================
+   🌿 Bendri kintamieji
+========================= */
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --accent: #6c63ff;
+  --accent-hover: #574bdb;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --success: #2e7d32;
+  --success-light: #c8e6c9;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --radius: 16px;
+  --padding: 2rem;
+}
+
+/* =========================
+   🌍 Bendri stiliai
+========================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================
+   🧩 Istorijos kortelė
+========================= */
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding);
+  box-sizing: border-box;
+}
+
+.preview-col {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-card {
+  width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--padding);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .preview-title {
+    text-align: center;
+
+    h2 {
+      font-size: 2rem;
+      color: var(--success);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .preview-photo {
+    width: 100%;
+    height: 320px;
+    border-radius: calc(var(--radius) - 4px);
+    overflow: hidden;
+    background: var(--success-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .field {
+    font-size: 1rem;
+    color: var(--muted);
+    background: #f9fafb;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .goal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--success-light);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+
+    .field {
+      background: transparent;
+      border: none;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .amount-pill {
+      background: var(--success);
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      box-shadow: var(--shadow);
+    }
+  }
+}
+
+/* =========================
+   📝 Istorijos forma
+========================= */
+.form-col {
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--padding);
+
+  > div {
+    max-width: 800px;
+    width: 100%;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--success);
+      font-size: 2rem;
+    }
+
+    .lead {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+.story-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 0.95rem;
+    }
+
+    input,
+    textarea {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: #f9fafb;
+
+      &:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+      }
+
+      &.amount {
+        max-width: 200px;
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+    }
+  }
+
+  .mb-3 {
+    text-align: center;
+
+    img {
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      max-width: 350px;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+
+    .btn {
+      padding: 0.8rem 1.8rem;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+
+      &.primary {
+        background: var(--accent);
+        color: white;
+
+        &:hover {
+          background: var(--accent-hover);
+          transform: translateY(-2px);
+        }
+      }
+
+      &.secondary {
+        background: var(--success-light);
+        color: var(--success);
+
+        &:hover {
+          background: #a5d6a7;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+/* =========================
+   📱 Responsyvumas
+========================= */
+@media (max-width: 600px) {
+  .preview-card,
+  .form-col > div {
+    padding: 1.5rem;
+  }
+
+  .preview-card .preview-photo {
+    height: 200px;
+  }
+
+  .story-form .actions {
+    flex-direction: column;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}

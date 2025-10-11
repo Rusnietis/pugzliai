@@ -1,7 +1,8 @@
 import { useContext, useState, useRef } from 'react';
 import { Writers } from '../../Contexts/Writers';
 import useImage from '../../Hooks/useImage';
-import "./StoryCard.scss";
+import '../../Style/StoryCard.scss';
+
 
 const defaultInputs = {
   name: '',

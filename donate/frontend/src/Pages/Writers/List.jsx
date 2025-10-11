@@ -1,7 +1,8 @@
-import { useContext } from "react";
-import { Stories } from "../../Contexts/Stories";
-import { SERVER_URL } from "../../Constants/main";
-import "./StoryCard.scss";
+import { useContext } from 'react';
+import { Stories } from '../../Contexts/Stories';
+import { SERVER_URL } from '../../Constants/main';
+import '../../Style/StoryCard.scss';
+
 
 export default function StoryCard() {
 
