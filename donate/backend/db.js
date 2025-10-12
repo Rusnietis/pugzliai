@@ -15,37 +15,50 @@ connection.connect(function (err) {
 });
 
 
-// Create users table
-const createWritersTable = _ => {
-    const sql = `CREATE TABLE IF NOT EXISTS writers (
-  id CHAR(36) PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  surname VARCHAR(100) NOT NULL,
-  created_at DATE NOT NULL
+const createDonorsTable = _ => {
+    const sql = `CREATE TABLE IF NOT EXISTS donors (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`;
     connection.query(sql, function (err) {
         if (err) throw err;
-        console.log('Writers table created');
+        console.log('Donors table created');
     });
 };
 
-const createStoriesTable = _ => {
-    const sql = `CREATE TABLE IF NOT EXISTS stories (
-    id CHAR(36) PRIMARY KEY,
-  writer_id CHAR(36) NOT NULL,
-  title VARCHAR(200) NOT NULL,
-  short_description VARCHAR(255),   -- 👈 čia trumpas aprašymas
-  story TEXT NOT NULL,
-  goal DECIMAL(10,2),
-  image TEXT,
-  FOREIGN KEY (writer_id) REFERENCES writers(id) ON DELETE CASCADE
- 
-)`;
-    connection.query(sql, function (err) {
-        if (err) throw err;
-        console.log('Stories table created');
-    });
-};
+// // Create users table
+// const createWritersTable = _ => {
+//     const sql = `CREATE TABLE IF NOT EXISTS writers (
+//   id CHAR(36) PRIMARY KEY,
+//   name VARCHAR(100) NOT NULL,
+//   surname VARCHAR(100) NOT NULL,
+//   created_at DATE NOT NULL
+// )`;
+//     connection.query(sql, function (err) {
+//         if (err) throw err;
+//         console.log('Writers table created');
+//     });
+// };
+
+// const createStoriesTable = _ => {
+//     const sql = `CREATE TABLE IF NOT EXISTS stories (
+//     id CHAR(36) PRIMARY KEY,
+//   writer_id CHAR(36) NOT NULL,
+//   title VARCHAR(200) NOT NULL,
+//   short_description VARCHAR(255),   -- 👈 čia trumpas aprašymas
+//   story TEXT NOT NULL,
+//   goal DECIMAL(10,2),
+//   image TEXT,
+//   FOREIGN KEY (writer_id) REFERENCES writers(id) ON DELETE CASCADE
+
+// )`;
+//     connection.query(sql, function (err) {
+//         if (err) throw err;
+//         console.log('Stories table created');
+//     });
+// };
 
 
 // // Create authors table
@@ -221,8 +234,8 @@ const createStoriesTable = _ => {
 // dropAllTables();
 //createAllTables();
 // seedAllTables();
-createWritersTable();
-createStoriesTable();
-
+// createWritersTable();
+// createStoriesTable();
+createDonorsTable();
 
 connection.end();

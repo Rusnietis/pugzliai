@@ -1,6 +1,6 @@
 import Nav from '../../Components/Nav';
 import List from './List';
-import '../../Style/StoryCard.scss';
+import '../../Style/StoriesList.scss';
 
 
 
@@ -18,7 +18,7 @@ export default function Layout() {
 
   return (
     <div>
-      <div className="page-container" >
+      <div className="page-box" >
         <div>
           <List />
         </div>
