@@ -17,3 +17,11 @@ export function addStory(story) {
         payload: story
     }
 }
+
+export function updateCollected(storyId, amount) {
+    return { 
+        type: constants.UPDATE_COLLECTED,
+        payload: { storyId, amount }
+
+    }
+}

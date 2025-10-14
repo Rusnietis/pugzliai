@@ -1,5 +1,4 @@
 import { createContext, useReducer, useState, useContext } from 'react';
-import { Stories } from './Stories';
 import useDonors from '../Hooks/useDonors';
 import donorsReducer from '../Reducers/donorsReducer';
 
@@ -15,7 +14,7 @@ export const DonorsProvider = ({ children }) => {
     console.log('donors', donors)
    
     // is hooko gauname funkcijas, su kuriai kreipsimes i severi ir su reduserio pagalba atnaujina duomenis
-    const { storeDonor, setStoreDonor, updateDonor, setUpdateDonor, destroyDonor, setDestroyDonor } = useDonors(dispatchDonors, dispatchStories);
+    const { storeDonor, setStoreDonor, updateDonor, setUpdateDonor, destroyDonor, setDestroyDonor } = useDonors(dispatchDonors);
 
 
 

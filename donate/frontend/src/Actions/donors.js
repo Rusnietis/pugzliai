@@ -1,6 +1,6 @@
 import * as  constants from '../Constants/donors';
 
-export function getWriters(donors) {
+export function getDonors(donors) {
 
     return {
 
@@ -9,21 +9,21 @@ export function getWriters(donors) {
     }
 }
 
-export function storeWriterAsTemp(donor) {
+export function storeDonorAsTemp(donor) {
     return {
         type: constants.CREATE_DONOR,
         payload: donor
     }
 }
 
-export function storeWriterAsReal(response) {
+export function storeDonorAsReal(response) {
     return {
         type: constants.CREATE_DONOR_REAL,
         payload: response
     }
 }
 
-export function storeWriterAsUndo(donor) {
+export function storeDonorAsUndo(donor) {
     return {
         type: constants.CREATE_DONOR_UNDO,
         payload: donor

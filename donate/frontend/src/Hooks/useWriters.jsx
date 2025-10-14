@@ -49,7 +49,8 @@ export default function useWriters(dispatchWriters, dispatchStories) {
                         story: res.data.story,
                         goal: res.data.goal,
                         image: res.data.image,
-                        status: res.data.status
+                        status: res.data.status,
+                        collected: res.data.collected
                     }));
                 })
                 .catch(err => {

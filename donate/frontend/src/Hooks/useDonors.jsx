@@ -3,7 +3,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/donors';
-import * as a from '../Actions/stories';
+import * as s from '../Actions/stories';
 //import { MessagesContext } from '../Contexts/Messages';
 
 
@@ -29,7 +29,7 @@ export default function useDonors(dispatchDonors, dispatchStories) {
             .catch(err => {
                 console.log(err)
             })
-    }, []);
+    }, [dispatchDonors]);
 
     useEffect(_ => {
         if (null !== storeDonor) {
@@ -41,16 +41,8 @@ export default function useDonors(dispatchDonors, dispatchStories) {
                     console.log("POST OK:", res.data);
                     setStoreDonor(null)
                     dispatchDonors(c.storeDonorAsReal(res.data));
-                    dispatchStories(a.addStory({
-                        id: res.data.storyId,  // priklauso nuo to, ką backend grąžina
-                        donor_id: res.data.donorId,
-                        title: res.data.title,
-                        short_description: res.data.shortDescription,
-                        story: res.data.story,
-                        goal: res.data.goal,
-                        image: res.data.image,
-                        status: res.data.status
-                    }));
+                    dispatchStories(s.updateCollected(res.data.story_id, res.data.amount));
+                    
                 })
                 .catch(err => {
                     dispatchDonors(c.storeDonorAsUndo({ ...storeDonor, id: uuid }));

@@ -1,14 +1,16 @@
 import { useContext, useState } from "react";
+import axios from 'axios';
 import { Stories } from "../../Contexts/Stories";
 import { Donors } from '../../Contexts/Donors';
 import { SERVER_URL } from "../../Constants/main";
+import * as s from '../../Actions/stories';
 import '../../Style/StoriesList.scss';
 import '../../Style/button18.scss';
 
 const defaultInputs = {
   name: '',
   amount: '',
-  date: Date.now(),
+  date: ''
 
 }
 
@@ -16,19 +18,35 @@ export default function List() {
 
   const [inputs, setInputs] = useState(defaultInputs);
 
-  const { stories } = useContext(Stories);
-  // const { setStoreDonor } = useContext(Donors);
+  const { stories, dispatchStories } = useContext(Stories);
+  const { donors, setStoreDonor } = useContext(Donors);
 
-  console.log('Donors', Donors)
+  console.log('Donors', donors)
+  console.log('Stories', stories)
+
 
   const handleChange = e => {
     setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
+  const addMoney = (story) => {
+    const donationData = {
+      name: inputs.name,
+      amount: parseFloat(inputs.amount),
+      story_id: story.id,
+      date: new Date().toISOString(),
+    };
 
-  const addMoney = (donor) => {
-    console.log('Aukoju', donor)
-  }
+    console.log('💸 Siunčiu donaciją per context:', donationData);
+
+    // Vietoj axios — naudojam kontekstą
+    setStoreDonor(donationData);
+
+    // Vietoje atskiro axios — surinkta suma atsinaujins per reducerį
+    dispatchStories(s.updateCollected(story.id, donationData.amount));
+
+    setInputs(defaultInputs);
+  };
 
   // jei istorija yra nepatvirtinta
 
@@ -85,7 +103,7 @@ export default function List() {
                 <div className="list-actions" >
                   <button type="button"
                     className="button-18"
-                    onClick={addMoney}
+                    onClick={() => addMoney(story)}
                   >
                     Aukoti
                   </button>
@@ -101,17 +119,29 @@ export default function List() {
                 {/* jau surinkta */}
                 <div className="collected">
                   <div className="list-field">🎯 Jau surinkta</div>
-                  <div className="amount-pill">€</div>
+
+
+                  <div className="amount-pill">{story?.collected} €</div>
                 </div>
                 {/* Darliko surinkti */}
                 <div className="remaining">
                   <div className="list-field">🎯 Dar liko surinkti</div>
-                  <div className="amount-pill">€</div>
+                  <div className="amount-pill">{(story?.goal || 0) - (story?.collected || 0)} €</div>
                 </div>
               </div>
               <div className="donors-list">
                 <div className="" style={{ fontSize: '18px' }}>Aukotojų sarašas</div>
                 <hr />
+                {
+                  donors
+                    ?.filter(d => d.story_id === story.id)
+                    .map(donor => (
+                      <div key={donor.id} className="donor-list">
+                        <li>{donor.name} – {donor.amount} €</li>
+                      </div>
+                    ))
+                }
+
               </div>
             </div>
           </div>

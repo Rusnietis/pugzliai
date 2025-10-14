@@ -132,7 +132,7 @@ app.get('/writers', (req, res) => {
 
 app.get("/stories", (req, res) => {
   const sql = `
-  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status
+  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status, s.collected
   FROM stories s
   LEFT JOIN writers w ON s.writer_id = w.id
   `;
@@ -145,6 +145,17 @@ app.get("/stories", (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/donors', (req, res) => {
+  const sql = 'SELECT * FROM donors';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json(results);
+    }
+  })
+})
 
 
 app.post("/writers", (req, res) => {
@@ -187,6 +198,36 @@ app.post("/writers", (req, res) => {
 
   });
 });
+
+app.post('/donors', (req, res) => {
+  const { name, amount, story_id, date } = req.body;
+  const sql = `INSERT INTO donors (name, amount, story_id, date) VALUES (?, ?, ?, ?)`;
+
+  connection.query(sql, [name, amount, story_id, date], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Klaida įrašant donorą', error: err });
+    }
+
+    const donorId = results.insertId;
+
+    const sql2 = `UPDATE stories SET collected = IFNULL(collected, 0) + ? WHERE id = ?`;
+    connection.query(sql2, [amount, story_id], (err2) => {
+      if (err2) {
+        return res.status(500).json({ message: 'Klaida atnaujinant stories', error: err2 });
+      }
+
+      // ✅ FRONTUI GRAŽINAME PILNĄ OBJEKTĄ
+      res.json({
+        id: donorId,
+        name,
+        amount,
+        story_id,
+        date
+      });
+    });
+  });
+});
+
 
 
 app.listen(port, () => {
