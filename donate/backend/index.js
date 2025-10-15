@@ -7,6 +7,7 @@ const fs = require('fs');
 const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
 const { error } = require('console');
+const { inflateRawSync } = require('zlib');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -135,6 +136,13 @@ app.get("/stories", (req, res) => {
   SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status, s.collected
   FROM stories s
   LEFT JOIN writers w ON s.writer_id = w.id
+  ORDER BY 
+  CASE 
+   WHEN collected >= goal THEN 2
+   ELSE 1
+   END,
+   collected ASC
+
   `;
 
   connection.query(sql, (err, results) => {
@@ -201,32 +209,42 @@ app.post("/writers", (req, res) => {
 
 app.post('/donors', (req, res) => {
   const { name, amount, story_id, date } = req.body;
-  const sql = `INSERT INTO donors (name, amount, story_id, date) VALUES (?, ?, ?, ?)`;
 
-  connection.query(sql, [name, amount, story_id, date], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Klaida įrašant donorą', error: err });
+  // 1️⃣ Patikrinti ar istorija dar nesurinko tikslo
+  const sqlCheck = `
+  SELECT goal, collected FROM stories WHERE id = ?
+
+  `;
+  connection.query(sqlCheck, [story_id], (err, result) => {
+    if (err || result.length === 0) {
+      return res.status(400).json({ message: 'Istorija nerasta' });
     }
 
-    const donorId = results.insertId;
+    const story = result[0];
+    if (story.collected >= story.goal) {
+      return res.status(403).json({ message: 'Tikslas jau pasiektas, daugiau aukoti negalima' });
+    }
 
-    const sql2 = `UPDATE stories SET collected = IFNULL(collected, 0) + ? WHERE id = ?`;
-    connection.query(sql2, [amount, story_id], (err2) => {
+    // 2️⃣ Jeigu viskas gerai — įrašom donorą
+    const sql = `INSERT INTO donors (name, amount, story_id, date) VALUES (?, ?, ?, ?)`;
+    connection.query(sql, [name, amount, story_id, date], (err2, results) => {
       if (err2) {
-        return res.status(500).json({ message: 'Klaida atnaujinant stories', error: err2 });
+        return res.status(500).json({ message: 'Klaida įrašant donorą', error: err2 });
       }
 
-      // ✅ FRONTUI GRAŽINAME PILNĄ OBJEKTĄ
-      res.json({
-        id: donorId,
-        name,
-        amount,
-        story_id,
-        date
+      // 3️⃣ Atnaujinti surinktą sumą
+      const sql2 = `UPDATE stories SET collected = collected + ? WHERE id = ?`;
+      connection.query(sql2, [amount, story_id], (err3) => {
+        if (err3) {
+          return res.status(500).json({ message: 'Klaida atnaujinant sumą', error: err3 });
+        }
+
+        res.json({ success: true, id: results.insertId, name, amount, story_id, date });
       });
     });
   });
 });
+
 
 
 
