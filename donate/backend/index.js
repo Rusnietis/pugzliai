@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-//const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql');
 const fs = require('fs');
 const md5 = require('md5');
@@ -19,14 +19,14 @@ const port = 3001;
 
 //const port = 80;
 
-// app.use(cors(
-//   {
-//     origin: 'http://localhost:3000',
-//     credentials: true,
-//   }
-// ));
-app.use(cors());
-//app.use(cookieParser());
+app.use(cors(
+  {
+    origin: 'http://localhost:5173',
+    credentials: true,
+  }
+));
+// app.use(cors());
+app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }))
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -113,6 +113,46 @@ const writeImage = imageBase64 => {
 
 // app.use(doAuth);
 
+//login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const sql = 'SELECT * FROM users WHERE name = ? AND password = ?';
+  connection.query(sql, [username, md5(password)], (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      if (results.length > 0) {
+        const token = md5(uuidv4());
+        const sql = 'UPDATE users SET session = ? WHERE id = ?'
+        connection.query(sql, [token, results[0].id], (err) => {
+          if (err) {
+            res.status(500).json({ message: 'Server error On Login' });
+          } else {
+            res.cookie('bankSession', token, { maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true });
+            res.json({
+              success: true,
+              name: results[0].name,
+              role: results[0].role,
+              id: results[0].id,
+              message: { type: 'success', text: 'Jus sekmingai prisijungete' }
+
+            });
+          }
+        });
+      } else {
+        res.status(401).json({ message: 'Invalid name or password' });
+      }
+    }
+  });
+});
+//logout 
+
+// app.post('/logout', (req, res) => {
+
+
+// })
+
+
 // routs
 
 app.get('/', (req, res) => {
@@ -121,6 +161,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/writers', (req, res) => {
+  res.cookie('test', 'test',{ maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true })
   const sql = 'SELECT * FROM writers';
   connection.query(sql, (err, results) => {
     if (err) {
@@ -129,7 +170,8 @@ app.get('/writers', (req, res) => {
       res.json(results);
     }
   })
-})
+}
+)
 
 app.get("/stories", (req, res) => {
   const sql = `
@@ -190,7 +232,7 @@ app.post("/writers", (req, res) => {
       const storyId = results2.insertId; // naujai sugeneruotas story id
 
       res.json({
-        succsess: true, 
+        succsess: true,
         writerId,
         storyId: results2.insertId, // id iš stories lentelės
         name,
@@ -209,43 +251,62 @@ app.post("/writers", (req, res) => {
 
 app.post('/donors', (req, res) => {
   const { name, amount, story_id, date } = req.body;
+  console.log('POST Donor', req.body);
 
-  // 1️⃣ Patikrinti ar istorija dar nesurinko tikslo
-  const sqlCheck = `
-  SELECT goal, collected FROM stories WHERE id = ?
-
-  `;
+  // 1️⃣ Patikriname ar istorija dar nesurinko tikslo
+  const sqlCheck = `SELECT goal, collected FROM stories WHERE id = ?`;
   connection.query(sqlCheck, [story_id], (err, result) => {
     if (err || result.length === 0) {
-      return res.status(400).json({ message: 'Istorija nerasta' });
+      return res.status(400).json({ message: 'Istorija nerasta arba klaida', error: err });
     }
 
     const story = result[0];
+    const newCollected = Number(story.collected || 0) + Number(amount);
+
+    // Jei tikslas jau pasiektas — neleidžiam aukoti
     if (story.collected >= story.goal) {
-      return res.status(403).json({ message: 'Tikslas jau pasiektas, daugiau aukoti negalima' });
+      return res.status(403).json({ message: 'Tikslas jau pasiektas — daugiau aukoti negalima' });
     }
 
-    // 2️⃣ Jeigu viskas gerai — įrašom donorą
-    const sql = `INSERT INTO donors (name, amount, story_id, date) VALUES (?, ?, ?, ?)`;
-    connection.query(sql, [name, amount, story_id, date], (err2, results) => {
+    // 2️⃣ Įrašome donorą
+    const sqlInsert = `INSERT INTO donors (name, amount, story_id, date) VALUES (?, ?, ?, ?)`;
+    connection.query(sqlInsert, [name, amount, story_id, date], (err2, results) => {
       if (err2) {
         return res.status(500).json({ message: 'Klaida įrašant donorą', error: err2 });
       }
 
-      // 3️⃣ Atnaujinti surinktą sumą
-      const sql2 = `UPDATE stories SET collected = collected + ? WHERE id = ?`;
-      connection.query(sql2, [amount, story_id], (err3) => {
+      // 3️⃣ Atnaujiname surinktą sumą
+      const sqlUpdateCollected = `UPDATE stories SET collected = ? WHERE id = ?`;
+      connection.query(sqlUpdateCollected, [newCollected, story_id], (err3) => {
         if (err3) {
-          return res.status(500).json({ message: 'Klaida atnaujinant sumą', error: err3 });
+          return res.status(500).json({ message: 'Klaida atnaujinant surinktą sumą', error: err3 });
         }
 
-        res.json({ success: true, id: results.insertId, name, amount, story_id, date });
+        // 4️⃣ 👇 Ir čia įdedi tavo klausiamą vietą — jei pasiekė tikslą, keičiam statusą
+        if (newCollected >= story.goal) {
+          const sqlUpdateStatus = `UPDATE stories SET status = 'finished' WHERE id = ?`;
+          connection.query(sqlUpdateStatus, [story_id], (err4) => {
+            if (err4) {
+              console.error('Klaida keičiant statusą:', err4);
+            }
+            // galima tiesiog tęsti net jei klaida čia, nes neesminė
+          });
+        }
+
+        // 5️⃣ Sėkmingas atsakymas
+        res.json({
+          success: true,
+          donorId: results.insertId,
+          name,
+          amount,
+          story_id,
+          date,
+          newCollected
+        });
       });
     });
   });
 });
-
-
 
 
 app.listen(port, () => {

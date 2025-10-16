@@ -1,0 +1,60 @@
+import { useEffect, useState, useContext } from 'react';
+import useLogin from '../../Hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
+import { Auth } from '../../Contexts/Auth';
+import { AFTER_LOGIN_URL, SITE_URL } from '../../Constants/main';
+import '../../Style/login.scss';
+
+
+export default function Login() {
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const {setInputs} = useLogin();
+    const { user } = useContext(Auth);
+
+    const navigate = useNavigate();
+
+
+    const go = _ => {
+        setInputs({ username, password });
+        setPassword('');
+    }
+
+    useEffect(_ => {
+        if (user) {
+            navigate('/apie');
+        }
+
+    }, [user])
+
+    if (!user) {
+        return (
+            <div className="login-page">
+                <div className="card">
+                    <div className="card-header">
+                        <h1>Login</h1>
+                    </div>
+                    <div className="card-body">
+                        <form className="form">
+                            <div className="mb-3">
+                                <label htmlFor="name" className="form-label">Username</label>
+                                <input type="text" className="form-control" name="name" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="password" className="form-label">Password</label>
+                                <input type="password" className="form-control" name="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <button type="button" className="button-18 blue" onClick={go}>GO</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        );
+    } else {
+        return null;
+    }
+}

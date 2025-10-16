@@ -21,7 +21,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
 
     useEffect(_ => {
 
-        axios.get(`${SERVER_URL}/writers`)
+        axios.get(`${SERVER_URL}/writers`, { withCredentials: true })
             .then(res => {
                 console.log(res.data)
                 dispatchWriters(c.getWriters(res.data));
