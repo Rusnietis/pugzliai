@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
@@ -17,19 +18,35 @@ export default function useStories(dispatchStories) {
     // const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
+    const navigate = useNavigate();
+
 
 
     useEffect(_ => {
 
-        axios.get(`${SERVER_URL}/stories`)
+        axios.get(`${SERVER_URL}/stories`, { withCredentials: true })
             .then(res => {
                 console.log(res.data)
                 dispatchStories(a.getStories(res.data));
             })
             .catch(err => {
-                console.log(err)
+                if (err.response) {
+                    const status = err.response.status;
+
+                    if (status === 401) {
+                        if (err.response.data.type === 'login') {
+                            navigate("/login");
+                        }
+                        navigate("/error/401");
+                    } else if (status === 503) {
+                        navigate("/error/503");
+                    } 
+
+
+                }
+
             })
-    }, [dispatchStories]);
+    }, [dispatchStories, navigate]);
 
 
 

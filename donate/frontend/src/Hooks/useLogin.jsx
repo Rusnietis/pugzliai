@@ -8,7 +8,7 @@ import { Auth } from '../Contexts/Auth';
 export default function useLogin() {
 
     const [inputs, setInputs] = useState(null);
-    // const [response, setResponse] = useState(null);
+    //const [response, setResponse] = useState(null);
     const navigate = useNavigate();
 
     const { login, setUser } = useContext(Auth);
@@ -16,12 +16,12 @@ export default function useLogin() {
 
     useEffect(_ => {
         if (null !== inputs) {
-            axios.post(`${SERVER_URL}/login`, inputs)
+            axios.post(`${SERVER_URL}/login`, inputs, { withCredentials: true })
                 .then(res => {
                     // window.localStorage.setItem('token', res.data.token);
                     // window.localStorage.setItem('user', res.data.name);
                     login(res.data.name, res.data.role, res.data.id);
-                    navigate('/apie')
+                    navigate(AFTER_LOGIN_URL)
                     //addMessage(res.data.message);
 
 
@@ -44,7 +44,7 @@ export default function useLogin() {
                 window.localStorage.removeItem('role');
                 window.localStorage.removeItem('id');
                 setUser(null);
-                navigate('/apie')
+                navigate(AFTER_LOGIN_URL)
                 //addMessage(res.data.message)
             })
             .catch(error => {

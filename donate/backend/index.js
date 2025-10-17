@@ -68,50 +68,50 @@ const writeImage = imageBase64 => {
 //   });
 // };
 
-// const checkUserIsAuthorized = (user, res, roles) => {
-//   if (user && roles.includes(user.role)) {
-//     return true;
-//   } else if (user && roles.includes('self:' + user.id)) {
-//     return true;
-//   } else if (user) {
-//     res.status(401).json({
-//       message: 'Not authorized',
-//       type: 'role'
-//     });
-//   } else {
-//     res.status(401).json({
-//       message: 'Not logged in',
-//       type: 'login'
-//     });
-//   }
-// }
+const checkUserIsAuthorized = (user, res, roles) => {
+  if (user && roles.includes(user.role)) {
+    return true;
+  } else if (user && roles.includes('self:' + user.id)) {
+    return true;
+  } else if (user) {
+    res.status(401).json({
+      message: 'Not authorized',
+      type: 'role'
+    });
+  } else {
+    res.status(401).json({
+      message: 'Not logged in',
+      type: 'login'
+    });
+  }
+}
 
-// const doAuth = (req, res, next) => {
-//   const token = req.cookies.libSession || '';
+const doAuth = (req, res, next) => {
+  const token = req.cookies.donateSession || '';
 
-//   //console.log('token', token)
-//   if (token === '') {
-//     return next();
-//   }
-//   const sql = `
-//     SELECT name, id, role
-//     FROM users
-//     WHERE session = ?
-//   `;
-//   connection.query(sql, [token], (err, results) => {
-//     if (err) {
-//       res.status(500).json({ message: 'Server error On Auth' });
-//     } else {
-//       if (results.length > 0) {
-//         const user = results[0];
-//         req.user = user;
-//       }
-//     }
-//     return next();
-//   });
-// };
+  //console.log('token', token)
+  if (token === '') {
+    return next();
+  }
+  const sql = `
+    SELECT name, id, role
+    FROM users
+    WHERE session = ?
+  `;
+  connection.query(sql, [token], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Server error On Auth' });
+    } else {
+      if (results.length > 0) {
+        const user = results[0];
+        req.user = user;
+      }
+    }
+    return next();
+  });
+};
 
-// app.use(doAuth);
+app.use(doAuth);
 
 //login
 app.post('/login', (req, res) => {
@@ -128,7 +128,7 @@ app.post('/login', (req, res) => {
           if (err) {
             res.status(500).json({ message: 'Server error On Login' });
           } else {
-            res.cookie('bankSession', token, { maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true });
+            res.cookie('donateSession', token, { maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true });
             res.json({
               success: true,
               name: results[0].name,
@@ -145,12 +145,21 @@ app.post('/login', (req, res) => {
     }
   });
 });
+
 //logout 
 
-// app.post('/logout', (req, res) => {
-
-
-// })
+app.post('/logout', (req, res) => {
+  const token = req.cookies.bankSession || '';
+  const sql = 'UPDATE users SET session = NULL WHERE session = ?';
+  connection.query(sql, [token], (err) => {
+    if (err) {
+      res.status(500).json({ message: { type: 'danger', text: 'Server error On Logout' } });
+    } else {
+      res.clearCookie('donateSession');
+      res.json({ message: { type: 'success', text: 'Goodbye!' } });
+    }
+  });
+})
 
 
 // routs
@@ -161,7 +170,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/writers', (req, res) => {
-  res.cookie('test', 'test',{ maxAge: 1000 * 60 * 60 * 24 * 365, httpOnly: true })
+
   const sql = 'SELECT * FROM writers';
   connection.query(sql, (err, results) => {
     if (err) {
@@ -174,6 +183,11 @@ app.get('/writers', (req, res) => {
 )
 
 app.get("/stories", (req, res) => {
+
+  // if (!checkUserIsAuthorized(req.user, res, ['user', 'animal'])) {
+  //   return;
+  // }
+
   const sql = `
   SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status, s.collected
   FROM stories s

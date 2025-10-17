@@ -5,6 +5,9 @@ import StoriesIndex from './Pages/Stories/Index.jsx';
 import HomeIndex from './Pages/Home/Index.jsx';
 import Login from './Pages/Auth/Login.jsx';
 
+import Page404 from './Pages/Page404.jsx';
+import Page401 from './Pages/Page401.jsx';
+
 export default function App() {
 
   const location = useLocation();
@@ -24,6 +27,12 @@ export default function App() {
         <Route path="/istorijos" element={<StoriesIndex />} />
         <Route path="/mano-istorijos" element={<WriterIndex />} />
         <Route path="/login" element={<Login />} />
+
+        <Route path="/error/401" element={<Page401 />} />
+
+        <Route path="*" element={<Page404 />} />
+
+
       </Routes>
     </div>
   );
