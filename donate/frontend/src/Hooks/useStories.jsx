@@ -30,24 +30,20 @@ export default function useStories(dispatchStories) {
                 dispatchStories(a.getStories(res.data));
             })
             .catch(err => {
-                if (err.response) {
-                    const status = err.response.status;
-
-                    if (status === 401) {
-                        if (err.response.data.type === 'login') {
-                            navigate("/login");
-                        }
+                if (err?.response?.status === 401) {
+                    if (err.response.data.type === 'login') {
+                        navigate("/login");
+                    } else {
                         navigate("/error/401");
-                    } else if (status === 503) {
-                        navigate("/error/503");
-                    } 
-
-
+                    }
+                } else {
+                    navigate("/error/503");
+                    //navigate("/error/ups");
                 }
-
+                console.log(err);
             })
-    }, [dispatchStories, navigate]);
 
+    }, [dispatchStories, navigate]);
 
 
     return {

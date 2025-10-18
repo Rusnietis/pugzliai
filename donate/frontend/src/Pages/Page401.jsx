@@ -1,27 +1,13 @@
-import { Link } from "react-router-dom";
+import ErrorTemplate from "./ErrorTemplate";
 
 export default function Page401() {
   return (
-    <div style={container}>
-      <h1>401 - Neautorizuota prieiga</h1>
-      <p>Norėdami pasiekti šį puslapį, turite būti prisijungę.</p>
-      <Link to="/login" style={button}>Prisijungti</Link>
-    </div>
+    <ErrorTemplate
+      code="401"
+      title="Neautorizuota prieiga"
+      message="Norėdami pasiekti šį puslapį, turite būti prisijungę."
+      color="#0d6efd"
+      hoverColor="#0b5ed7"
+    />
   );
 }
-
-const container = {
-  textAlign: "center",
-  marginTop: "100px",
-  fontFamily: "Arial, sans-serif"
-};
-const button = {
-  marginTop: "20px",
-  padding: "10px 20px",
-  backgroundColor: "#007bff",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  textDecoration: "none",
-  cursor: "pointer"
-};
