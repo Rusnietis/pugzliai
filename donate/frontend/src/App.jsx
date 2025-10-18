@@ -3,12 +3,14 @@ import Nav from './Components/Nav';
 import WriterIndex from './Pages/Writers/Index.jsx';
 import StoriesIndex from './Pages/Stories/Index.jsx';
 import HomeIndex from './Pages/Home/Index.jsx';
+import RegisterIndex from './Pages/Users/Index.jsx';
 import Login from './Pages/Auth/Login.jsx';
 
 import Page404 from './Pages/Page404.jsx';
 import Page401 from './Pages/Page401.jsx';
 import Page503 from './Pages/Page503.jsx';
 import PageUPS from './Pages/PageUps.jsx';
+
 
 export default function App() {
 
@@ -31,6 +33,7 @@ export default function App() {
         <Route path="/istorijos" element={<StoriesIndex />} />
         <Route path="/mano-istorijos" element={<WriterIndex />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register/*" element={<RegisterIndex />} />
 
         <Route path="/error/ups" element={<PageUPS />} />
         <Route path="/error/401" element={<Page401 />} />

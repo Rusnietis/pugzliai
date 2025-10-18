@@ -50,13 +50,23 @@ export default function Nav() {
             Logout
           </i>
         ) : (
-          <NavLink
-            to="/login"
-            className="button-18"
-            style={{ cursor: "pointer" }}
-          >
-            Login
-          </NavLink>
+          <>
+            <NavLink
+              to="/login"
+              className="button-18"
+              style={{ cursor: "pointer" }}
+            >
+              Login
+            </NavLink>
+            <span> | </span>
+            <NavLink
+              to="/register"
+              className="button-18"
+              style={{ cursor: "pointer", backgroundColor: "green" }}
+            >
+              Register
+            </NavLink>
+          </>
         )}
       </div>
     </div>
