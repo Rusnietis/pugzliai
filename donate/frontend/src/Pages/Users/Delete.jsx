@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from 'react';
-//import TopNav from '../TopNav';
 import { Users } from '../../Contexts/Users';
 
 
@@ -39,7 +38,6 @@ export default function Delete() {
     if (!users)
         return (
             <div>
-                <TopNav />
                 <h1>Loading...</h1>
             </div>
         )
@@ -47,16 +45,12 @@ export default function Delete() {
     if (!user)
         return (
             <div>
-                <TopNav />
                 <h1>User not Found</h1>
             </div>
         )
 
     return (
         <div>
-            <TopNav />
-
-
             <h1>Patvirtinkite kliento ištrinima: <b style={{color: 'red'}}>{user.username}</b></h1>
             <div className='row'>
                 <div className="button">

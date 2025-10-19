@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Users } from '../../Contexts/Users.jsx';
 import { v4 as uuidv4 } from 'uuid';
 import '../../Style/fruits.scss';
+import '../../Style/button18.scss';
 
 export default function Create() {
   const [username, setUsername] = useState('');
@@ -11,10 +12,6 @@ export default function Create() {
   const navigate = useNavigate(); // React Router redirect
 
   const register = () => {
-    if (!username || !password) {
-      alert('Įveskite vartotojo vardą ir slaptažodį.');
-      return;
-    }
 
     const user = {
       id: uuidv4(),
@@ -62,7 +59,7 @@ export default function Create() {
           </div>
 
           <div className="buttons">
-            <button type="submit" className="yellow">
+            <button type="button" className="button-18" onClick={register}>
               Registracija
             </button>
           </div>

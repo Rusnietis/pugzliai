@@ -32,10 +32,11 @@ export default function Nav() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/vartotojai" className={({ isActive }) => (isActive ? "active" : "")}>
-            Vartotojas
+          <NavLink to="/register/list" className={({ isActive }) => (isActive ? "active" : "")}>
+            Vartotojai
           </NavLink>
         </li>
+
       </ul>
 
       <div className="navbar-right">

@@ -322,6 +322,38 @@ app.post('/donors', (req, res) => {
   });
 });
 
+// User registracija
+
+app.post('/users', (req, res) => {
+  const name = req.body.name || req.body.userName || req.body.username;
+  const { password } = req.body
+  //console.log('user', req.body)
+  const sql = 'INSERT INTO users (name, password, role) VALUES (?, ?, ?)';
+  connection.query(sql, [name, md5(password), 'animal'], (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ success: true });
+    }
+  });
+
+});
+
+//User CRUD
+
+app.get('/users', (req, res) => {
+  const sql = 'SELECT * FROM users';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json(results);
+
+    }
+    
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`AUKOTOJU SERVERIS klauso ${port} porto.`);
