@@ -15,7 +15,7 @@ export default function User({ user }) {
             </div>
             <div className="actions">
                 <a href={'#users/edit/' + user.id} className="edit">Change Role</a>
-                <Link to={'/users/delete/' + user.id} className="delete">Delete</Link>
+                <Link to={'/register/delete/' + user.id} className="delete">Delete</Link>
                 {/* <a href={'#users/delete/' + user.id} className="delete">Delete</a> */}
             </div>
         </div>

@@ -103,30 +103,28 @@ export default function useUsers() {
 
     // //delete user
 
-    // useEffect(_ => {
-    //     if (null !== deleteUser) {
+    useEffect(_ => {
+        if (null !== deleteUser) {
 
-    //         const withTokenUrl =
-    //             user ? `${SERVER_URL}/users/${deleteUser}?token=${user.token}` : `${SERVER_URL}/users/${deleteUser}`;
-    //         axios.delete(withTokenUrl)
-    //             .then(res => {
-    //                 setDeleteUser(null);
-    //                 console.log(res.data);
-    //                 setUsers(c => c.filter(user => user.id !== res.data.id))
-    //             })
-    //             .catch(err => {
-    //                 setDeleteUser(null);
-    //                 setUsers(c => c.map(user => user.id === deleteUser ? { ...user, temp: false } : user))
-    //                 if (err.response && err.response.status === 401) {
-    //                     if (err.response.status === 'login') {
-    //                         logout();
-    //                     }
-    //                     show401Page();
-    //                 }
-    //             })
-    //     }
+            axios.delete(`${SERVER_URL}/users/${deleteUser}`)
+                .then(res => {
+                    setDeleteUser(null);
+                    console.log(res.data);
+                    setUsers(c => c.filter(user => user.id !== res.data.id))
+                })
+                .catch(err => {
+                    setDeleteUser(null);
+                    setUsers(c => c.map(user => user.id === deleteUser ? { ...user, temp: false } : user))
+                    if (err.response && err.response.status === 401) {
+                        if (err.response.status === 'login') {
+                            logout();
+                        }
+                        show401Page();
+                    }
+                })
+        }
 
-    // }, [deleteUser])
+    }, [deleteUser]);
 
     return {
 

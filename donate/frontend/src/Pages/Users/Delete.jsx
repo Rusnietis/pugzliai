@@ -1,64 +1,59 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Users } from '../../Contexts/Users';
 
-
-
-
-
 export default function Delete() {
+  const { id } = useParams(); // <-- Gauta iš URL pvz. /register/delete/:id
+  const navigate = useNavigate(); // <-- vietoj window.location.href
+  const { users, setUsers, setDeleteUser } = useContext(Users);
 
-    const [user, setUser] = useState(null);
-    const {params} = useContext(Router); // is router konteksto paimame parametrus
+  const [user, setUser] = useState(null);
 
-    const {users ,setDeleteUser, setUsers } = useContext(Users);
+  useEffect(() => {
+    if (!users) return;
 
+    const foundUser = users.find(u => u.id === parseInt(id));
+    setUser(foundUser || null);
+  }, [users, id]);
 
-     useEffect(_ => {
-            if (null == users) {
-                return;
-            }
-            // Patikriname ar yra klientas
-            const user = users.find(user => user.id === params[1])
-            console.log(user)
-            if (!user) {
-                setUser(null)
-            } else {
-                setUser(user) 
-            }
-    
-        }, [users, params[1]])
+  const doDelete = () => {
+    if (!user) return;
 
-    const doDelete = _ => {
-        const userId = user.id; 
-        setUsers(c => c.map(user => user.id === userId ? { ...user, temp: true } : user));
-         setDeleteUser(userId); 
-        window.location.href = '#users';
-    }
+    // Pažymim ištrintą vartotoją vizualiai (nebūtina, bet naudinga UX)
+    setUsers(prev => prev.map(u => u.id === user.id ? { ...u, deleting: true } : u));
 
-    if (!users)
-        return (
-            <div>
-                <h1>Loading...</h1>
-            </div>
-        )
+    // Iškviečiam backend DELETE (jei turi axios – čia paprastai būtų POST ar DELETE request)
+    setDeleteUser(user.id);
 
-    if (!user)
-        return (
-            <div>
-                <h1>User not Found</h1>
-            </div>
-        )
+    // Naviguojam atgal į sąrašą
+    navigate('/register/list');
+  };
 
-    return (
-        <div>
-            <h1>Patvirtinkite kliento ištrinima: <b style={{color: 'red'}}>{user.username}</b></h1>
-            <div className='row'>
-                <div className="button">
-                    <button className="red" onClick={doDelete} >Ištrinti</button>
-                    <button className="yellow" onClick={_ => window.location.href = '#users'} >Atšaukti</button>
-                </div>
-            </div>
+  if (!users) {
+    return <h1>Kraunama...</h1>;
+  }
+
+  if (!user) {
+    return <h1>Vartotojas nerastas</h1>;
+  }
+
+  return (
+    <div className="page-users">
+
+      <div className="row" >
+        <h1>
+          Patvirtinkite vartotojo ištrynimą:{' '}
+          <b style={{ color: 'red' }}>{user.name}</b>
+        </h1>
+        <div className="button">
+          <button className="button-18" style={{ backgroundColor: 'red' }} onClick={doDelete}>
+            Ištrinti
+          </button>
+          <button className="button-18" style={{ backgroundColor: 'green' }} onClick={() => navigate('/register/list')}>
+            Atšaukti
+          </button>
         </div>
-
-    )
+      </div>
+    </div>
+  );
 }

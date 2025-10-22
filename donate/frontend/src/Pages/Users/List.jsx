@@ -23,10 +23,11 @@ export default function List() {
 
     return (
 
-        <div>
+        <div className="page-users">
          
-            <h1>Vartotojų sąrašas</h1>
+           
             <div className="users-box">
+                 <h1>Vartotojų sąrašas</h1>
                 {
                     users.map(user => <User key={user.id} user={user} />)
                 }
