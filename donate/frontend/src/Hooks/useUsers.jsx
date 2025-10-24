@@ -9,7 +9,7 @@ export default function useUsers() {
 
     const [users, setUsers] = useState([]);
     const [createUser, setCreateUser] = useState(null);
-    // const [editUser, setEditUser] = useState(null);
+    const [editUser, setEditUser] = useState(null);
     const [deleteUser, setDeleteUser] = useState(null);
 
     const { user, login } = useContext(Auth);
@@ -37,69 +37,65 @@ export default function useUsers() {
     }, [user]);
 
     // kliento sukūrimas su axios post ir id siuntimas i serveri 
-   useEffect(() => {
-    if (createUser === null) return;
+    useEffect(() => {
+        if (createUser === null) return;
 
-    axios.post(`${SERVER_URL}/users`, createUser)
-      .then(res => {
-        console.log('Vartotojas sukurtas:', res.data);
+        axios.post(`${SERVER_URL}/users`, createUser)
+            .then(res => {
+                console.log('Vartotojas sukurtas:', res.data);
 
-        // ⬇️ Čia svarbiausia vieta: automatinis login
-        login(createUser.name, 'animal', createUser.id);
+                // ⬇️ Čia svarbiausia vieta: automatinis login
+                login(createUser.name, 'animal', createUser.id);
 
-        // atnaujina sąrašą po registracijos
-        return axios.get(`${SERVER_URL}/users`);
-      })
-      .then(res => setUsers(res.data))
-      .catch(err => console.error('Klaida kuriant user:', err))
-      .finally(() => setCreateUser(null));
-  }, [createUser]);
-
-
+                // atnaujina sąrašą po registracijos
+                return axios.get(`${SERVER_URL}/users`);
+            })
+            .then(res => setUsers(res.data))
+            .catch(err => console.error('Klaida kuriant user:', err))
+            .finally(() => setCreateUser(null));
+    }, [createUser]);
 
     //Vartotojo redagavimas
 
-    // useEffect(_ => {
-    //     if (null !== editUser) {
+    useEffect(_ => {
+        if (null !== editUser) {
 
-    //         const withTokenUrl =
-    //             user ? `${SERVER_URL}/users/${editUser.id}?token=${user.token}` : `${SERVER_URL}/users/${editUser.id}`;
-    //         axios.put(withTokenUrl, editUser)
+            axios.put(`${SERVER_URL}/users/${editUser.id}`, editUser)
 
-    //             .then(res => {
-    //                 setEditUser(null);// išvalo editUser
-    //                 //console.log(res.data);
-    //                 setUsers(c => 
-    //                     c.map(user => 
-    //                         user.id === res.data.id 
-    //                             ? { ...user, ...res.data, temp: false } 
-    //                             : user
-    //                     )
-    //                 );
+                .then(res => {
+                    setEditUser(null);// išvalo editUser
+                    //console.log(res.data);
+                    setUsers(c =>
+                        c.map(user =>
+                            user.id === res.data.id
+                                ? { ...user, ...res.data, temp: false }
+                                : user
+                        )
+                    );
 
-    //                 //setUsers(c => c.map(user => user.id === res.data.id ? { ...user, temp: false } : user))   
-    //             })
-    //             .catch(err => {
-    //                 setEditUser(null);// išvalo editUser
-    //                 setUsers(c => 
-    //                     c.map(user => 
-    //                         user.id === editUser.id 
-    //                             ? { ...editUser, preEdit: user, temp: true } 
-    //                             : user
-    //                     )
-    //                 );
+                    //setUsers(c => c.map(user => user.id === res.data.id ? { ...user, temp: false } : user))   
+                })
+                .catch(err => {
+                    setEditUser(null);// išvalo editUser
+                    setUsers(c =>
+                        c.map(user =>
+                            user.id === editUser.id
+                                ? { ...editUser, preEdit: user, temp: true }
+                                : user
+                        )
+                    );
 
-    //                 //setUsers(c => c.map(user => user.id === editUser.id ? { ...user.preEdit, temp: false } : user))
-    //                 if (err.response && err.response.status === 401) {
-    //                     if (err.response.status === 'login') {
-    //                         logout();
-    //                     }
-    //                     show401Page();
-    //                 }
-    //             })
-    //     }
+                    //setUsers(c => c.map(user => user.id === editUser.id ? { ...user.preEdit, temp: false } : user))
+                    // if (err.response && err.response.status === 401) {
+                    //     if (err.response.status === 'login') {
+                    //         logout();
+                    //     }
+                    //     //show401Page();
+                    // }
+                })
+        }
 
-    // }, [editUser])
+    }, [editUser])
 
     // //delete user
 
@@ -132,8 +128,8 @@ export default function useUsers() {
         setUsers,
         createUser,
         setCreateUser,
-        // editUser,
-        // setEditUser,
+        editUser,
+        setEditUser,
         deleteUser,
         setDeleteUser
 

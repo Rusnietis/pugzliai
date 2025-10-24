@@ -97,6 +97,44 @@
     }
 }
 
+.checkboxes {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 10px;
+
+        label {
+            color: black;
+            font-size: 30px;
+            padding: 0 30px;
+            user-select: none;
+            cursor: pointer;
+            position: relative;
+
+            &:before {
+                content: '\2610';
+                display: inline-block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                color: green;
+            }
+        }
+
+        input {
+            display: none;
+
+            &:checked+label {
+                &:before {
+                    content: '\2611';
+                }
+            }
+        }
+    }
+
 // .users-center {
 //     margin-top: 50px;
 //     display: flex;

@@ -354,6 +354,33 @@ app.get('/users', (req, res) => {
   });
 });
 
+app.delete('/users/:id', (req, res) => {
+
+  const sql = 'DELETE FROM users WHERE id = ?';
+   connection.query(sql, [req.params.id], (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({success: true, id: +req.params.id });
+
+    }
+    
+  });
+})
+
+app.put('/users/:id', (req, res) => {
+  const { role } = req.body;
+  const sql = 'UPDATE users SET role = ? WHERE id = ?';
+  connection.query(sql, [role, req.params.id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ success: true, id: +req.params.id });
+    }
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`AUKOTOJU SERVERIS klauso ${port} porto.`);

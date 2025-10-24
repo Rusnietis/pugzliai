@@ -1,87 +1,95 @@
-import { Users } from '../../Contexts/Users';
-//import TopNav from '../TopNav';
 import { useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Users } from '../../Contexts/Users';
+import { SERVER_URL } from '../../Constants/main';
+import '../../Style/users.scss';
 
 export default function Edit() {
+    const { id } = useParams(); // 👈 iš URL (/register/edit/:id)
+    const navigate = useNavigate();
+    const { users, setUsers, setEditUser } = useContext(Users);
 
     const [role, setRole] = useState('');
     const [user, setUser] = useState(null);
-    const { users, setEditUser, setUsers } = useContext(Users);
-    const { params } = useContext(Router);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(_ => {
-        if (null === users) {
-            return;
-        }
-        
-        const user = users.find(user => user.id === params[1]);
+    // Surandam user pagal ID
+    useEffect(() => {
+        if (!users) return;
+
+        const user = users.find(user => user.id === parseInt(id));
         if (!user) {
-            setUser(null);
+            setUser(null)
         } else {
-            setUser(user);
+            setUser(user)
         }
-    }, [users, params[1]]);
+    }, [users, id]);
 
-    useEffect(_ => {
-        if (null === user) {
-            return;
-        }
-        setRole(user.role.toLowerCase());
-    }, [user, setRole]);
+    // Užpildom formos laukus
+    useEffect(() => {
+        if (!user) return;
+        setRole(user.role?.toLowerCase() || '');
+    }, [user]);
 
+    // Išsaugom pakeitimus
     const save = _ => {
+
         const editedUser = {
             role,
             name: user.name,
             id: user.id
         };
-        
-        setUsers(f => f.map(user => user.id === editedUser.id ? { ...editedUser, temp: true, preEdit: user } : user)); 
-       
+        setUsers(f => f.map(user => user.id === editedUser.id ? { ...editedUser, temp: true, preEdit: user } : user));
         setEditUser(editedUser);  // this is the function that sends the edited user to the server
-        window.location.href = '#users';
-    }
+        navigate('/register/list');
+    };
 
-    if (!users)
-        return (
-            <div>
-                <TopNav />
-                <h1>Loading...</h1>
-            </div>
-        );
-
-    if (!user)
-        return (
-            <div>
-                <TopNav />
-                <h1>User not found</h1>
-            </div>
-        );
+    if (!users) return <h1>Kraunama...</h1>;
+    if (!user) return <h1>Vartotojas nerastas</h1>;
 
     return (
         <div>
-            <TopNav />
-            <h1>Edit user: <b style={{color: 'orange'}}> {user.username} </b>role </h1>
+            <h1>
+                Redaguoti vartotoją: <b style={{ color: 'orange' }}>{user.name}</b>
+            </h1>
             <div className="users-bin">
                 <div className="form">
                     <div className="form-group">
                         <label>Role</label>
                         <div className="checkboxes">
                             <div>
-                                <input id="s" type="checkbox" checked={'admin' === role} onChange={_ => setRole('admin')} />
-                                <label htmlFor="s">Admin</label>
+                                <input
+                                    id="admin"
+                                    type="checkbox"
+                                    checked={role === 'admin'}
+                                    onChange={() => setRole('admin')}
+                                />
+                                <label htmlFor="admin">Admin</label>
                             </div>
                             <div>
-                                <input id="c" type="checkbox" checked={'editor' === role} onChange={_ => setRole('editor')} />
-                                <label htmlFor="c">Editor</label>
+                                <input
+                                    id="user"
+                                    type="checkbox"
+                                    checked={role === 'user'}
+                                    onChange={() => setRole('user')}
+                                />
+                                <label htmlFor="user">User</label>
                             </div>
                             <div>
-                                <input id="r" type="checkbox" checked={'viewer' === role} onChange={_ => setRole('viewer')} />
-                                <label htmlFor="r">Viewer</label>
+                                <input
+                                    id="animal"
+                                    type="checkbox"
+                                    checked={role === 'animal'}
+                                    onChange={() => setRole('animal')}
+                                />
+                                <label htmlFor="animal">Animal</label>
                             </div>
                         </div>
                     </div>
-                    <button className="green" onClick={save}>Change Role</button>
+                    <button className="button-18" onClick={save} disabled={loading}>
+                        {loading ? 'Saugoma...' : 'Keisti rolę'}
+                    </button>
                 </div>
             </div>
         </div>
