@@ -36,6 +36,12 @@ export default function Nav() {
             Vartotojai
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
+            Admin panelė
+          </NavLink>
+        </li>
+
 
       </ul>
 

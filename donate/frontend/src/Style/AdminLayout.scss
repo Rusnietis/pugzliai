@@ -1,0 +1,101 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: "Inter", sans-serif;
+  color: #1e293b;
+
+  // ŠONINIS MENIU (SIDEBAR)
+  .sidebar {
+    width: 260px;
+    background-color: #1e293b; // tamsiai mėlyna/juoda
+    border-radius: 8px;
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: chocolate;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      a {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          color: #fff;
+        }
+
+        &.active {
+          background-color: #2563eb;
+          color: #fff;
+        }
+      }
+    }
+
+    // Jei nori mobiliems — sidebar susitraukia
+    @media (max-width: 768px) {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 220px;
+      transform: translateX(-100%);
+      z-index: 1000;
+
+      &.open {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  // PAGRINDINIS TURINYS
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: #f9fafb;
+
+    h1,
+    h2 {
+      color: #1e293b;
+    }
+
+    // kortelės ar dashboard elementai viduje
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      margin-bottom: 1.5rem;
+
+      h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #334155;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #475569;
+      }
+    }
+  }
+}

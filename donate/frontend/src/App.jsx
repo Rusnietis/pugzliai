@@ -5,6 +5,7 @@ import StoriesIndex from './Pages/Stories/Index.jsx';
 import HomeIndex from './Pages/Home/Index.jsx';
 import RegisterIndex from './Pages/Users/Index.jsx';
 import Login from './Pages/Auth/Login.jsx';
+import AdminIndex from './Pages/Admin/Index.jsx';
 
 import Page404 from './Pages/Page404.jsx';
 import Page401 from './Pages/Page401.jsx';
@@ -32,8 +33,10 @@ export default function App() {
         <Route path="/apie" element={<HomeIndex />} />
         <Route path="/istorijos" element={<StoriesIndex />} />
         <Route path="/mano-istorijos" element={<WriterIndex />} />
+        <Route path="/admin/*" element={<AdminIndex />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register/*" element={<RegisterIndex />} />
+        
 
         <Route path="/error/ups" element={<PageUPS />} />
         <Route path="/error/401" element={<Page401 />} />
