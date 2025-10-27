@@ -161,6 +161,41 @@ app.post('/logout', (req, res) => {
   });
 })
 
+// Admin panel
+
+app.get('/stories/status', (req, res) => {
+  const sql = `
+    SELECT status, COUNT(*) as count
+    FROM stories
+    GROUP BY status
+    `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json(results);
+    }
+  })
+})
+
+app.get('/admin/stories', (req, res) => {
+  const sql = `
+   SELECT s.id, s.title, s.status, w.name AS writerName, w.surname AS writerSurname
+FROM stories s
+LEFT JOIN writers w ON s.writer_id = w.id
+ORDER BY w.created_at DESC;
+  `;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Klaida gaunant istorijas' });
+    }
+    res.json(results);
+  });
+});
+
+
 
 // routs
 
@@ -350,21 +385,21 @@ app.get('/users', (req, res) => {
       res.json(results);
 
     }
-    
+
   });
 });
 
 app.delete('/users/:id', (req, res) => {
 
   const sql = 'DELETE FROM users WHERE id = ?';
-   connection.query(sql, [req.params.id], (err) => {
+  connection.query(sql, [req.params.id], (err) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({success: true, id: +req.params.id });
+      res.json({ success: true, id: +req.params.id });
 
     }
-    
+
   });
 })
 

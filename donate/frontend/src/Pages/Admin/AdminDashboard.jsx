@@ -4,31 +4,25 @@ import '../../Style/AdminDashboard.scss';
 import { SERVER_URL } from '../../Constants/main';
 
 export default function AdminDashboard() {
-    const [stats, setStats] = useState({
-        pending: 0,
-        approved: 0,
-        finished: 0,
-    });
+    const [status, setStatus] = useState([]);
 
     useEffect(() => {
         // Čia bus API kvietimas į back-end
         // Pvz. GET /api/stories/stats
-        axios.get(`${SERVER_URL}/stories/stats`)
+        axios.get(`${SERVER_URL}/stories/status`)
             .then(res => {
                 console.log(res.data)
+                setStatus(res.data);
             })
             .catch(err => {
                 console.log(err);
             })
-        // Simuliuojame duomenis:
-        setTimeout(() => {
-            setStats({
-                pending: 5,
-                approved: 12,
-                rejected: 3,
-            });
-        }, 500);
+
     }, []);
+
+    const pending = status.find(item => item.status === 'pending')?.count || 0;
+    const approved = status.find(item => item.status === 'approved')?.count || 0;
+    const rejected = status.find(item => item.status === 'rejected')?.count || 0;
 
     return (
 
@@ -38,17 +32,17 @@ export default function AdminDashboard() {
             <div className="admin-dashboard__stats">
                 <div className="card pending">
                     <h2>Laukiančios istorijos</h2>
-                    {/* <p>{stats.pending}</p> */}
+                    <p>{pending}</p>
                 </div>
 
                 <div className="card approved">
                     <h2>Patvirtintos istorijos</h2>
-                    {/* <p>{stats.approved}</p> */}
+                    <p>{approved}</p>
                 </div>
 
                 <div className="card rejected">
                     <h2>Atmestos istorijos</h2>
-                    {/* <p>{stats.rejected}</p> */}
+                    <p>{rejected}</p>
                 </div>
             </div>
 
