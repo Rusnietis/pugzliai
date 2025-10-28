@@ -5,6 +5,7 @@ import { SERVER_URL } from '../../Constants/main';
 
 export default function AdminStories() {
     const [stories, setStories] = useState([]);
+    const [selectedStory, setSelectedStory] = useState(null);
     //   const [loading, setLoading] = useState(true);
     //   const [error, setError] = useState(null);
 
@@ -21,8 +22,24 @@ export default function AdminStories() {
             })
     }, []);
 
+    // Istorijos gavimas ir Pattvirtinimas arba atmetimas
 
-
+    const handleStatusChange = (id, newStatus) => {
+        axios.put(`${SERVER_URL}/admin/stories/${id}`, { status: newStatus })
+            .then(res => {
+                setStories(prev =>
+                    prev.map(story =>
+                        story.id === id ? { ...story, status: newStatus } : story
+                    )
+                );
+                setSelectedStory(prev =>
+                    prev && prev.id === id ? { ...prev, status: newStatus } : prev
+                );
+            })
+            .catch(err => {
+                console.error("Klaida keičiant statusą:", err);
+            });
+    };
 
 
     //if (loading) return <p>Kraunama...</p>;
@@ -46,32 +63,39 @@ export default function AdminStories() {
                     </thead>
                     <tbody>
                         {stories.map((story) => (
-                            <tr key={story._id}>
+                            <tr key={story.id}>
                                 <td>{story.title}</td>
-                                <td>{story.authorName}</td>
+                                <td>{story.surname}</td>
                                 <td>
                                     <span className={`status ${story.status}`}>
                                         {story.status}
                                     </span>
                                 </td>
-                                <td>
-                                    {story.status === "pending" ? (
+                                <td >
+                                    <button
+                                        className="view"
+                                        style={{ margin: '2px' }}
+                                        onClick={() => setSelectedStory(story)}
+                                    >
+                                        Peržiūrėti
+                                    </button>
+
+                                    {story.status === "pending" && (
                                         <>
                                             <button
                                                 className="approve"
-                                                onClick={() => handleApprove(story._id)}
+                                                onClick={() => handleStatusChange(story.id, "approved")}
                                             >
                                                 Patvirtinti
                                             </button>
                                             <button
                                                 className="reject"
-                                                onClick={() => handleReject(story._id)}
+                                                style={{ margin: '2px' }}
+                                                onClick={() => handleStatusChange(story.id, "rejected")}
                                             >
                                                 Atmesti
                                             </button>
                                         </>
-                                    ) : (
-                                        <em>{story.status === "approved" ? "✅ Patvirtinta" : "❌ Atmesta"}</em>
                                     )}
                                 </td>
                             </tr>
@@ -79,6 +103,64 @@ export default function AdminStories() {
                     </tbody>
                 </table>
             )}
+
+            {/* 🔹 Modal langas */}
+            {selectedStory && (
+                <div className="modal-overlay" onClick={() => setSelectedStory(null)}>
+                    <div
+                        className="modal"
+                        onClick={(e) => e.stopPropagation()} // kad neuzdarytų paspaudus viduje
+                    >
+                        <button className="close" onClick={() => setSelectedStory(null)}>
+                            ✖
+                        </button>
+
+                        <h2>{selectedStory.title}</h2>
+                        <p className="author">
+                            Autorius: {selectedStory.writerName}
+                        </p>
+                        <p className={`status ${selectedStory.status}`}>
+                            {selectedStory.status}
+                        </p>
+                        {/* {console.log("Story image path:", selectedStory?.image)} */}
+                        <div className="preview-photo" >
+                            {selectedStory?.image ? (
+                                <img style={{ objectFit: 'contain' }}
+                                    src={`http://localhost:3001/${selectedStory.image}`}
+                                    alt={selectedStory.title}
+                                />
+                            ) : (
+                                <img src="/images/no-image.jpg" alt="no image" />
+                            )}
+                        </div>
+
+                        <div className="content">{selectedStory.story}</div>
+
+                        {selectedStory.status === "pending" && (
+                            <div className="actions">
+                                <button
+                                    className="approve"
+                                    onClick={() =>
+                                        handleStatusChange(selectedStory.id, "approved")
+                                    }
+                                >
+                                    Patvirtinti
+                                </button>
+                                <button
+                                    className="reject"
+                                    onClick={() =>
+                                        handleStatusChange(selectedStory.id, "rejected")
+                                    }
+                                >
+                                    Atmesti
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
+
+
 }

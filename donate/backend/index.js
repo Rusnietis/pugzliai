@@ -180,7 +180,7 @@ app.get('/stories/status', (req, res) => {
 
 app.get('/admin/stories', (req, res) => {
   const sql = `
-   SELECT s.id, s.title, s.status, w.name AS writerName, w.surname AS writerSurname
+   SELECT s.id, s.title, s.status, s.story, s.image, w.name AS writerName, w.surname AS writerSurname
 FROM stories s
 LEFT JOIN writers w ON s.writer_id = w.id
 ORDER BY w.created_at DESC;
@@ -194,6 +194,20 @@ ORDER BY w.created_at DESC;
     res.json(results);
   });
 });
+
+app.put('/admin/stories/:id', (req, res) => {
+  const { status } = req.body;
+  console.log('status', status, 'id', req.params.id);
+  const sql = 'UPDATE stories SET status = ? WHERE id = ?';
+  connection.query(sql, [status, req.params.id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Klaida atnaujinant statusą' });
+    }
+    res.json({ success: true });
+  });
+});
+
 
 
 
