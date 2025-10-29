@@ -48,20 +48,22 @@ export default function List() {
     setInputs(defaultInputs);
   };
 
+  const approvedStories = stories.filter(story => story.status === 'approved');
+
   // jei istorija yra nepatvirtinta
+  console.log("Statuses:", approvedStories);
 
   return (
     <aside className="preview-col">
 
       {/* Filtruojame tik patvirtintas istorijas */}
-      {stories.filter(story => story.status !== 'pending').length === 0 ? (
+      {approvedStories.length === 0 ? (
         <div className="no-stories">
           <h2>🔔 Šiuo metu nėra patvirtintų istorijų</h2>
           <p>Patikrinkite vėliau – netrukus čia atsiras naujų pagalbos prašymų.</p>
         </div>
       ) : (
-        stories
-          .filter(story => story.status !== 'pending')
+        approvedStories
           .map((story) => (
             <div key={story.id} className="list-card">
               <div className="preview-title">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../Style/AdminDashboard.scss';
 import { SERVER_URL } from '../../Constants/main';
@@ -46,9 +47,24 @@ export default function AdminDashboard() {
                 </div>
             </div>
 
-            <div className="admin-dashboard__actions">
-                <button className="btn">Peržiūrėti laukiančias</button>
-                <button className="btn btn-secondary">Valdyti vartotojus</button>
+            <div className="btn">
+                <Link to={'/admin/stories'} style={{
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    textDecoration: "none",
+                    marginRight: '10px'
+                }}>Peržiūrėti istorijas</Link>
+                <Link
+                style={{
+                    backgroundColor: "#cb1b1bff",
+                    color: "white",
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    textDecoration: "none",
+                }}
+                >Valdyti vartotojus</Link>
             </div>
         </div>
     );
