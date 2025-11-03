@@ -48,10 +48,31 @@ export default function List() {
     setInputs(defaultInputs);
   };
 
-  const approvedStories = stories.filter(story => story.status === 'approved');
+  const approvedStories = stories.filter(
+    story => story.status?.toLowerCase().trim() === "approved"
+  );
+
+  console.log("Approved count:", approvedStories.length); // turi būti 1
+
+  //   const approvedStories = stories.filter(story => {
+  //   console.log("Story:", story.id, story.status);
+  //   return story.status?.toLowerCase().trim() === "approved";
+  // });
+
+  // console.log("Approved count:", approvedStories.length);
+
+  // const approvedStories = stories.filter(story => {
+  //   const cleanStatus = story.status?.replaceAll('"', '').toLowerCase().trim();
+  //   return cleanStatus === 'approved';
+  // });
 
   // jei istorija yra nepatvirtinta
-  console.log("Statuses:", approvedStories);
+  // console.log("STORIES TYPE:", typeof stories, Array.isArray(stories));
+  // console.log("STORIES DATA:", stories);
+  // console.log(
+  //   "STATUSES EXACT:",
+  //   stories.map(s => `"${s.status}"`)
+  // );
 
   return (
     <aside className="preview-col">

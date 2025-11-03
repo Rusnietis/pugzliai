@@ -22,7 +22,7 @@ export default function useUsers() {
             return
         }
 
-        axios.get(`${SERVER_URL}/users`)
+        axios.get(`${SERVER_URL}/users`, { withCredentials: true })
             .then(res => {
                 setUsers(res.data);
                 console.log('Response data:', res.data);

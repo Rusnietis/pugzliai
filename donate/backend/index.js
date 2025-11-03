@@ -68,6 +68,24 @@ const writeImage = imageBase64 => {
 //   });
 // };
 
+// const checkUserIsAuthorized = (user, res, roles) => {
+//   if (user && roles.includes(user.role)) {
+//     return true;
+//   } else if (user && roles.includes('self:' + user.id)) {
+//     return true;
+//   } else if (user) {
+//     res.status(401).json({
+//       message: 'Not authorized',
+//       type: 'role'
+//     });
+//   } else {
+//     res.status(401).json({
+//       message: 'Not logged in',
+//       type: 'login'
+//     });
+//   }
+// }
+
 const checkUserIsAuthorized = (user, res, roles) => {
   if (user && roles.includes(user.role)) {
     return true;
@@ -78,13 +96,16 @@ const checkUserIsAuthorized = (user, res, roles) => {
       message: 'Not authorized',
       type: 'role'
     });
+    return false; // <--- pridėk šitą
   } else {
     res.status(401).json({
       message: 'Not logged in',
       type: 'login'
     });
+    return false; // <--- ir šitą
   }
 }
+
 
 const doAuth = (req, res, next) => {
   const token = req.cookies.donateSession || '';
@@ -112,6 +133,31 @@ const doAuth = (req, res, next) => {
 };
 
 app.use(doAuth);
+
+// // 2️⃣ Autentifikacijos middleware (kad nustatytų req.user)
+// app.use((req, res, next) => {
+
+//   console.log('Cookies:', req.cookies);
+
+//   const sessionToken = req.cookies?.donateSession;
+//   if (!sessionToken) {
+//     req.user = null;
+//     return next();
+//   }
+
+//   const sql = 'SELECT id, name, role FROM users WHERE session = ? LIMIT 1';
+//   connection.query(sql, [sessionToken], (err, results) => {
+//     if (err) {
+//       console.error('Session lookup error:', err);
+//       req.user = null;
+//     } else if (results.length > 0) {
+//       req.user = results[0];
+//     } else {
+//       req.user = null;
+//     }
+//     next();
+//   });
+// });
 
 //login
 app.post('/login', (req, res) => {
@@ -203,6 +249,17 @@ app.put('/admin/stories/:id', (req, res) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: 'Klaida atnaujinant statusą' });
+    }
+    res.json({ success: true });
+  });
+});
+
+app.delete('/admin/stories/:id', (req, res) => {
+  const sql = 'DELETE FROM stories WHERE id = ?';
+  connection.query(sql, [req.params.id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Klaida trinant istoriją' });
     }
     res.json({ success: true });
   });
@@ -391,6 +448,13 @@ app.post('/users', (req, res) => {
 //User CRUD
 
 app.get('/users', (req, res) => {
+
+  //console.log('req.user', req.user);
+
+  if (!checkUserIsAuthorized(req.user, res, ['admin'])) {
+    return;
+  }
+
   const sql = 'SELECT * FROM users';
   connection.query(sql, (err, results) => {
     if (err) {

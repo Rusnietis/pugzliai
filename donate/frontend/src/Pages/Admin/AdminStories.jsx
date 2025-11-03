@@ -41,6 +41,20 @@ export default function AdminStories() {
             });
     };
 
+    // Istorijos ištrynimas
+
+    const handleDeleteStory = (id) => {
+        axios.delete(`${SERVER_URL}/admin/stories/${id}`)
+            .then(res => {
+                setStories(prev => prev.filter(story => story.id !== id));
+                setSelectedStory(null);
+            })
+            .catch(err => {
+                console.error("Klaida trinant istoriją:", err);
+            });
+        };
+
+
 
     //if (loading) return <p>Kraunama...</p>;
     //if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -91,9 +105,9 @@ export default function AdminStories() {
                                             <button
                                                 className="reject"
                                                 style={{ margin: '2px' }}
-                                                onClick={() => handleStatusChange(story.id, "rejected")}
+                                                onClick={() => handleDeleteStory(story.id)}
                                             >
-                                                Atmesti
+                                                Ištrinti
                                             </button>
                                         </>
                                     )}
@@ -148,11 +162,9 @@ export default function AdminStories() {
                                 </button>
                                 <button
                                     className="reject"
-                                    onClick={() =>
-                                        handleStatusChange(selectedStory.id, "rejected")
-                                    }
+                                    
                                 >
-                                    Atmesti
+                                    Ištrinti
                                 </button>
                             </div>
                         )}
