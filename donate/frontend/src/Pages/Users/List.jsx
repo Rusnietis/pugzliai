@@ -12,26 +12,49 @@ export default function List() {
                 <h1>Loading...</h1>
             </div>
         )
-        if (users.error)
-            return (
-                <div>
+    if (users.error)
+        return (
+            <div>
 
-                    <h1>Serverio klaida</h1>
-                </div>
-            )
+                <h1>Serverio klaida</h1>
+            </div>
+        )
 
 
     return (
 
         <div className="page-users">
-         
-           
-            <div className="users-box">
-                 <h1>Vartotojų sąrašas</h1>
-                {
-                    users.map(user => <User key={user.id} user={user} />)
-                }
 
+            <div className="users-box">
+
+                <div className="left-col">
+                    <h1>Vartotojų sąrašas</h1>
+
+                    {/* user komponento atvaizdavimas lenteleje */}
+
+                    {/* <table>
+                    <thead>
+                        <tr>
+                            <th>Vardas</th>
+                            <th>Rolė</th>
+                            <th>Rolės keitimas</th>
+                            <th>Veiksmai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.length === 0 ? (
+                            <p>Nėra vartotojų.</p>
+                        ) : (
+                            users.map(user => <User key={user.id} user={user} />)
+                        )}
+
+                    </tbody>
+                </table> */}
+
+                    {
+                        users.map(user => <User key={user.id} user={user} />)
+                    }
+                </div>
             </div>
         </div>
     );

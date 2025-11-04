@@ -56,7 +56,7 @@ export default function AdminDashboard() {
                     textDecoration: "none",
                     marginRight: '10px'
                 }}>Peržiūrėti istorijas</Link>
-                <Link
+                <Link to={'/admin/users/list'}
                 style={{
                     backgroundColor: "#cb1b1bff",
                     color: "white",

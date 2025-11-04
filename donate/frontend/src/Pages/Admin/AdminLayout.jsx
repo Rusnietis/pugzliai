@@ -10,7 +10,7 @@ export default function AdminLayout() {
         <nav>
           <NavLink to="/admin/dashboard">Pagrindinis</NavLink>
           <NavLink to="/admin/stories">Istorijos</NavLink>
-          <NavLink to="/register/list">Vartotojai</NavLink>
+          <NavLink to="/admin/users/list">Vartotojai</NavLink>
         </nav>
       </aside>
 

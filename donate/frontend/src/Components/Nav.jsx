@@ -31,11 +31,11 @@ export default function Nav() {
             Mano istorijos
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/register/list" className={({ isActive }) => (isActive ? "active" : "")}>
             Vartotojai
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
             Admin panelė

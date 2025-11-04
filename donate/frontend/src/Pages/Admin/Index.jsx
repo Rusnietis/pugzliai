@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import AdminLayout from './AdminLayout';
 import AdminDashboard from './AdminDashboard';
 import AdminStories from './AdminStories';
+import RegisterIndex from '../Users/Index';
+
 
 export default function AdminIndex() {
   return (
@@ -10,6 +12,7 @@ export default function AdminIndex() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="stories" element={<AdminStories />} />
         {/* gali pridėti kitus */}
+         <Route path="users/*" element={<RegisterIndex />} />
       </Route>
     </Routes>
   );

@@ -52,7 +52,7 @@ export default function AdminStories() {
             .catch(err => {
                 console.error("Klaida trinant istoriją:", err);
             });
-        };
+    };
 
 
 
@@ -62,115 +62,116 @@ export default function AdminStories() {
     return (
         <div className="admin-stories">
             <h1>Istorijos</h1>
-
-            {stories.length === 0 ? (
-                <p>Nėra istorijų.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pavadinimas</th>
-                            <th>Autorius</th>
-                            <th>Statusas</th>
-                            <th>Veiksmai</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {stories.map((story) => (
-                            <tr key={story.id}>
-                                <td>{story.title}</td>
-                                <td>{story.surname}</td>
-                                <td>
-                                    <span className={`status ${story.status}`}>
-                                        {story.status}
-                                    </span>
-                                </td>
-                                <td >
-                                    <button
-                                        className="view"
-                                        style={{ margin: '2px' }}
-                                        onClick={() => setSelectedStory(story)}
-                                    >
-                                        Peržiūrėti
-                                    </button>
-
-                                    {story.status === "pending" && (
-                                        <>
-                                            <button
-                                                className="approve"
-                                                onClick={() => handleStatusChange(story.id, "approved")}
-                                            >
-                                                Patvirtinti
-                                            </button>
-                                            <button
-                                                className="reject"
-                                                style={{ margin: '2px' }}
-                                                onClick={() => handleDeleteStory(story.id)}
-                                            >
-                                                Ištrinti
-                                            </button>
-                                        </>
-                                    )}
-                                </td>
+            <div className="users-box">
+                {stories.length === 0 ? (
+                    <p>Nėra istorijų.</p>
+                ) : (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pavadinimas</th>
+                                <th>Autorius</th>
+                                <th>Statusas</th>
+                                <th>Veiksmai</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+                        </thead>
+                        <tbody>
+                            {stories.map((story) => (
+                                <tr key={story.id}>
+                                    <td>{story.title}</td>
+                                    <td>{story.surname}</td>
+                                    <td>
+                                        <span className={`status ${story.status}`}>
+                                            {story.status}
+                                        </span>
+                                    </td>
+                                    <td >
+                                        <button
+                                            className="view"
+                                            style={{ margin: '2px' }}
+                                            onClick={() => setSelectedStory(story)}
+                                        >
+                                            Peržiūrėti
+                                        </button>
 
-            {/* 🔹 Modal langas */}
-            {selectedStory && (
-                <div className="modal-overlay" onClick={() => setSelectedStory(null)}>
-                    <div
-                        className="modal"
-                        onClick={(e) => e.stopPropagation()} // kad neuzdarytų paspaudus viduje
-                    >
-                        <button className="close" onClick={() => setSelectedStory(null)}>
-                            ✖
-                        </button>
+                                        {story.status === "pending" && (
+                                            <>
+                                                <button
+                                                    className="approve"
+                                                    onClick={() => handleStatusChange(story.id, "approved")}
+                                                >
+                                                    Patvirtinti
+                                                </button>
+                                                <button
+                                                    className="reject"
+                                                    style={{ margin: '2px' }}
+                                                    onClick={() => handleDeleteStory(story.id)}
+                                                >
+                                                    Ištrinti
+                                                </button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
 
-                        <h2>{selectedStory.title}</h2>
-                        <p className="author">
-                            Autorius: {selectedStory.writerName}
-                        </p>
-                        <p className={`status ${selectedStory.status}`}>
-                            {selectedStory.status}
-                        </p>
-                        {/* {console.log("Story image path:", selectedStory?.image)} */}
-                        <div className="preview-photo" >
-                            {selectedStory?.image ? (
-                                <img style={{ objectFit: 'contain' }}
-                                    src={`http://localhost:3001/${selectedStory.image}`}
-                                    alt={selectedStory.title}
-                                />
-                            ) : (
-                                <img src="/images/no-image.jpg" alt="no image" />
+                {/* 🔹 Modal langas */}
+                {selectedStory && (
+                    <div className="modal-overlay" onClick={() => setSelectedStory(null)}>
+                        <div
+                            className="modal"
+                            onClick={(e) => e.stopPropagation()} // kad neuzdarytų paspaudus viduje
+                        >
+                            <button className="close" onClick={() => setSelectedStory(null)}>
+                                ✖
+                            </button>
+
+                            <h2>{selectedStory.title}</h2>
+                            <p className="author">
+                                Autorius: {selectedStory.writerName}
+                            </p>
+                            <p className={`status ${selectedStory.status}`}>
+                                {selectedStory.status}
+                            </p>
+                            {/* {console.log("Story image path:", selectedStory?.image)} */}
+                            <div className="preview-photo" >
+                                {selectedStory?.image ? (
+                                    <img style={{ objectFit: 'contain' }}
+                                        src={`http://localhost:3001/${selectedStory.image}`}
+                                        alt={selectedStory.title}
+                                    />
+                                ) : (
+                                    <img src="/images/no-image.jpg" alt="no image" />
+                                )}
+                            </div>
+
+                            <div className="content">{selectedStory.story}</div>
+
+                            {selectedStory.status === "pending" && (
+                                <div className="actions">
+                                    <button
+                                        className="approve"
+                                        onClick={() =>
+                                            handleStatusChange(selectedStory.id, "approved")
+                                        }
+                                    >
+                                        Patvirtinti
+                                    </button>
+                                    <button
+                                        className="reject"
+
+                                    >
+                                        Ištrinti
+                                    </button>
+                                </div>
                             )}
                         </div>
-
-                        <div className="content">{selectedStory.story}</div>
-
-                        {selectedStory.status === "pending" && (
-                            <div className="actions">
-                                <button
-                                    className="approve"
-                                    onClick={() =>
-                                        handleStatusChange(selectedStory.id, "approved")
-                                    }
-                                >
-                                    Patvirtinti
-                                </button>
-                                <button
-                                    className="reject"
-                                    
-                                >
-                                    Ištrinti
-                                </button>
-                            </div>
-                        )}
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 
