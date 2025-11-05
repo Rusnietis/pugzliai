@@ -29,7 +29,7 @@ export default function AdminDashboard() {
 
         <div className="admin-dashboard">
             <h1 className="admin-dashboard__title">Administratoriaus valdymo skydas</h1>
-
+           <div className="users-box">
             <div className="admin-dashboard__stats">
                 <div className="card pending">
                     <h2>Laukiančios istorijos</h2>
@@ -65,6 +65,7 @@ export default function AdminDashboard() {
                     textDecoration: "none",
                 }}
                 >Valdyti vartotojus</Link>
+            </div>
             </div>
         </div>
     );

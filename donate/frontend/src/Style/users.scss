@@ -1,12 +1,15 @@
 .page-users {
-    display: grid;
-    grid-template-columns: 1fr;
-    /* dvi lygios dalys */
-    // gap: 32px;
-    width: 100%;
-    min-height: 100vh;
-    // padding: 40px;
-    background: linear-gradient(180deg, #f4f7fb, #eef3fb 60%);
+
+     background-color: #f9fafb;
+  min-height: 100vh;
+    // display: grid;
+    // grid-template-columns: 1fr;
+    // /* dvi lygios dalys */
+    // // gap: 32px;
+    // width: 100%;
+    // min-height: 100vh;
+    // // padding: 40px;
+    // background: linear-gradient(180deg, #f4f7fb, #eef3fb 60%);
 
     @media (max-width: 900px) {
         grid-template-columns: 1fr;

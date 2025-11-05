@@ -24,11 +24,10 @@ export default function List() {
     return (
 
         <div className="page-users">
-
+            <h1>Vartotojų sąrašas</h1>
             <div className="users-box">
 
                 <div className="left-col">
-                    <h1>Vartotojų sąrašas</h1>
 
                     {/* user komponento atvaizdavimas lenteleje */}
 
