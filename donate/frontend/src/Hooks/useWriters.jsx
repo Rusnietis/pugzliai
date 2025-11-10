@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/writers';
 import * as a from '../Actions/stories';
-//import { MessagesContext } from '../Contexts/Messages';
+import { MessagesContext } from '../Contexts/Messages';
 
 
 
@@ -15,7 +15,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
     const [updateWriter, setUpdateWriter] = useState(null);
     const [destroyWriter, setDestroyWriter] = useState(null);
     // const { setUser } = useContext(Auth);
-    // const { addMessage } = useContext(MessagesContext);
+    const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
 
@@ -52,6 +52,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
                         status: res.data.status,
                         collected: res.data.collected
                     }));
+                    addMessage(res.data.message)
                 })
                 .catch(err => {
                     dispatchWriters(c.storeWriterAsUndo({ ...storeWriter, id: uuid }));

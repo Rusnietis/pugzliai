@@ -37,18 +37,18 @@ code {
   z-index: 999;
 }
 
-.messages {
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 10px;
-  z-index: 1000;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+// .messages {
+//   position: fixed;
+//   top: 0;
+//   right: 0;
+//   padding: 10px;
+//   z-index: 1000;
+//   padding: 20px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-end;
 
-}
+// }
 
 .login-page {
   display: flex;

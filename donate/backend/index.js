@@ -362,7 +362,8 @@ app.post("/writers", (req, res) => {
         shortDescription,
         story,
         image: filename ? `/images/${filename}` : null,
-        goal
+        goal,
+        message: { type: 'success', text: 'Jūsų istorija sėkmingai išsaugota ir laukia patvirtinimo' }
       });
     });
 

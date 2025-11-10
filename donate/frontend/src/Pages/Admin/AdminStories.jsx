@@ -63,9 +63,7 @@ export default function AdminStories() {
         <div className="admin-stories">
             <h1>Istorijos</h1>
             <div className="users-box">
-                {stories.length === 0 ? (
-                    <p>Nėra istorijų.</p>
-                ) : (
+               
                     <table>
                         <thead>
                             <tr>
@@ -116,7 +114,7 @@ export default function AdminStories() {
                             ))}
                         </tbody>
                     </table>
-                )}
+             
 
                 {/* 🔹 Modal langas */}
                 {selectedStory && (
