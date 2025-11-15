@@ -64,23 +64,25 @@ export default function Home() {
       {/* Istorijų sąrašas */}
       <section className="stories">
         <h2>Istorijos</h2>
+
         <div className="story-grid">
-          <div className="stories-grid">
-            {latestStories.map((story) => (
-              <div className="story-card" key={story.id}>
-                <img src={story.image} alt={story.title} className="story-image" />
-                <div className="story-info">
-                  <h3>{story.title}</h3>
-                  <p className="short-description">{story.short_description}</p>
-                  <Link to="/istorijos" className="btn secondary">
-                    Skaityti daugiau
-                  </Link>
-                </div>
+          {latestStories.map((story) => (
+            <div className="story-card" key={story.id}>
+              <img src={story.image} alt={story.title} className="story-image" />
+
+              <div className="story-info">
+                <h3>{story.title}</h3>
+                <p className="short-description">{story.short_description}</p>
+
+                <Link to="/istorijos" className="btn secondary">
+                  Skaityti daugiau
+                </Link>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
+
 
       {/* Footer */}
       <footer className="footer">

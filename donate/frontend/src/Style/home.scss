@@ -106,57 +106,68 @@
 .stories {
   padding: 60px 20px;
   text-align: center;
+}
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
-  }
+.stories h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
 
+/* --- Desktop: 3 kortelės per vidurį --- */
+.story-grid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  max-width: 1100px; /* telpa 3 kortelės */
+  margin: 0 auto;
+  flex-wrap: nowrap; /* visada viena eilė */
+}
+
+.story-card {
+  background: #fff;
+  border-radius: 12px;
+  width: 300px;
+  flex-shrink: 0; 
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  overflow: hidden;
+}
+
+/* Responsyvus paveiksliukas */
+.story-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.story-card h3 {
+  font-size: 18px;
+  margin: 16px;
+}
+
+.story-card p {
+  font-size: 14px;
+  margin: 0 16px 16px;
+  color: #4b5563;
+}
+
+.story-card .btn {
+  margin: 0 16px 20px;
+}
+
+/* --- Planšetė: 2 kortelės --- */
+@media (max-width: 900px) {
   .story-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    max-width: 650px; /* 2 kortelės + tarpas */
+    flex-wrap: wrap;
   }
+}
 
-  .story-card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-    text-align: left;
-
-    img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    h3 {
-      font-size: 18px;
-      margin: 16px;
-    }
-
-    p {
-      font-size: 14px;
-      margin: 0 16px 16px;
-      color: #4b5563;
-    }
-
-    button {
-      margin: 0 16px 20px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #6c63ff, #7a76ff);
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background: #5a52e6;
-      }
-    }
+/* --- Telefonas: 1 kortelė --- */
+@media (max-width: 600px) {
+  .story-grid {
+    max-width: 340px; /* 1 kortelė */
   }
 }
 
