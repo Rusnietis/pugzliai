@@ -440,7 +440,10 @@ app.post('/users', (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ success: true });
+      res.json({ 
+        success: true,
+        message: { type: 'success', text: 'Registracija sėkminga! Galite prisijungti.'}
+      });
     }
   });
 

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { SERVER_URL, AFTER_LOGIN_URL, SITE_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
-//import { MessagesContext } from '../Contexts/Messages';
+import { MessagesContext } from '../Contexts/Messages';
 
 export default function useLogin() {
 
@@ -12,7 +12,7 @@ export default function useLogin() {
     const navigate = useNavigate();
 
     const { login, setUser } = useContext(Auth);
-    //const { addMessage } = useContext(MessagesContext)
+    const { addMessage } = useContext(MessagesContext)
 
     useEffect(_ => {
         if (null !== inputs) {
@@ -22,7 +22,7 @@ export default function useLogin() {
                     // window.localStorage.setItem('user', res.data.name);
                     login(res.data.name, res.data.role, res.data.id);
                     navigate(AFTER_LOGIN_URL)
-                    //addMessage(res.data.message);
+                    addMessage(res.data.message);
 
 
                 })
@@ -45,7 +45,7 @@ export default function useLogin() {
                 window.localStorage.removeItem('id');
                 setUser(null);
                 navigate(AFTER_LOGIN_URL)
-                //addMessage(res.data.message)
+                addMessage(res.data.message)
             })
             .catch(error => {
                 console.log(error);
