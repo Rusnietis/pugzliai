@@ -1,6 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Stories } from "../../Contexts/Stories";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { SERVER_URL } from "../../Constants/main";
 
 
 //import StoriesPreview from "../../Components/StoriesPreview";
@@ -9,9 +11,23 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
 
-  const { stories } = useContext(Stories);
+
+  const [stories, setStories] = useState([])
+  //const { stories } = useContext(Stories);
   console.log(stories)
   // Jeigu dar neužkrautos istorijos
+
+  useEffect(_ => {
+    axios.get(`${SERVER_URL}/visitors/stories`)
+      .then(res => {
+        setStories(res.data);
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log('Klaida gaunant istorijas:', err);
+      });
+  }, []);
+
   if (!stories) {
     return <div className="loading">Kraunama...</div>;
   }
@@ -68,8 +84,8 @@ export default function Home() {
         <div className="story-grid">
           {latestStories.map((story) => (
             <div className="story-card" key={story.id}>
-              <img src={story.image} alt={story.title} className="story-image" />
-
+              {/* <img src={story.image} alt={story.title} className="story-image" /> */}
+              <img src={`${SERVER_URL}/${story.image}`} alt={story.title} className="story-image" />
               <div className="story-info">
                 <h3>{story.title}</h3>
                 <p className="short-description">{story.short_description}</p>

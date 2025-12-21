@@ -8,6 +8,7 @@ const md5 = require('md5');
 const { v4: uuidv4 } = require('uuid');
 const { error } = require('console');
 const { inflateRawSync } = require('zlib');
+const { SERVER_URL } = require('../frontend/src/Constants/main');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -288,6 +289,30 @@ app.get('/writers', (req, res) => {
 }
 )
 
+// Gauti visas admin patvirtintas istorijas tik su nuotrauka, pavadinimu ir trumpu aprasymu
+app.get("/visitors/stories", (req, res) => {
+  const sql = `
+  SELECT s.id, s.writer_id, s.title, s.short_description, s.story, s.goal, s.image, s.status, s.collected
+  FROM stories s
+  LEFT JOIN writers w ON s.writer_id = w.id
+  ORDER BY 
+  CASE 
+   WHEN collected >= goal THEN 2
+   ELSE 1
+   END,
+   collected ASC
+
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Klaida gaunant duomenis iš stories", error: err });
+    }
+
+    res.json(results);
+  });
+
+});
+
 app.get("/stories", (req, res) => {
 
   // if (!checkUserIsAuthorized(req.user, res, ['user', 'animal'])) {
@@ -440,9 +465,9 @@ app.post('/users', (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ 
+      res.json({
         success: true,
-        message: { type: 'success', text: 'Registracija sėkminga! Galite prisijungti.'}
+        message: { type: 'success', text: 'Registracija sėkminga! Galite prisijungti.' }
       });
     }
   });
