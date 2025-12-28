@@ -45,7 +45,9 @@ export default function Home() {
             Prisidėk prie įvairių kilnių iniciatyvų — nuo sveikatos pagalbos iki gamtosaugos.
             Kiekviena tavo auka prisideda prie geresnio rytojaus.
           </p>
-          <button className="cta">Prisidėti dabar</button>
+          <Link to="/istorijos" className="btn secondary" style={{borderRadius: '10px', backgroundColor: 'orange', padding: '10px'}}>
+            Prisidėti dabar
+          </Link>
         </div>
       </section>
 
