@@ -33,6 +33,8 @@ export default function App() {
     'heavy-rain': 'Smarkus lietus',
     'sleet': 'Šlapdriba',
     'snow': 'Sniegas',
+    'heavy-snow': 'Smarkus sniegas',
+    'light-snow': 'Nedidelis sniegas',
     'fog': 'Rūkas',
     'heavy-rain-with-thunderstorms': 'Perkūnija ir lietus',
     'isolated-thunderstorms': 'Perkūnija ir lietus',
@@ -156,7 +158,7 @@ export default function App() {
             {/* Dabartinė prognozė */}
             <div style={{
               //backgroundColor: 'rgba(255, 255, 255, 0.3)',
-              backgroundImage: 'url(/palanga-saulelydis.jpg)',
+              backgroundImage: 'url(/klevas.jpg)',
               backgroundSize: 'cover',
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
