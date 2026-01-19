@@ -25,11 +25,12 @@ export default function useWriters(dispatchWriters, dispatchStories) {
             .then(res => {
                 console.log(res.data)
                 dispatchWriters(c.getWriters(res.data));
+                
             })
             .catch(err => {
                 console.log(err)
             })
-    }, [destroyWriter]);
+    }, [dispatchWriters]);
 
     useEffect(_ => {
         if (null !== storeWriter) {

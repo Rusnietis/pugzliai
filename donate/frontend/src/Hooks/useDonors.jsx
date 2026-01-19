@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/donors';
 import * as s from '../Actions/stories';
-//import { MessagesContext } from '../Contexts/Messages';
+import { MessagesContext } from '../Contexts/Messages';
 
 
 
@@ -15,7 +15,7 @@ export default function useDonors(dispatchDonors, dispatchStories) {
     const [updateDonor, setUpdateDonor] = useState(null);
     const [destroyDonor, setDestroyDonor] = useState(null);
     // const { setUser } = useContext(Auth);
-    // const { addMessage } = useContext(MessagesContext);
+    const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
 
 
@@ -25,9 +25,10 @@ export default function useDonors(dispatchDonors, dispatchStories) {
             .then(res => {
                 console.log(res.data)
                 dispatchDonors(c.getDonors(res.data));
+
             })
             .catch(err => {
-                console.log(err)
+                console.log(err);
             })
     }, [dispatchDonors]);
 
@@ -42,14 +43,14 @@ export default function useDonors(dispatchDonors, dispatchStories) {
                     setStoreDonor(null)
                     dispatchDonors(c.storeDonorAsReal(res.data));
                     dispatchStories(s.updateCollected(res.data.story_id, res.data.amount));
-                    
+                    addMessage(res.data.message)
                 })
                 .catch(err => {
                     dispatchDonors(c.storeDonorAsUndo({ ...storeDonor, id: uuid }));
                     setStoreDonor(null)
                 })
         }
-    }, [storeDonor]);
+    }, [storeDonor, dispatchDonors, dispatchStories, addMessage]);
 
 
 

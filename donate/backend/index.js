@@ -347,7 +347,9 @@ app.get('/donors', (req, res) => {
     if (err) {
       res.status(500);
     } else {
-      res.json(results);
+      res.json(
+        results
+      );
     }
   })
 })
@@ -447,7 +449,8 @@ app.post('/donors', (req, res) => {
           amount,
           story_id,
           date,
-          newCollected
+          newCollected,
+         message: { type: 'success', text: 'Ačiū už jūsų auką!' }
         });
       });
     });
