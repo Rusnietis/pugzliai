@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { Stories } from "../../Contexts/Stories";
 import { Donors } from '../../Contexts/Donors';
 import { SERVER_URL } from "../../Constants/main";
@@ -31,6 +32,7 @@ export default function List() {
 
   const addMoney = (story) => {
     const donationData = {
+      //  id: uuidv4(),
       name: inputs.name,
       amount: parseFloat(inputs.amount),
       story_id: story.id,

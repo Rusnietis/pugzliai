@@ -40,6 +40,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
             axios.post(`${SERVER_URL}/writers`, { ...storeWriter, id: uuid })
                 .then(res => {
                     console.log("POST OK:", res.data);
+                  // console.log('Got message from backend:', res.data.message);
                     setStoreWriter(null)
                     dispatchWriters(c.storeWriterAsReal(res.data));
                     dispatchStories(a.addStory({

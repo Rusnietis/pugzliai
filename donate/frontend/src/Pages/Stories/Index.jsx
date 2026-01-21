@@ -7,14 +7,12 @@ import Layout from './Layout';
 export default function Index() {
 
     return (
-
-        <StoriesProvider>
-            <WritersProvider>
-                <DonorsProvider>
+        <DonorsProvider>
+            <StoriesProvider>
+                <WritersProvider>
                     <Layout />
-                </DonorsProvider>
-            </WritersProvider>
-        </StoriesProvider>
-
+                </WritersProvider>
+            </StoriesProvider>
+        </DonorsProvider>
     )
 }

@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from 'react';
+import { createContext, useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import '../Style/message.scss';
 
@@ -10,7 +10,7 @@ export const MessagesProvider = ({ children }) => {
     const [messages, setMessages] = useState([]);
 
 
-    const addMessage = useCallback(({text, type}) => {
+    const addMessage = useCallback(({ text, type }) => {
         const id = uuidv4();
         setMessages(m => [...m, { text, type, id }]);
         setTimeout(_ => {
@@ -18,25 +18,30 @@ export const MessagesProvider = ({ children }) => {
         }, 5000);
     }, []);
 
+    useEffect(() => {
+        console.log("Fetched messages IDs:", messages.map(m => m.id));
+    }, [messages]);
 
     return (
         <MessagesContext.Provider value={{
             addMessage
         }}>
             <>
-             
+
                 {
-                messages.length > 0 &&
-                <div className="messages">
-                    {
-                        messages.map(message => (
-                            <div key={message.id} className={`message message--${message.type}`} 
-                            role="alert" onClick={_ => setMessages(m => m.filter(m => m.id !== message.id))}>
-                                {message.text}
-                            </div>
-                        ))
-                    }
-                </div>
+                    messages.length > 0 &&
+                    <div className="messages">
+                        {
+                            messages.map(message => (
+                                <div key={message.id} className={`message message--${message.type}`}
+                                    role="alert" onClick={_ => setMessages(m => m.filter(m => m.id !== message.id))}>
+                                    {message.text}
+
+                                </div>
+
+                            ))
+                        }
+                    </div>
                 }
 
 

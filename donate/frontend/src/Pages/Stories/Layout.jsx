@@ -5,7 +5,10 @@ import '../../Style/StoriesList.scss';
 
 
 
+
 export default function Layout() {
+
+  
   // const { editCustomer, customers } = useContext(Customers);
 
   // if (customers === null) {
@@ -15,6 +18,9 @@ export default function Layout() {
   //     </div>
   //   );
   // }
+
+
+
 
   return (
     <div>

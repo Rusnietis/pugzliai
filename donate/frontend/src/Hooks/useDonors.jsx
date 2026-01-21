@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
@@ -17,7 +17,7 @@ export default function useDonors(dispatchDonors, dispatchStories) {
     // const { setUser } = useContext(Auth);
     const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
-
+    const sentRef = useRef(false);
 
     useEffect(_ => {
 
@@ -40,10 +40,12 @@ export default function useDonors(dispatchDonors, dispatchStories) {
             axios.post(`${SERVER_URL}/donors`, { ...storeDonor, id: uuid })
                 .then(res => {
                     console.log("POST OK:", res.data);
+                    console.log('Got message from backend:', res.data.message);
                     setStoreDonor(null)
                     dispatchDonors(c.storeDonorAsReal(res.data));
-                    dispatchStories(s.updateCollected(res.data.story_id, res.data.amount));
-                    addMessage(res.data.message)
+                    //dispatchStories(s.updateCollected(res.data.story_id, res.data.amount));
+
+                    addMessage({...res.data.message, id: uuidv4()})
                 })
                 .catch(err => {
                     dispatchDonors(c.storeDonorAsUndo({ ...storeDonor, id: uuid }));
@@ -51,6 +53,7 @@ export default function useDonors(dispatchDonors, dispatchStories) {
                 })
         }
     }, [storeDonor, dispatchDonors, dispatchStories, addMessage]);
+
 
 
 
