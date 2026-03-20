@@ -3,7 +3,8 @@ import axios from 'axios';
 import { SERVER_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
 //import { use } from 'react';
-import { MessagesContext } from '../Contexts/Messages';
+// import { MessagesContext } from '../Contexts/Messages';
+import { ToastContext } from '../Contexts/Toast';
 
 export default function useUsers() {
 
@@ -13,7 +14,8 @@ export default function useUsers() {
     const [deleteUser, setDeleteUser] = useState(null);
 
     const { user, login } = useContext(Auth);
-    const { addMessage } = useContext(MessagesContext);
+    // const { addMessage } = useContext(MessagesContext);
+    const {showToast} = useContext(ToastContext)
     console.log(user)
     //const { show401Page } = useContext(Router)
 
@@ -50,7 +52,8 @@ export default function useUsers() {
 
                 // atnaujina sąrašą po registracijos
                 return axios.get(`${SERVER_URL}/users`);
-                addMessage(res.data.message);
+                // addMessage(res.data.message);
+                showToast(res.data.message);
             })
             .then(res => setUsers(res.data))
             .catch(err => console.error('Klaida kuriant user:', err))

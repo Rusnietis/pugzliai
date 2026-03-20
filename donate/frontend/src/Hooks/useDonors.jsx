@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/donors';
 import * as s from '../Actions/stories';
-import { MessagesContext } from '../Contexts/Messages';
-
+// import { MessagesContext } from '../Contexts/Messages';
+import { ToastContext } from '../Contexts/Toast';
 
 
 //patikrinta
@@ -15,7 +15,8 @@ export default function useDonors(dispatchDonors, dispatchStories) {
     const [updateDonor, setUpdateDonor] = useState(null);
     const [destroyDonor, setDestroyDonor] = useState(null);
     // const { setUser } = useContext(Auth);
-    const { addMessage } = useContext(MessagesContext);
+    // const { addMessage } = useContext(MessagesContext);
+    const { showToast } = useContext(ToastContext)
     // const { setErrorPageType } = useContext(Router);
     const sentRef = useRef(false);
 
@@ -45,14 +46,15 @@ export default function useDonors(dispatchDonors, dispatchStories) {
                     dispatchDonors(c.storeDonorAsReal(res.data));
                     //dispatchStories(s.updateCollected(res.data.story_id, res.data.amount));
 
-                    addMessage({...res.data.message, id: uuidv4()})
+                    // addMessage({...res.data.message, id: uuidv4()})
+                    showToast({...res.data.message, id: uuidv4()})
                 })
                 .catch(err => {
                     dispatchDonors(c.storeDonorAsUndo({ ...storeDonor, id: uuid }));
                     setStoreDonor(null)
                 })
         }
-    }, [storeDonor, dispatchDonors, dispatchStories, addMessage]);
+    }, [storeDonor, dispatchDonors, dispatchStories, showToast]);
 
 
 

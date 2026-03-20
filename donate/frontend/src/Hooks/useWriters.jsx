@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
 import * as c from '../Actions/writers';
 import * as a from '../Actions/stories';
-import { MessagesContext } from '../Contexts/Messages';
-
+//import { MessagesContext } from '../Contexts/Messages';
+import { ToastContext } from '../Contexts/Toast';
 
 
 //patikrinta
@@ -15,9 +15,9 @@ export default function useWriters(dispatchWriters, dispatchStories) {
     const [updateWriter, setUpdateWriter] = useState(null);
     const [destroyWriter, setDestroyWriter] = useState(null);
     // const { setUser } = useContext(Auth);
-    const { addMessage } = useContext(MessagesContext);
+    //const { addMessage } = useContext(MessagesContext);
     // const { setErrorPageType } = useContext(Router);
-
+    const { showToast } = useContext(ToastContext)
 
     useEffect(_ => {
 
@@ -25,7 +25,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
             .then(res => {
                 console.log(res.data)
                 dispatchWriters(c.getWriters(res.data));
-                
+
             })
             .catch(err => {
                 console.log(err)
@@ -40,7 +40,7 @@ export default function useWriters(dispatchWriters, dispatchStories) {
             axios.post(`${SERVER_URL}/writers`, { ...storeWriter, id: uuid })
                 .then(res => {
                     console.log("POST OK:", res.data);
-                  // console.log('Got message from backend:', res.data.message);
+                    // console.log('Got message from backend:', res.data.message);
                     setStoreWriter(null)
                     dispatchWriters(c.storeWriterAsReal(res.data));
                     dispatchStories(a.addStory({
@@ -54,7 +54,8 @@ export default function useWriters(dispatchWriters, dispatchStories) {
                         status: res.data.status,
                         collected: res.data.collected
                     }));
-                    addMessage(res.data.message)
+                    //addMessage(res.data.message)
+                    showToast(res.data.message);
                 })
                 .catch(err => {
                     dispatchWriters(c.storeWriterAsUndo({ ...storeWriter, id: uuid }));

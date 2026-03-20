@@ -181,13 +181,13 @@ app.post('/login', (req, res) => {
               name: results[0].name,
               role: results[0].role,
               id: results[0].id,
-              message: { type: 'success', text: 'Jus sekmingai prisijungete' }
+              message: { type: 'success', text: ` ${username} sekmingai prisijungete`}
 
             });
           }
         });
       } else {
-        res.status(401).json({ message: 'Invalid name or password' });
+        res.status(401).json({ message:{ type: 'error', text:'Neteisingas vardas arba slaptažodis' }});
       }
     }
   });

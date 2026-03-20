@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { SERVER_URL, AFTER_LOGIN_URL, SITE_URL } from '../Constants/main';
 import { Auth } from '../Contexts/Auth';
-import { MessagesContext } from '../Contexts/Messages';
+// import { MessagesContext } from '../Contexts/Messages';
+import { ToastContext } from '../Contexts/Toast';
 
 export default function useLogin() {
 
@@ -12,7 +13,8 @@ export default function useLogin() {
     const navigate = useNavigate();
 
     const { login, setUser } = useContext(Auth);
-    const { addMessage } = useContext(MessagesContext)
+    // const { addMessage } = useContext(MessagesContext)
+    const { showToast } = useContext(ToastContext)
 
     useEffect(_ => {
         if (null !== inputs) {
@@ -22,37 +24,39 @@ export default function useLogin() {
                     // window.localStorage.setItem('user', res.data.name);
                     login(res.data.name, res.data.role, res.data.id);
                     navigate(AFTER_LOGIN_URL)
-                    addMessage(res.data.message);
-
+                    // addMessage(res.data.message);
+                    showToast(res.data.message)
+                    console.log(res.data)
 
                 })
                 .catch(error => {
                     console.log(error);
                     if (!error.response) {
-                        //addMessage({ type: 'danger', text: 'Server error' })
+                        showToast({ type: 'error', text: 'Server error' })
                     } else {
-                        //addMessage({ type: 'danger', text: error.response.data.message })
+                        showToast( error.response.data.message)
                     }
                 })
         }
     }, [inputs, login]);
 
     const logout = _ => {
-        axios.post(`${SERVER_URL}/logout`,{}, { withCredentials: true })
+        axios.post(`${SERVER_URL}/logout`, {}, { withCredentials: true })
             .then(res => {
                 window.localStorage.removeItem('user');
                 window.localStorage.removeItem('role');
                 window.localStorage.removeItem('id');
                 setUser(null);
                 navigate(AFTER_LOGIN_URL)
-                addMessage(res.data.message)
+                // addMessage(res.data.message);
+                showToast(res.data.message)
             })
             .catch(error => {
                 console.log(error);
                 if (!error.response) {
-                    //addMessage({ type: 'danger', text: 'Server error' })
+                    showToast({ type: 'error', text: 'Server error' })
                 } else {
-                    //addMessage({ type: 'danger', text: error.response.data.message })
+                    showToast({ type: 'error', text: error.response.data.message })
                 }
             })
     };
